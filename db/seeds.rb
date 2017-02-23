@@ -5,3 +5,5 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+require File.expand_path('../seeds/users', __FILE__)
+require File.expand_path('../seeds/fragments', __FILE__)
