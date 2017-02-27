@@ -12,7 +12,14 @@ end
 gem 'rails', '~> 5.0.1'
 
 gem 'pg'
+# auth google+ twitter facebook
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
 
+# bootstrap
+gem 'bootstrap-sass'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
