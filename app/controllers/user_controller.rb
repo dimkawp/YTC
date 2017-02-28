@@ -7,4 +7,14 @@ class UserController < ApplicationController
       format.json { render :json => @users }
     end
   end
+
+  def show
+    @user = User.find(params[:id])
+
+  end
+
+  def destroy
+    @user = User.find(params[:id])
+    @user.destroy
+  end
 end

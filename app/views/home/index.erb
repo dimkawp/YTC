@@ -5,7 +5,7 @@
   <p>Home</p>
   <p>Video</p>
 <% if current_user %>
-  <p>Profile</p>
+  <p><a href="/user/<%= current_user.id %>">Profile</a></p>
 <% end %>
 </div>
 

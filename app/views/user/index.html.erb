@@ -1,0 +1,11 @@
+<table class="table table-striped">
+  <tr>
+    <td><h1>Users</h1></td>
+  </tr>
+  <% @users.each do |user| %>
+      <tr>
+        <td><a href="/user/<%= user.id %>"><%= user.first_name %> <%= user.last_name %> <%= user.email %></a></td>
+        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+  <% end %>
+</table>

@@ -3,6 +3,8 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   get '/' => 'home#index'
   get '/users' => 'user#index'
+  resources :user
+  #match '/users/:id' => 'user#destroy', :via => :delete
   get '/fragments' => 'fragment#index'
   get '/auth' => 'home#create'
 
