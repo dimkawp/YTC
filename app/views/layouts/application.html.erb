@@ -1,14 +1,40 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>YTC</title>
-    <%= csrf_meta_tags %>
+<head>
+  <title>YTC</title>
+  <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
 
-  <body>
-    <%= yield %>
-  </body>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <% flash.each do |name, msg| -%>
+          <%= content_tag :div, msg, class: name %>
+      <% end -%>
+      <ol class="breadcrumb">
+        <li> <%= link_to 'Index', root_path %> </li>
+        <li> <%= link_to 'Home', root_path %> </li>
+        <li> <%= link_to 'Video', root_path %> </li>
+
+      <% if current_user %>
+        <li><a href="/user/<%= current_user.id %>">Profile</a></li>
+      <% end %>
+      <% if current_user %>
+        <li><%= current_user.first_name %></li>
+        <li><%= link_to 'Log Out', logout_path, method: :delete %></li>
+      <% else %>
+        <li><%= link_to 'Google +', '/auth/google_oauth2' %></li>
+        <li><%= link_to 'Twitter', '/auth/twitter' %></li>
+        <li><%= link_to 'Facebook', '/auth/facebook' %></li>
+      <% end %>
+      </ol>
+    </div>
+  </div>
+</nav>
+  <%= yield %>
+</body>
 </html>
