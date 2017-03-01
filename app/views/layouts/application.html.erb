@@ -18,7 +18,7 @@
       <ol class="breadcrumb">
         <li> <%= link_to 'Index', root_path %> </li>
         <li> <%= link_to 'Home', root_path %> </li>
-        <li> <%= link_to 'Video', root_path %> </li>
+        <li> <%= link_to 'Video', '/users' %> </li>
 
       <% if current_user %>
         <li><a href="/user/<%= current_user.id %>">Profile</a></li>
