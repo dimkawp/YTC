@@ -18,6 +18,13 @@ gem 'omniauth-google-oauth2'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 
+#work with video file
+gem 'cloudinary'
+gem 'youtube-dl.rb'
+gem 'yt'
+#active type fore upload video
+gem 'active_type'
+
 # bootstrap
 gem 'bootstrap-sass'
 # Use Puma as the app server

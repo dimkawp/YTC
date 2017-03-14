@@ -1,5 +1,26 @@
-<%= @user.first_name %>
-<br>
-<%= @user.last_name %>
-<br>
-<%= @user.email %></h2>
+<div class="container"><h4><%= @user.email %></h4></div>
+
+<div class="container">
+  <div class="row ">
+    <% @user_profile.each do |user_profile| %>
+    <div class="col-xs-6 col-sm-4">
+      <div class="video-block" style="width: 200px; height: 200px;">
+      <%= cl_video_tag("#{user_profile.name}", :resource_type => :video,cloud_name: "comedy", :end_offset=>"#{@end_offset}", :start_offset=>"#{@start_offset}", :width=>"#{200}",:height=>"#{200}") %>
+      </div>
+      <div class="bottom-aligned-row" style="margin: 0 auto;">
+        <button type="button" class="btn btn-success">
+          <a href="/video_uploads/<%= user_profile.id %>/new">Upload on YouTube</a>
+        </button>
+        <button type="button" class="btn btn-danger">
+          <%= link_to 'Destroy', user_profile, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </button>
+      </div>
+    </div>
+
+    <% end %>
+  </div>
+
+
+
+
+</div>

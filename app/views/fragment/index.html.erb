@@ -1,0 +1,11 @@
+<table class="table table-striped">
+  <tr>
+    <td><h1>Fragments</h1></td>
+  </tr>
+  <% @fragments.each do |fragment| %>
+      <tr>
+        <td><a href="/fragment/<%= fragment.id %>"><%= fragment.url %></td>
+        <td><%= link_to 'Destroy', fragment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+  <% end %>
+</table>

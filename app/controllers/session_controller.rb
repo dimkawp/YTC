@@ -8,6 +8,19 @@ class SessionController < ApplicationController
     redirect_to root_url
   end
 
+  # def offset
+  #   session[:start_offset] = params['fragment']['start_offset']
+  #   session[:end_offset] = params['fragment']['end_offset']
+  #   flash[:success] = "session created."
+  #   redirect_to root_url
+  # end
+
+  def offset_logout
+    session[:start_offset] = nil
+    session[:end_offset] = nil
+    redirect_to root_url
+  end
+
   def destroy
     session[:user_id] = nil
     redirect_to root_url

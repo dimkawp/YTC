@@ -18,10 +18,12 @@
       <ol class="breadcrumb">
         <li> <%= link_to 'Index', root_path %> </li>
         <li> <%= link_to 'Home', root_path %> </li>
-        <li> <%= link_to 'Video', '/users' %> </li>
+        <li> <%= link_to 'Video', '/fragments.json' %> </li>
+        <li> <%= link_to 'Users', '/users' %> </li>
 
       <% if current_user %>
         <li><a href="/user/<%= current_user.id %>">Profile</a></li>
+        <!--<li><%= link_to 'Upload Video', new_video_upload_path %></li>-->
       <% end %>
       <% if current_user %>
         <li><%= current_user.first_name %></li>

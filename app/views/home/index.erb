@@ -1,2 +1,31 @@
+<div class="container">
+  <%= form_tag({controller: "fragment", action: "create"}, method: "post", class: "form-horizontal col-sm-10") do %>
+  <%= text_field(:fragment, :url, class: "form-control", placeholder: "url") %>
+  <%= text_field(:offset, :start, class: "col-sm-1", placeholder: "start") %>
+  <%= text_field(:offset, :end, class: "col-sm-1", placeholder: "end") %>
+  <br>
+  <hr>
+  <%= submit_tag "Download", class: "btn btn-default" %>
+  <% end %>
+  <br>
 
+</div>
+</br>
 
+<div class="container">
+
+<% if @response.nil? %>
+
+  <div class="container">
+  <% %>
+  </div>
+
+  <% else %>
+
+  <%= cl_video_tag("#{@response['public_id']}", :resource_type => :video,cloud_name: "comedy", :end_offset=>"#{session[:end]}", :start_offset=>"#{session[:start]}", :width=>"#{200}") %>
+    <%= form_tag({controller: "fragment", action: "video_info"}, method: "post", class: "form-horizontal col-sm-10") do %>
+    <%= text_field(:fragment, :url, class: "form-control", placeholder: "url") %>
+    <%= button_to 'Info about YouTube Video', {:controller => "fragment", :action => "video_info"}, :method=>:post, class: "btn btn-success" %>
+    <% end %>
+  <% end%>
+</div>
