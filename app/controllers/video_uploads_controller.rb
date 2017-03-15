@@ -13,8 +13,8 @@ class VideoUploadsController < ApplicationController
     @all_fragments_user = Fragment.find(params[:id])
 
     @video_uploads = VideoUploader.new(title: params[:video_uploads][:title],
-                                    description: params[:video_uploads][:description],
-                                    file: @all_fragments_user.url)
+                                       description: params[:video_uploads][:description],
+                                       file: @all_fragments_user.url)
 
     if @video_uploads.save
       #render json: @video_uploads

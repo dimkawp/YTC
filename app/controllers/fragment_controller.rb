@@ -16,32 +16,39 @@ class FragmentController < ApplicationController
   end
 
   def create
+    #create new fragment url
     @fragment = Fragment.new(fragment_params)
     @fragment.user_id = session[:user_id]
     if current_user.nil?
       flash[:success] = "Need authefication"
       redirect_to root_url
     else
+      #initializers fragment with params
       @fragment.name = current_user.first_name
       session[:start] = params['offset']['start']
       session[:end] = params['offset']['end']
-
-      @constructor = "/eo_#{session[:end]},so_#{session[:start]}"
+      #create params
+      @params = "/eo_#{session[:end]},so_#{session[:start]}"
     end
 
     if @fragment.save
-
+      #if create , add url(this youtube url) in DL gem and download video
       @fragment = Fragment.find(Fragment.last)
       @url = @fragment.url
       @url_name = @fragment.name
 
       if YoutubeDL.download @url, output: "video/#{@url_name}.mp4"
+        #if download is ok, upload video file on cloudinary
         @response = Cloudinary::Uploader.upload("video/#{@url_name}.mp4", :resource_type => :video)
 
         if @response.nil?
-          flash[:success] = "Uploader is failed."
+          File.delete("video/#{@url_name}.mp4")
+          @fragment = Fragment.find(Fragment.last)
+          @fragment.destroy
+          flash[:success] = "Uploader on cloudinary is failed."
           redirect_to root_url
         else
+          #if all ok, name = cloudinary public_id video
           @fragment.name = @response['public_id']
           if @fragment.save
             File.delete("video/#{@url_name}.mp4")
@@ -50,15 +57,15 @@ class FragmentController < ApplicationController
               format.html { render 'home/index', @response }
               format.json { render :json => @response }
             end
-
-            @fragment.url = "http://res.cloudinary.com/comedy/video/upload#{@constructor}/v1488899230/#{@fragment.name}.mp4"
+            #builder url and save
+            @fragment.url = "http://res.cloudinary.com/comedy/video/upload#{@params}/v1488899230/#{@fragment.name}.mp4"
             @fragment.save
             flash[:success] = "Uploader is END."
           end
         end
 
       else
-        flash[:success] = "The download is ERROR."
+        flash[:success] = "The download video from YouTube is failed."
         redirect_to root_url
       end
 
@@ -73,7 +80,6 @@ class FragmentController < ApplicationController
   end
 
   def video_info
-
       @id_url = params['fragment']['url']
       @video = Yt::Video.new id: @id_url[32..@id_url.size]
       #render json: @id_url[32..@id_url.size]
@@ -103,7 +109,6 @@ class FragmentController < ApplicationController
   private
 
   def fragment_params
-
     params.require(:fragment).permit(:user_id, :name, :url)
   end
 

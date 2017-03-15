@@ -5,8 +5,9 @@
     <% @user_profile.each do |user_profile| %>
     <div class="col-xs-6 col-sm-4">
       <div class="video-block" style="width: 200px; height: 200px;">
-      <%= cl_video_tag("#{user_profile.name}", :resource_type => :video,cloud_name: "comedy", :end_offset=>"#{@end_offset}", :start_offset=>"#{@start_offset}", :width=>"#{200}",:height=>"#{200}") %>
+      <%= cl_video_tag("#{user_profile.name}", :resource_type => :video,cloud_name: "comedy", :width=>"#{200}",:height=>"#{200}") %>
       </div>
+      <a href="<%= user_profile.url %>" style="font-size: 7px;"><%= user_profile.url %></a>
       <div class="bottom-aligned-row" style="margin: 0 auto;">
         <button type="button" class="btn btn-success">
           <a href="/video_uploads/<%= user_profile.id %>/new">Upload on YouTube</a>
@@ -19,8 +20,4 @@
 
     <% end %>
   </div>
-
-
-
-
 </div>
