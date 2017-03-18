@@ -7,26 +7,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.1'
-
-gem 'pg'
-# auth google+ twitter facebook
-gem 'omniauth'
-gem 'omniauth-google-oauth2'
-gem 'omniauth-facebook'
-gem 'omniauth-twitter'
-
-#work with video file
-gem 'cloudinary'
-gem 'youtube-dl.rb'
-gem 'yt'
-#active type fore upload video
-gem 'active_type'
-
-# bootstrap
-gem 'bootstrap-sass'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
@@ -35,26 +17,12 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
-gem 'sidekiq'
-
-gem 'faker'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -76,3 +44,25 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'dotenv-rails', groups: [:development, :test]
+gem 'pg'
+gem 'faker'
+gem 'sidekiq'
+
+# oAuth services
+gem 'omniauth'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
+
+# work with video file
+gem 'cloudinary'
+gem 'youtube-dl.rb'
+gem 'yt'
+
+# active type for upload video
+gem 'active_type'
+
+# Bootstrap
+gem 'bootstrap-sass'

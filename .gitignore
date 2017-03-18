@@ -11,8 +11,6 @@
 config/secrets.yml
 config/database.yml
 
-config/initializers/omniauth.rb
-
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
@@ -28,3 +26,8 @@ config/initializers/omniauth.rb
 
 # Ignore rvm
 .rvmrc
+.ruby-gemset
+.ruby-version
+
+# Ignore env
+.env
