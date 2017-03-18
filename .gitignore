@@ -26,3 +26,8 @@ config/database.yml
 
 # Ignore rvm
 .rvmrc
+.ruby-gemset
+.ruby-version
+
+# Ignore env
+.env

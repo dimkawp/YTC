@@ -1,0 +1,17 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Fragments</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @fragments.each do |fragment| %>
+    <tr>
+      <td>
+        <a href="/fragment/<%= fragment.id %>"><%= fragment.url %></a>
+      </td>
+      <td><%= link_to 'Destroy', fragment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
