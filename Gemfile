@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.4.0'
+ruby '2.3.3'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
@@ -23,6 +23,12 @@ gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
+
+gem 'grape'
+gem 'grape-swagger'
+gem 'swagger-ui'
+gem 'swagger-docs'
+gem 'grape-jbuilder'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
