@@ -3,15 +3,8 @@ module Fragments
     format :json
     formatter :json, Grape::Formatter::Jbuilder
 
-    #resource :fragments do
-    #  desc "List all Fragments"
-
-      get 'fragments', jbuilder: 'fragments.jbuilder' do
-        @fragments = Fragment.all
-
-     # end
-
+    get 'fragments', jbuilder: 'fragments' do
+      @fragments = Fragment.all
     end
-
   end
 end

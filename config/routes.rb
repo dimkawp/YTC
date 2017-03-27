@@ -20,7 +20,7 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  mount API => '/'
+  mount API => '/api'
   mount Sidekiq::Web => '/sidekiq'
   #mount GrapeSwaggerRails::Engine => '/swagger'
 end
