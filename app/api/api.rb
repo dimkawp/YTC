@@ -1,7 +1,15 @@
-class Api < Grape::API
-  version 'v1', using: :path
+require 'grape-swagger'
 
-  mount Users::All
-  mount Fragments::All
-  add_swagger_documentation
+module Api
+  class API < Grape::API
+    format :json
+    formatter :json, Grape::Formatter::Jbuilder
+
+    mount Endpoints::Users
+    mount Endpoints::Fragments
+
+    add_swagger_documentation hide_documentation_path: true,
+                              api_version: 'v1',
+                              format: :json
+  end
 end

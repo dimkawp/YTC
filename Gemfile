@@ -24,12 +24,6 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 
-gem 'grape'
-gem 'grape-swagger'
-gem 'swagger-ui'
-gem 'swagger-docs'
-gem 'grape-jbuilder'
-
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
@@ -55,6 +49,10 @@ gem 'dotenv-rails', groups: [:development, :test]
 gem 'pg'
 gem 'faker'
 gem 'sidekiq'
+gem 'grape'
+gem 'grape-jbuilder'
+gem 'grape-swagger'
+gem 'grape-swagger-rails'
 
 # oAuth services
 gem 'omniauth'
