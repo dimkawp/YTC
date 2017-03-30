@@ -31,3 +31,4 @@ config/database.yml
 
 # Ignore env
 .env
+/env

@@ -49,6 +49,7 @@ gem 'dotenv-rails', groups: [:development, :test]
 gem 'pg'
 gem 'faker'
 gem 'sidekiq'
+gem 'sidekiq-status'
 gem 'grape'
 gem 'grape-jbuilder'
 gem 'grape-swagger'
