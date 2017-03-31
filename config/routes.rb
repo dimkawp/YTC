@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback', to: 'session#create'
   post '/video_uploads/:id' => 'video_uploads#create'
   post '/video_info' => 'fragment#video_info'
-  post '/cloud_video_info' => 'fragment#video_from_cloud'
+  post '/cloud_video_info' => 'fragment#cloud_public_id'
   post '/check_status_job' => 'fragment#check_status_job'
   post '/fragment/download' => 'fragment#download'
   post 'cloudinary' => 'fragment#cloudinary'
