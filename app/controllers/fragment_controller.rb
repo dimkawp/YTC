@@ -17,7 +17,7 @@ class FragmentController < ApplicationController
   def url_id(url)
     uri = URI.parse(url)
     params = CGI.parse(uri.query)
-    url = params['v']
+    url = params['v'].first
   end
 
   def create
@@ -25,8 +25,7 @@ class FragmentController < ApplicationController
     fragment = Fragment.new(fragment_params)
     fragment.user_id = session[:user_id]
     url = fragment.url
-    url_id(url)
-    session[:url_id] = url_id(fragment.url)
+    session[:url_id] = url_id(url)
     if current_user.nil?
       flash[:success] = 'verify_authenticity'
       redirect_to root_url
@@ -96,11 +95,11 @@ class FragmentController < ApplicationController
     ]
   end
 
-  def download
-    DownloadWorker.perform_async(session[:url_id])
-    redirect_to root_url
-
-  end
+  # def download
+  #   DownloadWorker.perform_async(session[:url_id])
+  #   redirect_to root_url
+  #
+  # end
 
   def video_from_cloud
 
@@ -123,16 +122,9 @@ class FragmentController < ApplicationController
   end
 
   def cloudinary
-    url_id = session[:url_id].first
-    # if video_from_cloud.nil?
-    #   flash[:success] = 'This video have cloudinary.'
-    #   redirect_to root_url
-    # else
-      job_id = CloudinaryWorker.perform_async(url_id)
-      session[:job_id] = job_id
-      flash[:success] = 'Uploading on cloudinary.'
+      job_id = CloudinaryWorker.perform_async(session[:url_id])
+      flash[:success] = 'Video upload on c;oudinary'
       redirect_to root_url
-    #end
 
   end
 
