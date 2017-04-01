@@ -76,7 +76,7 @@ class FragmentController < ApplicationController
 
   def video_size
     url_id = session[:url_id]
-    File.size("video/#{url_id}.mp4")
+    File.size("tmp/video/#{url_id}.mp4")
   end
 
   def video_info
