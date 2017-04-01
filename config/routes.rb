@@ -1,4 +1,5 @@
 require 'sidekiq/web'
+require 'sidekiq-status/web'
 
 Rails.application.routes.draw do
   get '/' => 'home#index'
@@ -10,7 +11,8 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback', to: 'session#create'
   post '/video_uploads/:id' => 'video_uploads#create'
   post '/video_info' => 'fragment#video_info'
-  post '/fragment/download' => 'fragment#download'
+  post '/cloud_video_info' => 'fragment#cloud_public_id'
+  post '/check_status_job' => 'fragment#check_status_job'
   post 'cloudinary' => 'fragment#cloudinary'
   delete '/logout', to: 'session#destroy', as: :logout
 

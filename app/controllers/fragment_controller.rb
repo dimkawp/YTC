@@ -1,5 +1,4 @@
 class FragmentController < ApplicationController
-  skip_before_filter :verify_authenticity_token, :only => [:download, :cloudinary]
 
   def index
     @fragments = Fragment.all
@@ -14,63 +13,32 @@ class FragmentController < ApplicationController
     @fragment = Fragment.find(params[:id])
   end
 
+  def url_id(url)
+    uri = URI.parse(url)
+    params = CGI.parse(uri.query)
+    url = params['v'].first
+  end
+
   def create
     #create new fragment url
-    @fragment = Fragment.new(fragment_params)
-    @fragment.user_id = session[:user_id]
+    fragment = Fragment.new(fragment_params)
+    fragment.user_id = session[:user_id]
+    url = fragment.url
+    session[:url_id] = url_id(url)
     if current_user.nil?
-      flash[:success] = 'Need authefication'
+      flash[:success] = 'verify_authenticity'
 
       redirect_to root_url
     else
-      #initializers fragment with params
-      @fragment.name = current_user.first_name
-      session[:start] = params['offset']['start']
-      session[:end] = params['offset']['end']
-      #create params
-      @params = "/eo_#{session[:end]},so_#{session[:start]}"
+      fragment.name = current_user.first_name
     end
 
-    if @fragment.save
-      #if create , add url(this youtube url) in DL gem and download video
-      @fragment = Fragment.find(Fragment.last)
-      @url = @fragment.url
-      @url_name = @fragment.name
+    if fragment.save
+      #take fragment.id in worker download
+      @job_id = DownloadWorker.perform_async(fragment.id)
+      session[:job_id] = @job_id
 
-      if YoutubeDL.download @url, output: "video/#{@url_name}.mp4"
-        #if download is ok, upload video file on cloudinary
-        @response = Cloudinary::Uploader.upload("video/#{@url_name}.mp4", :resource_type => :video)
-
-        if @response.nil?
-          File.delete("video/#{@url_name}.mp4")
-          @fragment = Fragment.find(Fragment.last)
-          @fragment.destroy
-
-          flash[:success] = 'Uploader on cloudinary is failed.'
-
-          redirect_to root_url
-        else
-          #if all ok, name = cloudinary public_id video
-          @fragment.name = @response['public_id']
-          if @fragment.save
-            File.delete("video/#{@url_name}.mp4")
-
-            respond_to do |format|
-              format.html { render 'home/index', @response }
-              format.json { render :json => @response }
-            end
-            #builder url and save
-            @fragment.url = "http://res.cloudinary.com/comedy/video/upload#{@params}/v1488899230/#{@fragment.name}.mp4"
-            @fragment.save
-
-            flash[:success] = 'Uploader is END.'
-          end
-        end
-      else
-        flash[:success] = 'The download video from YouTube is failed.'
-
-        redirect_to root_url
-      end
+      redirect_to root_url
     else
       if current_user.nil?
         flash[:success] = 'Empty value url. or you not auth.'
@@ -78,27 +46,54 @@ class FragmentController < ApplicationController
     end
   end
 
-  def video_info
-      @id_url = params['fragment']['url']
-      @video = Yt::Video.new id: @id_url[32..@id_url.size]
-
-      render json: [@video.id,
-                    @video.title,
-                    @video.description,
-                    @video.published_at,
-                    @video.thumbnail_url,
-                    @video.channel_id,
-                    @video.channel_title,
-                    @video.category_id,
-                    @video.category_title]
+  def status_job(job_id)
+    Sidekiq::Status::get_all job_id
   end
 
-  def download
+  def check_status_job
+    all_stats = status_job(session[:job_id])
+    status = all_stats['status']
+    #worker = all_stats["worker"]
+    #args = all_stats["args"]
+    #update_time = all_stats["update_time"]
+    #jid = all_stats["jid"]
+    render json: status
+  end
 
+  def video_size
+    url_id = session[:url_id]
+    File.size("tmp/video/#{url_id}.mp4")
+  end
+
+  def video_info
+    url_id = session[:url_id].first
+    @video = Yt::Video.new id: url_id
+    render json: [@video.id,
+                  @video.title,
+                  @video.description,
+                  @video.published_at,
+                  @video.thumbnail_url,
+                  @video.channel_id,
+                  @video.channel_title,
+                  @video.category_id,
+                  @video.category_title,
+                  @video.length]
+  end
+
+  def video_from_cloud
+    video = Cloudinary::Api.resources_by_ids(session[:url_id], :resource_type => :video)
+  end
+
+  def cloud_public_id
+      render json: video_from_cloud
   end
 
   def cloudinary
+    job_id = CloudinaryWorker.perform_async(session[:url_id])
 
+    flash[:success] = 'Video upload on c;oudinary'
+
+    redirect_to root_url
   end
 
   def destroy
