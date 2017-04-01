@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   post '/video_info' => 'fragment#video_info'
   post '/cloud_video_info' => 'fragment#cloud_public_id'
   post '/check_status_job' => 'fragment#check_status_job'
-  post '/fragment/download' => 'fragment#download'
   post 'cloudinary' => 'fragment#cloudinary'
   delete '/logout', to: 'session#destroy', as: :logout
 

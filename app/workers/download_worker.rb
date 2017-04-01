@@ -11,7 +11,6 @@ class DownloadWorker
     link = 'https://www.youtube.com/watch?v='
 
     YoutubeDL.download "#{link}#{url}", output: "tmp/video/#{url}.mp4", 'max-filesize': '40m'
-
-
+    
   end
 end
