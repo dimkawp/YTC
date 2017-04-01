@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
   def index
-
+    flash[:success] = "HELLO WORLD!"
+    flash[:error] = "HELLO WORLD!"
   end
 
   def create

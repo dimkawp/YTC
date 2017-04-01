@@ -1,42 +1,88 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>YTC</title>
-  <%= csrf_meta_tags %>
+<html lang="en" data-ng-app="app">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-</head>
+    <%= csrf_meta_tags %>
 
-<body>
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <% flash.each do |name, msg| -%>
-          <%= content_tag :div, msg, class: name %>
-      <% end -%>
-      <ol class="breadcrumb">
-        <li> <%= link_to 'Index', root_path %> </li>
-        <li> <%= link_to 'Home', root_path %> </li>
-        <li> <%= link_to 'Video', '/fragments.json' %> </li>
-        <li> <%= link_to 'Users', '/users' %> </li>
+    <title>YTC</title>
 
-      <% if current_user %>
-        <li><a href="/user/<%= current_user.id %>">Profile</a></li>
-        <!--<li><%= link_to 'Upload Video', new_video_upload_path %></li>-->
+    <link href="/favicon.ico" rel="shortcut icon">
+
+    <link href="/packages/semantic/css/semantic.min.css" rel="stylesheet">
+    <link href="/assets/css/app.min.css" rel="stylesheet">
+  </head>
+  <body data-ng-controller="IndexController as index">
+    <div class="ui container">
+      <header>
+        <div class="ui menu">
+          <a class="item" href="/">Home</a>
+          <a class="item" href="/users">Users</a>
+          <a class="item" href="/fragments">Fragments</a>
+
+          <% if current_user %>
+          <a class="item" href="/user/<%= current_user.id %>">Profile</a>
+          <% end %>
+
+          <% if current_user %>
+          <div class="item"><%= current_user.first_name %></div>
+          <a class="item" href="/<%= logout_path %>">Logout</a>
+          <% else %>
+          <a class="item" href="/auth/google_oauth2">Google +</a>
+          <a class="item" href="/auth/twitter">Twitter</a>
+          <a class="item" href="/auth/facebook">Facebook</a>
+          <% end %>
+        </div>
+      </header>
+
+      <% if flash[:success] %>
+      <div class="ui green icon message">
+        <i class="close icon"></i>
+        <i class="check icon"></i>
+
+        <div class="content">
+          <div class="header">Success!</div>
+
+          <div><%= flash[:success] %></div>
+        </div>
+      </div>
       <% end %>
-      <% if current_user %>
-        <li><%= current_user.first_name %></li>
-        <li><%= link_to 'Log Out', logout_path, method: :delete %></li>
-      <% else %>
-        <li><%= link_to 'Google +', '/auth/google_oauth2' %></li>
-        <li><%= link_to 'Twitter', '/auth/twitter' %></li>
-        <li><%= link_to 'Facebook', '/auth/facebook' %></li>
+
+      <% if flash[:error] %>
+      <div class="ui red icon message">
+        <i class="close icon"></i>
+        <i class="warning sign icon"></i>
+
+        <div class="content">
+          <div class="header">Error!</div>
+
+          <div><%= flash[:error] %></div>
+        </div>
+      </div>
       <% end %>
-      </ol>
+
+      <div class="ui segment">
+        {{ index.user.first_name }} {{ index.user.last_name }}
+
+        <a class="ui youtube button" href="/auth/google_oauth2">
+          <i class="youtube icon"></i> YouTube
+        </a>
+      </div>
+
+      <section class="content">
+        <div class="ui segment">
+          <%= yield %>
+        </div>
+      </section>
+
+      <footer></footer>
     </div>
-  </div>
-</nav>
-  <%= yield %>
-</body>
+
+    <script src="/packages/jquery/js/jquery.min.js"></script>
+    <script src="/packages/angular/js/angular.min.js"></script>
+    <script src="/packages/semantic/js/semantic.min.js"></script>
+    <script src="/assets/js/app.min.js"></script>
+  </body>
 </html>
