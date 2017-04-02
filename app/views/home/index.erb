@@ -44,20 +44,6 @@
 
 <div class="ui divider"></div>
 
-<div class="ui header">Youtube Link</div>
-
-<div class="ui form">
-  <%= form_tag({controller: 'fragment', action: 'create'}, method: 'post') do %>
-    <div class="field">
-      <%= label_tag('Url') %>
-      <%= text_field(:fragment, :url, placeholder: 'url') %>
-    </div>
-    <%= submit_tag 'Download', class: 'ui green button' %>
-  <% end %>
-</div>
-
-<div class="ui divider"></div>
-
 <div class="ui buttons">
   <%= button_to 'Info about YouTube Video', {:controller => 'fragment', :action => 'video_info'}, :method => :post, class: 'ui button' %>
   <%= button_to 'Check_status_job', {:controller => 'fragment', :action => 'check_status_job'}, :method => :post, class: 'ui button' %>

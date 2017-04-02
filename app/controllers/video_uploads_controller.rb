@@ -13,13 +13,14 @@ class VideoUploadsController < ApplicationController
 
     @video_uploads = VideoUploader.new(title: params[:video_uploads][:title],
                                        description: params[:video_uploads][:description],
-                                       file: @all_fragments_user.url)
+                                       file: @all_fragments_user.cloud_url)
+    #render json: @video_uploads
 
     if @video_uploads.save
       uploaded_video = @video_uploads.upload!(current_user)
 
       if uploaded_video.failed?
-        flash[:success] = 'There was an error while uploading your video...'
+        flash[:success] = 'There was an error uploading your video'
       else
         flash[:success] = 'Your video has been uploaded!'
       end

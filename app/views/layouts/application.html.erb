@@ -28,7 +28,7 @@
 
           <% if current_user %>
           <div class="item"><%= current_user.first_name %></div>
-          <a class="item" href="/<%= logout_path %>">Logout</a>
+          <a class="item" href="<%= logout_path %>">Logout</a>
           <% else %>
           <a class="item" href="/auth/google_oauth2">Google +</a>
           <a class="item" href="/auth/twitter">Twitter</a>

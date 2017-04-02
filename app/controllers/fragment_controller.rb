@@ -66,7 +66,7 @@ class FragmentController < ApplicationController
   end
 
   def video_info
-    url_id = session[:url_id].first
+    url_id = session[:url_id]
     @video = Yt::Video.new id: url_id
     render json: [@video.id,
                   @video.title,
@@ -90,8 +90,12 @@ class FragmentController < ApplicationController
 
   def cloudinary
     job_id = CloudinaryWorker.perform_async(session[:url_id])
-
-    flash[:success] = 'Video upload on c;oudinary'
+    fragment = Fragment.where(user_id: session[:user_id]).last
+    cloud = video_from_cloud
+    fragment.cloud_url = cloud['resources'].last['url']
+    fragment.save
+    flash[:success] = 'Video upload on cloudinary'
+    #render json: fragment
 
     redirect_to root_url
   end

@@ -11,12 +11,15 @@ Rails.application.routes.draw do
   get '/video_uploads/:id/new' => 'video_uploads#new'
   get '/auth/failure', to: 'session#auth_failure'
   get '/auth/:provider/callback', to: 'session#create'
+  get 'logout', to: 'session#destroy', as: :logout
   post '/video_uploads/:id' => 'video_uploads#create'
   post '/video_info' => 'fragment#video_info'
   post '/cloud_video_info' => 'fragment#cloud_public_id'
   post '/check_status_job' => 'fragment#check_status_job'
   post 'cloudinary' => 'fragment#cloudinary'
-  delete '/logout', to: 'session#destroy', as: :logout
+  delete '/delete/:id' => 'fragment#destroy'
+
+  #delete 'logout' => 'session#destroy'
 
   resources :user
   resources :fragment

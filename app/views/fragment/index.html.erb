@@ -10,7 +10,12 @@
       <td>
         <a href="/fragment/<%= fragment.id %>"><%= fragment.url %></a>
       </td>
-      <td><%= link_to 'Destroy', fragment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <td>
+        <%= form_tag("/delete/#{fragment.id}", method: "delete") do %>
+        <%= submit_tag 'Delete', class: 'ui button' %>
+        <% end %>
+
+      </td>
     </tr>
     <% end %>
   </tbody>

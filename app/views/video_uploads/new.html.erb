@@ -2,18 +2,16 @@
   <h1>Upload video</h1>
 
   <% if current_user %>
-  <a href="<%= @all_fragments_user.url %>" style="font-size: 8px;"><%= @all_fragments_user.url %></a>
-  <%= form_tag({controller: 'video_uploads', action: 'create'}, method: 'post', class: 'form-horizontal col-sm-10', url: video_uploads_path) do %>
-  <div class="form-group">
-    <label>Title:</label>
-    <%= text_field(:video_uploads, :title, class: 'col-sm-2', placeholder: 'Title') %>
-  </div>
-  <div class="form-group">
-    <label>Description: </label>
-    <%= text_area(:video_uploads, :description, class: 'col-sm-4', placeholder: 'Description', row: '3') %>
-  </div>
+  <a href="<%= @all_fragments_user.cloud_url %>" style="font-size: 8px;"><%= @all_fragments_user.cloud_url %></a>
+  <%= form_tag({controller: 'video_uploads', action: 'create'}, method: 'post', class: 'ui form', url: video_uploads_path) do %>
 
-  <%= submit_tag 'Sign in', class: 'btn btn-default' %>
+    <label>Title:</label>
+    <%= text_field(:video_uploads, :title, class: 'ui input', placeholder: 'Title') %>
+
+    <label>Description: </label>
+    <%= text_area(:video_uploads, :description, class: 'ui input', placeholder: 'Description', row: '3') %>
+
+  <%= submit_tag 'Sign in', class: 'ui button' %>
   <% end %>
   <% else %>
   <p>Please <%= link_to 'sign in', '/auth/google_oauth2' %>.</p>
