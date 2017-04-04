@@ -5,15 +5,36 @@
     angular.module('app.index')
            .controller('IndexController', IndexController);
 
-    IndexController.$inject = ['users'];
+    IndexController.$inject = ['api', '$sce'];
 
-    function IndexController(users)
+    function IndexController(api, $sce)
     {
         var vm = this;
 
         vm.user = [];
+        vm.fragment = [];
+
+        vm.preview = preview;
 
         getUser();
+
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Fragments
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function preview()
+        {
+            var data = {
+                url: vm.fragment.url
+            };
+
+            api.getEmbedUrl(data).then(function (data)
+            {
+                vm.fragment.embed_url = $sce.trustAsResourceUrl(data);
+            });
+        }
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -23,7 +44,7 @@
 
         function getUser()
         {
-            users.getUser().then(function (data)
+            api.getUser().then(function (data)
             {
                 vm.user = data;
             });
