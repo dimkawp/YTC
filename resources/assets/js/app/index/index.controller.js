@@ -27,7 +27,9 @@
         function preview()
         {
             var data = {
-                url: vm.fragment.url
+                url: vm.fragment.url,
+                start: vm.fragment.start,
+                end: vm.fragment.end
             };
 
             api.getEmbedUrl(data).then(function (data)

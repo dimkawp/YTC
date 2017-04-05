@@ -2,17 +2,26 @@
   <div class="ui form">
     <div class="field">
       <label>Youtube URL</label>
-
-      <div class="ui action input">
-        <input type="text" data-ng-model="index.fragment.url">
-
-        <button class="ui button" data-ng-click="index.preview()">Preview</button>
-      </div>
+        <div class="ui input">
+          <input type="text" data-ng-change="index.preview()" data-ng-model="index.fragment.url">
+        </div>
     </div>
   </div>
 
   <div class="ui segment" data-ng-if="index.fragment.embed_url">
-    <div class="ui embed" data-source="youtube" data-url="{{ index.fragment.embed_url }}" data-app-embed></div>
+    <h3><a data-ng-href="{{index.fragment.embed_url}}">{{index.fragment.embed_url}}</a></h3>
+    <iframe data-ng-src="{{index.fragment.embed_url}}">></iframe>
+    <div class="two fields">
+      <div class="field">
+        <label>Start</label>
+        <input type="number" min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.start">
+      </div>
+      <div class="ui field">
+        <label>End</label>
+        <input type="number" min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.end">
+      </div>
+    </div>
+    <!--https://www.youtube.com/embed/9cOzY8EN8XM?start=10&end=20 -->
   </div>
 
   <!--<div class="ui segment" data-ng-if="index.fragment.embed_url">-->
@@ -23,23 +32,25 @@
 <div class="ui divider"></div>
 
 <div class="ui form">
+
   <%= form_tag({controller: 'fragment', action: 'create'}, method: 'post') do %>
-      <div class="field">
+      <div class="field ">
         <%= label_tag('Youtube URL') %>
         <%= text_field(:fragment, :url, placeholder: 'url') %>
       </div>
-      <div class="two fields">
-        <div class="field">
-          <%= label_tag('Start') %>
-          <%= text_field(:offset, :start, placeholder: 'start') %>
-        </div>
-        <div class="field">
-          <%= label_tag('End') %>
-          <%= text_field(:offset, :end, placeholder: 'end') %>
-        </div>
-      </div>
+      <!--<div class="two fields">-->
+        <!--<div class="field">-->
+          <!--<%= label_tag('Start') %>-->
+          <!--<%= text_field(:offset, :start, placeholder: 'start') %>-->
+        <!--</div>-->
+        <!--<div class="field">-->
+          <!--<%= label_tag('End') %>-->
+          <!--<%= text_field(:offset, :end, placeholder: 'end') %>-->
+        <!--</div>-->
+      <!--</div>-->
       <%= submit_tag 'Download', class: 'ui button' %>
   <% end %>
+
 </div>
 
 <div class="ui divider"></div>
@@ -50,3 +61,4 @@
   <%= button_to 'Upload on cloudinary', {:controller => 'fragment', :action => 'cloudinary'}, :method => :post, class: 'ui button' %>
   <%= button_to 'Check video from cloudinary', {:controller => 'fragment', :action => 'cloud_public_id'}, :method => :post, class: 'ui button' %>
 </div>
+
