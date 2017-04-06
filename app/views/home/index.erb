@@ -1,64 +1,67 @@
-<div class="ui segment">
-  <div class="ui form">
-    <div class="field">
-      <label>Youtube URL</label>
-        <div class="ui input">
+<div class="ui equal width center aligned padded grid">
+  <div class="row">
+    <div class="column">
+
+      <div class="ui form">
+        <div class="field">
+          <label>Youtube URL</label>
           <input type="text" data-ng-change="index.preview()" data-ng-model="index.fragment.url">
         </div>
+      </div>
+
+      <div class="row" data-ng-if="index.fragment.embed_url">
+        <iframe style="width:800px; height: 400px;" class="filed" data-ng-src="{{index.fragment.embed_url}}"></iframe>
+        <div class="form group field">
+          <label>Start</label>
+          <input type="number" data-ng-min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.start">
+          <label>End</label>
+          <input type="number" data-ng-min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.end">
+        </div>
+        <button class="ui primary basic button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Create fragment</button>
+
+        <button class="ui primary basic button" data-ng-click="info = ! info" data-ng-class="{'btn-warning': started, 'btn-danger': !started}">Video Info</button>
+        <div data-ng-show="info">
+          <p>{{index.postInfo.id}}</p>
+        </div>
+
+      </div>
+
     </div>
   </div>
-
-  <div class="ui segment" data-ng-if="index.fragment.embed_url">
-    <h3><a data-ng-href="{{index.fragment.embed_url}}">{{index.fragment.embed_url}}</a></h3>
-    <iframe data-ng-src="{{index.fragment.embed_url}}">></iframe>
-    <div class="two fields">
-      <div class="field">
-        <label>Start</label>
-        <input type="number" min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.start">
-      </div>
-      <div class="ui field">
-        <label>End</label>
-        <input type="number" min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.end">
-      </div>
-    </div>
-    <!--https://www.youtube.com/embed/9cOzY8EN8XM?start=10&end=20 -->
-  </div>
-
-  <!--<div class="ui segment" data-ng-if="index.fragment.embed_url">-->
-    <!--<iframe ng-src="{{ index.fragment.embed_url }}" data-test="{{ index.fragment.embed_url }}" frameborder="0"></iframe>-->
-  <!--</div>-->
 </div>
 
-<div class="ui divider"></div>
 
-<div class="ui form">
 
-  <%= form_tag({controller: 'fragment', action: 'create'}, method: 'post') do %>
-      <div class="field ">
-        <%= label_tag('Youtube URL') %>
-        <%= text_field(:fragment, :url, placeholder: 'url') %>
-      </div>
-      <!--<div class="two fields">-->
-        <!--<div class="field">-->
-          <!--<%= label_tag('Start') %>-->
-          <!--<%= text_field(:offset, :start, placeholder: 'start') %>-->
-        <!--</div>-->
-        <!--<div class="field">-->
-          <!--<%= label_tag('End') %>-->
-          <!--<%= text_field(:offset, :end, placeholder: 'end') %>-->
-        <!--</div>-->
+
+
+<!--<div class="ui form">-->
+
+  <!--<%= form_tag({controller: 'fragment', action: 'create'}, method: 'post') do %>-->
+      <!--<div class="field ">-->
+        <!--<%= label_tag('Youtube URL') %>-->
+        <!--<%= text_field(:fragment, :url, placeholder: 'url') %>-->
       <!--</div>-->
-      <%= submit_tag 'Download', class: 'ui button' %>
-  <% end %>
+      <!--&lt;!&ndash;<div class="two fields">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="field">&ndash;&gt;-->
+          <!--&lt;!&ndash;<%= label_tag('Start') %>&ndash;&gt;-->
+          <!--&lt;!&ndash;<%= text_field(:offset, :start, placeholder: 'start') %>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="field">&ndash;&gt;-->
+          <!--&lt;!&ndash;<%= label_tag('End') %>&ndash;&gt;-->
+          <!--&lt;!&ndash;<%= text_field(:offset, :end, placeholder: 'end') %>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+      <!--<%= submit_tag 'Download', class: 'ui button' %>-->
+  <!--<% end %>-->
 
-</div>
+<!--</div>-->
 
-<div class="ui divider"></div>
+<!--<div class="ui divider"></div>-->
 
-<div class="ui buttons">
-  <%= button_to 'Info about YouTube Video', {:controller => 'fragment', :action => 'video_info'}, :method => :post, class: 'ui button' %>
-  <%= button_to 'Check_status_job', {:controller => 'fragment', :action => 'check_status_job'}, :method => :post, class: 'ui button' %>
-  <%= button_to 'Upload on cloudinary', {:controller => 'fragment', :action => 'cloudinary'}, :method => :post, class: 'ui button' %>
-  <%= button_to 'Check video from cloudinary', {:controller => 'fragment', :action => 'cloud_public_id'}, :method => :post, class: 'ui button' %>
-</div>
+<!--<div class="ui buttons">-->
+  <!--<%= button_to 'Info about YouTube Video', {:controller => 'fragment', :action => 'video_info'}, :method => :post, class: 'ui button' %>-->
+  <!--<%= button_to 'Check_status_job', {:controller => 'fragment', :action => 'check_status_job'}, :method => :post, class: 'ui button' %>-->
+  <!--<%= button_to 'Upload on cloudinary', {:controller => 'fragment', :action => 'cloudinary'}, :method => :post, class: 'ui button' %>-->
+  <!--<%= button_to 'Check video from cloudinary', {:controller => 'fragment', :action => 'cloud_public_id'}, :method => :post, class: 'ui button' %>-->
+<!--</div>-->
 

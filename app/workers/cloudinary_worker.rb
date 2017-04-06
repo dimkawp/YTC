@@ -1,7 +1,10 @@
 class CloudinaryWorker
   include Sidekiq::Worker
 
-  def perform(url)
+  def perform(id)
+    fragment = Fragment.find(id)
+    url = fragment.url
+    url = url[32..url.size]
     begin
       video = Cloudinary::Api.resource(url, :resource_type => :video)
     rescue CloudinaryException

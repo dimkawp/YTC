@@ -7,16 +7,51 @@
 
     IndexController.$inject = ['api', '$sce'];
 
+
+
     function IndexController(api, $sce)
     {
         var vm = this;
 
         vm.user = [];
         vm.fragment = [];
+        vm.test = [];
+        vm.postInfo = [];
 
         vm.preview = preview;
+        vm.create = create;
 
         getUser();
+        postInfo();
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Fragments Create
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function postInfo()
+        {
+            api.postInfo().then(function (data)
+            {
+                vm.postInfo = data;
+            });
+        }
+
+        function create()
+        {
+            var data = {
+                url: vm.fragment.url,
+                user_id: 28,
+                start: vm.fragment.start,
+                end: vm.fragment.end
+            };
+
+            api.postFragmentCreate(data).then(function (data)
+            {
+                vm.create = data;
+            });
+
+        }
 
         /*
          |--------------------------------------------------------------------------------------------------------------

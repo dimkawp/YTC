@@ -11,8 +11,19 @@
     {
         return {
             "getEmbedUrl": getEmbedUrl,
-            "getUser": getUser
+            "getUser": getUser,
+            "postFragmentCreate": postFragmentCreate,
+            "postInfo": postInfo
         };
+
+        function postInfo(data)
+        {
+            return $http.post('/api/fragments/info/358', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
+
 
         function getEmbedUrl(data)
         {
@@ -20,6 +31,14 @@
             {
                 return response.data;
             });
+        }
+
+        function postFragmentCreate(data)  {
+            return $http.post('/api/fragments/create', data).then(function (response)
+            {
+                return response.data;
+            });
+
         }
 
         function getUser()
