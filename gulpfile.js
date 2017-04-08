@@ -17,6 +17,7 @@ elixir(function (mix) {
         'app/app.module.js',
         'app/index/index.module.js',
         'app/index/index.controller.js',
+        'app/index/auth.config.js',
         'app/index/api.service.js',
         'app/index/app-embed.directive.js',
     ], 'public/assets/js/app.min.js');
@@ -31,6 +32,12 @@ elixir(function (mix) {
     // AngularJS
     mix.copy('node_modules/angular/angular.min.js', 'public/packages/angular/js/angular.min.js');
     mix.copy('node_modules/angular/angular.min.js.map', 'public/packages/angular/js/angular.min.js.map');
+
+    // Angular Cookie
+    mix.copy('node_modules/angular-cookie/angular-cookie.min.js', 'public/packages/angular-cookie/js/cookie.min.js');
+
+    // Angular Token Auth
+    mix.copy('node_modules/ng-token-auth/dist/ng-token-auth.min.js', 'public/packages/angular-token-auth/js/token-auth.min.js');
 
     // Semantic UI
     mix.copy('resources/packages/semantic/dist/themes/default', 'public/packages/semantic/css/themes/default');

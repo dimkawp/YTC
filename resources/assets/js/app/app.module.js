@@ -2,7 +2,5 @@
 {
     'use strict';
 
-    angular.module('app', [
-        'app.index'
-    ]);
+    angular.module('app', ['app.index']);
 })();

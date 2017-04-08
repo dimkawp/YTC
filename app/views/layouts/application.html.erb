@@ -16,70 +16,31 @@
   </head>
   <body data-ng-controller="IndexController as index">
     <div class="ui container">
-      <header>
-        <div class="ui menu">
-          <a class="item" href="/">Home</a>
-          <a class="item" href="/users">Users</a>
-          <a class="item" href="/fragments">Fragments</a>
-
-          <% if current_user %>
-          <a class="item" href="/user/<%= current_user.id %>">Profile</a>
-          <% end %>
-
-          <% if current_user %>
-          <div class="item"><%= current_user.first_name %></div>
-          <a class="item" href="/<%= logout_path %>">Logout</a>
-          <% else %>
-          <a class="item" href="/auth/google_oauth2">Google +</a>
-          <a class="item" href="/auth/twitter">Twitter</a>
-          <a class="item" href="/auth/facebook">Facebook</a>
-          <% end %>
-        </div>
-      </header>
-
-      <% if flash[:success] %>
-      <div class="ui green icon message">
-        <i class="close icon"></i>
-        <i class="check icon"></i>
-
-        <div class="content">
-          <div class="header">Success!</div>
-
-          <div><%= flash[:success] %></div>
-        </div>
-      </div>
-      <% end %>
-
-      <% if flash[:error] %>
-      <div class="ui red icon message">
-        <i class="close icon"></i>
-        <i class="warning sign icon"></i>
-
-        <div class="content">
-          <div class="header">Error!</div>
-
-          <div><%= flash[:error] %></div>
-        </div>
-      </div>
-      <% end %>
-
-      <div class="ui segment">
-        {{ index.user.first_name }} {{ index.user.last_name }}
-
-        <a class="ui youtube button" href="/auth/google_oauth2">
-          <i class="youtube icon"></i> YouTube
-        </a>
-      </div>
-
       <section class="content">
+        <div class="ui segment">
+          <a class="ui red ribbon label">
+            <i class="user icon"></i>
+          </a>
+
+          {{ index.user.name }}
+
+          <button class="ui youtube button" data-ng-click="index.login()" data-ng-hide="index.user.id">
+            <i class="sign in icon"></i> Login with YouTube
+          </button>
+
+          <button class="ui button" data-ng-click="index.logout()" data-ng-show="index.user.id">
+            <i class="sign out icon"></i> Logout
+          </button>
+        </div>
+
         <%= yield %>
       </section>
-
-      <footer></footer>
     </div>
 
     <script src="/packages/jquery/js/jquery.min.js"></script>
     <script src="/packages/angular/js/angular.min.js"></script>
+    <script src="/packages/angular-cookie/js/cookie.min.js"></script>
+    <script src="/packages/angular-token-auth/js/token-auth.min.js"></script>
     <script src="/packages/semantic/js/semantic.min.js"></script>
     <script src="/assets/js/app.min.js"></script>
   </body>
