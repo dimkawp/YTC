@@ -3,5 +3,9 @@ module Endpoints
     get 'users', jbuilder: 'users' do
       @users = User.all
     end
+
+    get 'users/me' do
+      User.last
+    end
   end
 end

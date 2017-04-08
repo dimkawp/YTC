@@ -12,9 +12,7 @@ module YTC
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    # config.paths.add File.join('app', 'api'), glob: File.join('**', '*.rb')
-    # config.autoload_paths += Dir[Rails.root.join('app', 'api', '*')]
-
+    config.assets.enabled = true
     config.active_job.queue_adapter = :sidekiq
 
     config.middleware.use(Rack::Config) do |env|

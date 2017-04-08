@@ -1,31 +1,66 @@
-<div class="container well bs-component">
-  <h1 class="text-center">Youtube Link</h1>
-  <%= form_tag({controller: "fragment", action: "create"}, method: "post", class: "form-horizontal col-sm-12") do %>
-  <%= text_field(:fragment, :url, class: "form-control", placeholder: "url") %>
-  <br>
-  <hr>
-  <%= submit_tag "Download", class: "btn btn-raised btn-warning col-md-4 col-xs-4 col-md-push-4 col-xs-push-4" %>
+<div class="ui segment">
+  <div class="ui form">
+    <div class="field">
+      <label>Youtube URL</label>
+
+      <div class="ui action input">
+        <input type="text" data-ng-model="index.fragment.url">
+
+        <button class="ui button" data-ng-click="index.preview()">Preview</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui segment" data-ng-if="index.fragment.embed_url">
+    <div class="ui embed" data-source="youtube" data-url="{{ index.fragment.embed_url }}" data-app-embed></div>
+  </div>
+
+  <!--<div class="ui segment" data-ng-if="index.fragment.embed_url">-->
+    <!--<iframe ng-src="{{ index.fragment.embed_url }}" data-test="{{ index.fragment.embed_url }}" frameborder="0"></iframe>-->
+  <!--</div>-->
+</div>
+
+<div class="ui divider"></div>
+
+<div class="ui form">
+  <%= form_tag({controller: 'fragment', action: 'create'}, method: 'post') do %>
+      <div class="field">
+        <%= label_tag('Youtube URL') %>
+        <%= text_field(:fragment, :url, placeholder: 'url') %>
+      </div>
+      <div class="two fields">
+        <div class="field">
+          <%= label_tag('Start') %>
+          <%= text_field(:offset, :start, placeholder: 'start') %>
+        </div>
+        <div class="field">
+          <%= label_tag('End') %>
+          <%= text_field(:offset, :end, placeholder: 'end') %>
+        </div>
+      </div>
+      <%= submit_tag 'Download', class: 'ui button' %>
   <% end %>
-  <br>
-  <hr>
-  <div class="row">
-    <%= button_to 'Info about YouTube Video', {:controller => "fragment", :action => "video_info"}, :method=>:post, class: "btn btn-raised btn-success col-md-4 col-xs-4 col-md-push-4 col-xs-push-4" %>
-  </div>
-  <div class="row">
-    <%= button_to 'Check_status_job', {:controller => "fragment", :action => "check_status_job"}, :method=>:post, class: "btn btn-raised btn-success col-md-4 col-xs-4 col-md-push-4 col-xs-push-4" %>
-  </div>
-  <div class="row">
-    <%= button_to 'Upload on cloudinary', {:controller => "fragment", :action => "cloudinary"}, :method=>:post, class: "btn btn-raised btn-success col-md-4 col-xs-4 col-md-push-4 col-xs-push-4" %>
-  </div>
-  <div class="row">
-    <%= button_to 'Check video from cloudinary', {:controller => "fragment", :action => "cloud_public_id"}, :method=>:post, class: "btn btn-raised btn-success col-md-4 col-xs-4 col-md-push-4 col-xs-push-4" %>
-  </div>
-  <div class="row">
-    <p><%  %></p>
+</div>
 
-  </div>
+<div class="ui divider"></div>
 
-  <br>
+<div class="ui header">Youtube Link</div>
 
+<div class="ui form">
+  <%= form_tag({controller: 'fragment', action: 'create'}, method: 'post') do %>
+    <div class="field">
+      <%= label_tag('Url') %>
+      <%= text_field(:fragment, :url, placeholder: 'url') %>
+    </div>
+    <%= submit_tag 'Download', class: 'ui green button' %>
+  <% end %>
+</div>
 
+<div class="ui divider"></div>
+
+<div class="ui buttons">
+  <%= button_to 'Info about YouTube Video', {:controller => 'fragment', :action => 'video_info'}, :method => :post, class: 'ui button' %>
+  <%= button_to 'Check_status_job', {:controller => 'fragment', :action => 'check_status_job'}, :method => :post, class: 'ui button' %>
+  <%= button_to 'Upload on cloudinary', {:controller => 'fragment', :action => 'cloudinary'}, :method => :post, class: 'ui button' %>
+  <%= button_to 'Check video from cloudinary', {:controller => 'fragment', :action => 'cloud_public_id'}, :method => :post, class: 'ui button' %>
 </div>

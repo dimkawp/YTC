@@ -2,6 +2,8 @@ require 'sidekiq/web'
 require 'sidekiq-status/web'
 
 Rails.application.routes.draw do
+  root 'home#index'
+
   get '/' => 'home#index'
   get '/users' => 'user#index'
   get '/fragments' => 'fragment#index'
@@ -19,8 +21,6 @@ Rails.application.routes.draw do
   resources :user
   resources :fragment
   resources :video_uploads, only: [:index, :new, :create]
-
-  root 'home#index'
 
   mount Api::API => '/api'
   mount Sidekiq::Web => '/sidekiq'
