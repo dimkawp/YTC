@@ -9,30 +9,48 @@
         </div>
       </div>
 
+      <div class="row"><br></div>
       <div class="row" data-ng-if="index.fragment.embed_url">
         <iframe style="width:800px; height: 400px;" class="filed" data-ng-src="{{index.fragment.embed_url}}"></iframe>
+        <div class="row"><br></div>
         <div class="form group field">
           <label>Start</label>
           <input type="number" data-ng-min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.start">
           <label>End</label>
           <input type="number" data-ng-min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.end">
         </div>
-        <button class="ui primary basic button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Create fragment</button>
+        <div class="row"><br></div>
+        <button class="ui inverted blue button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Create fragment</button>
+        <button class="ui inverted blue button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Upload on cloudinary</button>
+        <button class="ui inverted blue button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Upload on youtube</button>
 
-        <button class="ui primary basic button" data-ng-click="info = ! info" data-ng-class="{'btn-warning': started, 'btn-danger': !started}">Video Info</button>
+
+        <button class="ui inverted green button" data-ng-click="info = ! info" data-ng-class="{'ui inverted green button': started, 'ui inverted orange button': !started}">Video Info</button>
         <div data-ng-show="info">
-          <p>{{index.postInfo.id}}</p>
+          <ul>
+            <li>{{index.postInfo.title}}</li>
+            <li>{{index.postInfo.channel_title}}</li>
+            <li>{{index.postInfo.published_at}}</li>
+            <li>{{index.postInfo.length}}</li>
+          </ul>
+          <!--@video.id,-->
+          <!--@video.title,-->
+          <!--@video.description,-->
+          <!--@video.published_at,-->
+          <!--@video.thumbnail_url,-->
+          <!--@video.channel_id,-->
+          <!--@video.channel_title,-->
+          <!--@video.category_id,-->
+          <!--@video.category_title,-->
+          <!--@video.length]-->
         </div>
 
       </div>
 
+
     </div>
   </div>
 </div>
-
-
-
-
 
 <!--<div class="ui form">-->
 

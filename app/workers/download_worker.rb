@@ -4,10 +4,12 @@ class DownloadWorker
   def perform(id)
     fragment = Fragment.find(id)
     url = fragment.url
-    url = url[32..url.size]
+    url = URI.parse(url)
+    respond = CGI.parse(url.query)
+    video_id = respond['v'].first
 
     link = 'https://www.youtube.com/watch?v='
 
-    YoutubeDL.download "#{link}#{url}", output: "tmp/video/#{url}.mp4", 'max-filesize': '40m'
+    YoutubeDL.download "#{link}#{video_id}", output: "tmp/video/#{video_id}.mp4", 'max-filesize': '40m'
   end
 end

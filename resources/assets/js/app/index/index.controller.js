@@ -31,6 +31,7 @@
 
         function postInfo()
         {
+
             api.postInfo().then(function (data)
             {
                 vm.postInfo = data;
@@ -48,7 +49,7 @@
 
             api.postFragmentCreate(data).then(function (data)
             {
-                vm.create = data;
+                vm.fragment = data;
             });
 
         }

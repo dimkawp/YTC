@@ -82,10 +82,18 @@ class FragmentController < ApplicationController
 
   def video_from_cloud
     video = Cloudinary::Api.resources_by_ids(session[:url_id], :resource_type => :video)
+
   end
 
   def cloud_public_id
-      render json: video_from_cloud
+    title = 'asdasd'
+    description = 'asdasdasdad'
+    cloud_uri = 'http://res.cloudinary.com/comedy/video/upload/v1490986836/GqWqm2pYF0E.webm'
+    token = 'ya29.GlwoBJeAvw6K8j6Xh2LpPrWiwQtrLiSszDVkQLCejf4ggkcF20hU1wGl4zFv29OOIRPX8BxVbXC5DQ-eUZ_xCexEpNWHiIQ_N2q7WsZCTzgR-DdZO7fGxxIvEoz8cg'
+
+
+    job = UploaderWorker.perform_async(title,description,cloud_uri)
+      #render json: video_from_cloud
   end
 
   def cloudinary

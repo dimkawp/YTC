@@ -9,6 +9,20 @@ module Endpoints
         @fragments = Fragment.find(params[:id])
     end
 
+    get 'profile' do
+      fragment = Fragment.where(user_id: '28').last
+      url = fragment.url
+      url = URI.parse(url)
+      respond = CGI.parse(url.query)
+      video_id = respond['v'].first
+
+      @video_from_cloud = Cloudinary::Api.resources_by_ids(video_id, :resource_type => :video)
+      # cloud = video_from_cloud
+      # fragment.cloud_url = cloud['resources'].last['url']
+      # fragmen.save
+    end
+
+
     params do
       requires :url, type: String, desc: 'URL'
       optional :start, type: Integer, desc: 'start'
@@ -19,8 +33,8 @@ module Endpoints
       @start = params[:start]
       @end = params[:end]
       url = URI.parse(params[:url])
-      params = CGI.parse(url.query)
-      video_id = params['v'].first
+      respond = CGI.parse(url.query)
+      video_id = respond['v'].first
 
       "https://www.youtube.com/embed/#{video_id}?start=#{@start}&end=#{@end}&autoplay=1"
     end
@@ -33,7 +47,7 @@ module Endpoints
     end
 
     post 'fragments/create' do
-      begin
+       begin
         fragment = Fragment.create({
                                   url: params[:url],
                                   user_id: '28',
@@ -49,7 +63,7 @@ module Endpoints
           error!(
               {
               status: :error, message: fragment.errors.full_messages.first
-              }) if fragment.errors.any?
+              }) if fragment.errors
         end
       rescue ActiveRecord::RecordNotFound
         error!({status: :error, message: :not_found}, 404)
@@ -101,10 +115,18 @@ module Endpoints
       job_id = DownloadWorker.perform_async(fragment.id)
     end
 
+    # params do
+    #   requires :id, type: String, desc: 'id'
+    # end
+
     post 'fragments/info/:id' do
       fragment = Fragment.find(params[:id])
-      @url = fragment.url
-      @video = Yt::Video.new id: @url[32..@url.size]
+      url = fragment.url
+      url = URI.parse(fragment.url)
+      respond = CGI.parse(url.query)
+      video_id = respond['v'].first
+
+      @video = Yt::Video.new id: video_id
        [id: @video.id,
         title: @video.title,
         description: @video.description,
@@ -117,9 +139,45 @@ module Endpoints
         length: @video.length].first
     end
 
-    post 'cloudinary/:id' do
-      fragment = Fragment.find(params[:id])
+    params do
+      requires :user_id, type: String, desc: 'user_id'
+    end
+
+    post 'cloudinary' do
+      fragment = Fragment.where(user_id: params[:user_id]).last
+      # url = fragment.url
+      # url = URI.parse(url)
+      # respond = CGI.parse(url.query)
+      # video_id = respond['v'].first
+      # video = Cloudinary::Api.resource(video_id, :resource_type => :video)
       job_id = CloudinaryWorker.perform_async(fragment.id)
+    end
+
+    params do
+      requires :cloud_uri, type: String, desc: 'URL'
+      optional :title, type: String, desc: 'title'
+      optional :description, type: String, desc: 'description'
+    end
+
+    post 'uploader' do
+      #fragment = Fragment.find(params[:id])
+      cloud_uri = params[:cloud_uri]
+      title = params[:title]
+      description = params[:description]
+      job_id = UploaderWorker.perform_async(title,description,cloud_uri)
+    end
+
+    params do
+      requires :job_id, type: String, desc: 'job_id'
+    end
+
+    get 'status_job' do
+      all_stats = status_job(params[:job_id])
+      status = all_stats['status']
+      #worker = all_stats["worker"]
+      #args = all_stats["args"]
+      #update_time = all_stats["update_time"]
+      #jid = all_stats["jid"]
     end
 
   end
