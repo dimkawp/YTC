@@ -10,29 +10,44 @@
       </div>
 
       <div class="row"><br></div>
+      <h3>{{index.fragment.url}}</h3>
+      <h4>{{index.postInfo.title}}</h4>
+
       <div class="row" data-ng-if="index.fragment.embed_url">
+
         <iframe style="width:800px; height: 400px;" class="filed" data-ng-src="{{index.fragment.embed_url}}"></iframe>
         <div class="row"><br></div>
-        <div class="form group field">
-          <label>Start</label>
-          <input type="number" data-ng-min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.start">
-          <label>End</label>
-          <input type="number" data-ng-min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.end">
+        <div class="ui form">
+          <div class="row">
+            <!--<label>Start</label>-->
+            <input style="width: 200px;" class="column" type="number" placeholder="Start" data-ng-min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.start">
+            <!--<label>End</label>-->
+            <input style="width: 200px;" class="column" type="number" placeholder="End" data-ng-min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.end">
+          </div>
+
         </div>
         <div class="row"><br></div>
         <button class="ui inverted blue button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Create fragment</button>
-        <button class="ui inverted blue button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Upload on cloudinary</button>
-        <button class="ui inverted blue button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Upload on youtube</button>
+        <!--<div data-ng-if="index.create()">-->
+          <!--<h3>Create</h3>-->
+        <!--</div>-->
+        <!--<button class="ui inverted blue button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Upload on cloudinary</button>-->
+        <!--<button class="ui inverted blue button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Upload on youtube</button>-->
 
 
-        <button class="ui inverted green button" data-ng-click="info = ! info" data-ng-class="{'ui inverted green button': started, 'ui inverted orange button': !started}">Video Info</button>
-        <div data-ng-show="info">
-          <ul>
-            <li>{{index.postInfo.title}}</li>
-            <li>{{index.postInfo.channel_title}}</li>
-            <li>{{index.postInfo.published_at}}</li>
-            <li>{{index.postInfo.length}}</li>
-          </ul>
+        <button class="ui inverted green button" data-ng-click="index.postInfo()"  data-ng-model="index.fragment.url" data-ng-class="{'ui inverted green button': index.postInfo(), 'ui inverted orange button': !index.postInfo()}">Video Info</button>
+
+        <!--<button class="ui inverted green button" data-ng-click="show ! = show" data-ng-class="{'ui inverted green button': show, 'ui inverted orange button': !show}">Video Info</button>-->
+        <!--<div data-ng-show="index.postInfo()">-->
+        <!--<button class="ui inverted green button" data-ng-click="show = ! show" data-ng-model="index.fragment.url" data-ng-class="{'ui inverted green button': show, 'ui inverted orange button': !show}">Video Info</button>-->
+        <!--<div data-ng-show="show">-->
+          <div>
+            <p>{{index.postInfo.channel_title}}</p>
+            <p>{{index.postInfo.published_at}}</p>
+            <p>{{index.postInfo.length}}</p>
+          </div>
+        <!--</div>-->
+
           <!--@video.id,-->
           <!--@video.title,-->
           <!--@video.description,-->
@@ -43,9 +58,12 @@
           <!--@video.category_id,-->
           <!--@video.category_title,-->
           <!--@video.length]-->
-        </div>
+        <!--</div>-->
 
       </div>
+
+
+
 
 
     </div>

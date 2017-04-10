@@ -20,6 +20,7 @@
 
         vm.preview = preview;
         vm.create = create;
+        // vm.postInfo = postInfo;
 
         getUser();
         postInfo();
@@ -31,8 +32,11 @@
 
         function postInfo()
         {
+            var data = {
+                url: vm.fragment.url
+            };
 
-            api.postInfo().then(function (data)
+            api.postInfo(data).then(function (data)
             {
                 vm.postInfo = data;
             });

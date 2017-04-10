@@ -18,7 +18,7 @@
 
         function postInfo(data)
         {
-            return $http.post('/api/fragments/info/358', data).then(function (response)
+            return $http.post('/api/fragments/video/info', data).then(function (response)
             {
                 return response.data;
             });

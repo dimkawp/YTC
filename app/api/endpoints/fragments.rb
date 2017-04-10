@@ -35,8 +35,7 @@ module Endpoints
       url = URI.parse(params[:url])
       respond = CGI.parse(url.query)
       video_id = respond['v'].first
-
-      "https://www.youtube.com/embed/#{video_id}?start=#{@start}&end=#{@end}&autoplay=1"
+      embed = "https://www.youtube.com/embed/#{video_id}?start=#{@start}&end=#{@end}&autoplay=1"
     end
 
     params do
@@ -114,19 +113,18 @@ module Endpoints
       fragment = Fragment.find(params[:id])
       job_id = DownloadWorker.perform_async(fragment.id)
     end
+    #
+    params do
+      requires :url, type: String, desc: 'url'
+    end
 
-    # params do
-    #   requires :id, type: String, desc: 'id'
-    # end
-
-    post 'fragments/info/:id' do
-      fragment = Fragment.find(params[:id])
-      url = fragment.url
-      url = URI.parse(fragment.url)
+    post 'fragments/video/info' do
+      url = params[:url]
+      url = URI.parse(url)
       respond = CGI.parse(url.query)
       video_id = respond['v'].first
 
-      @video = Yt::Video.new id: video_id
+        @video = Yt::Video.new id: video_id
        [id: @video.id,
         title: @video.title,
         description: @video.description,
