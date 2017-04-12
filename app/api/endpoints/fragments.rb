@@ -1,6 +1,5 @@
 module Endpoints
   class Fragments < Grape::API
-
     get 'fragments', jbuilder: 'fragments' do
       @fragments = Fragment.all
     end
@@ -9,8 +8,9 @@ module Endpoints
         @fragments = Fragment.find(params[:id])
     end
 
-    get 'profile' do
-      fragment = Fragment.where(user_id: '28').last
+    get 'fragments/resources' do
+      user_id = 28
+      fragment = Fragment.where(user_id: user_id).last
       url = fragment.url
       url = URI.parse(url)
       respond = CGI.parse(url.query)
@@ -40,35 +40,19 @@ module Endpoints
 
     params do
       requires :url, type: String, desc: 'URL'
-      requires :user_id, type: Integer, desc: 'user_id'
-      optional :start, type: Integer, desc: 'start'
-      optional :end, type: Integer, desc: 'end'
+      requires :start, type: Integer, desc: 'Start'
+      requires :end, type: Integer, desc: 'End'
+      requires :title, type: String, desc: 'Title'
     end
 
-    post 'fragments/create' do
-       #begin
-        fragment = Fragment.create({
-                                  url: params[:url],
-                                  user_id: '28',
-                                  start: params[:start],
-                                  end: params[:end],
-                                  status: 'new'
-                                  })
+    post 'fragments' do
+      user_id = User.last.id
 
-      #   if fragment.save
-      #     {
-      #         status: :success
-      #     }
-      #   else
-      #     error!(
-      #         {
-      #         status: :error, message: fragment.errors.full_messages.first
-      #         }) if fragment.errors
-      #   end
-      # rescue ActiveRecord::RecordNotFound
-      #   error!({status: :error, message: :not_found}, 404)
-      # end
-
+      Fragment.create({user_id: user_id,
+                       url: params[:url],
+                       start: params[:start],
+                       end: params[:end],
+                       status: 'new'})
     end
 
     params do
@@ -122,23 +106,42 @@ module Endpoints
       requires :user_id, type: Integer, desc: 'user_id'
     end
 
-    post 'download' do
+    post 'fragments/download' do
       fragment = Fragment.where(user_id: params[:user_id]).last
       job_id = DownloadWorker.perform_async(fragment.id)
     end
-    #
+
     params do
       requires :url, type: String, desc: 'url'
     end
 
-    post 'fragments/video/info' do
+    post 'fragments/download/url' do
       url = params[:url]
       url = URI.parse(url)
       respond = CGI.parse(url.query)
       video_id = respond['v'].first
 
-        @video = Yt::Video.new id: video_id
-       [id: @video.id,
+      job_id = DownloadWorker.perform_async(video_id)
+    end
+    #
+    params do
+      requires :start, type: Integer, desc: 'start'
+      requires :end, type: Integer, desc: 'end'
+      requires :url, type: String, desc: 'url'
+    end
+
+    post 'fragments/video/info' do
+
+      url = params[:url]
+      url = URI.parse(url)
+      respond = CGI.parse(url.query)
+      video_id = respond['v'].first
+
+      embed = "https://www.youtube.com/embed/#{video_id}?start=#{params[:start]}&end=#{params[:end]}&autoplay=1"
+
+      @video = Yt::Video.new id: video_id
+       [embed: embed,
+        id: @video.id,
         title: @video.title,
         description: @video.description,
         published_at: @video.published_at,
@@ -154,7 +157,7 @@ module Endpoints
       requires :user_id, type: String, desc: 'user_id'
     end
 
-    post 'cloudinary' do
+    post 'fragments/uploaded_on_cloudinary' do
       fragment = Fragment.where(user_id: params[:user_id]).last
       # url = fragment.url
       # url = URI.parse(url)
@@ -179,7 +182,7 @@ module Endpoints
       optional :description, type: String, desc: 'description'
     end
 
-    post 'uploader' do
+    post 'fragments/uploaded_on_youtube' do
       #fragment = Fragment.find(params[:id])
       cloud_uri = params[:cloud_uri]
       title = params[:title]
@@ -191,14 +194,13 @@ module Endpoints
       requires :job_id, type: String, desc: 'job_id'
     end
 
-    get 'status_job' do
-      all_stats = status_job(params[:job_id])
-      status = all_stats['status']
+    post 'status_job' do
+      Sidekiq::Status::get_all params[:job_id]
+      
       #worker = all_stats["worker"]
       #args = all_stats["args"]
       #update_time = all_stats["update_time"]
       #jid = all_stats["jid"]
     end
-
   end
 end

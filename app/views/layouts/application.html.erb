@@ -37,32 +37,6 @@
         </div>
       </header>
 
-      <!--<% if flash[:success] %>-->
-      <!--<div class="ui green icon message">-->
-        <!--<i class="close icon"></i>-->
-        <!--<i class="check icon"></i>-->
-
-        <!--<div class="content">-->
-          <!--<div class="header">Success!</div>-->
-
-          <!--<div><%= flash[:success] %></div>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<% end %>-->
-
-      <!--<% if flash[:error] %>-->
-      <!--<div class="ui red icon message">-->
-        <!--<i class="close icon"></i>-->
-        <!--<i class="warning sign icon"></i>-->
-
-        <!--<div class="content">-->
-          <!--<div class="header">Error!</div>-->
-
-          <!--<div><%= flash[:error] %></div>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<% end %>-->
-
       <div class="ui segment">
         {{ index.user.first_name }} {{ index.user.last_name }}
 
@@ -71,16 +45,13 @@
         </a>
       </div>
 
-      <section class="content" style="">
+      <section class="content">
         <%= yield %>
       </section>
 
       <footer>
-
-        <div class="ui inverted vertical footer segment">
-          <div class="ui container center">
-            <h4 style="text-align: center;">2017.</h4>
-          </div>
+        <div class="ui basic segment center aligned">
+          <p>&copy; 2017</p>
         </div>
       </footer>
     </div>
@@ -89,5 +60,23 @@
     <script src="/packages/angular/js/angular.min.js"></script>
     <script src="/packages/semantic/js/semantic.min.js"></script>
     <script src="/assets/js/app.min.js"></script>
+
+    <script>
+        $(function ()
+        {
+            $('form').form
+            ({
+                fields: {
+                    url: ['empty','url'],
+                    start: ['empty', 'integer'],
+                    end: ['empty', 'integer'],
+                    title: ['empty']
+
+                }
+            });
+        })
+
+    </script>
+
   </body>
 </html>
