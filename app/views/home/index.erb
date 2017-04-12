@@ -5,13 +5,22 @@
       <div class="ui form">
         <div class="field">
           <label>Youtube URL</label>
-          <input type="text" data-ng-change="index.preview()" data-ng-model="index.fragment.url">
+          <input type="text" data-ng-change="index.preview();index.postInfo();" data-ng-model="index.fragment.url">
         </div>
       </div>
 
-      <div class="row"><br></div>
-      <h3>{{index.fragment.url}}</h3>
-      <h4>{{index.postInfo.title}}</h4>
+      <!--<div class="row"><br></div>-->
+      <!--<h3>{{index.fragment.url}}</h3>-->
+      <!--<h4>{{index.postInfo.title}}</h4>-->
+      <!--<div class="row">-->
+        <!--&lt;!&ndash;<h3>Fragment Created</h3>&ndash;&gt;-->
+        <!--&lt;!&ndash;<button class="ui inverted blue button" data-ng-click="">Download</button>&ndash;&gt;-->
+        <!--&lt;!&ndash;<h3>{{index.cloudinary}}</h3>&ndash;&gt;-->
+      <!--</div>-->
+      <!--<div class="row" data-ng-if="">-->
+        <!--<h3>Uploads on cloudinary</h3>-->
+        <!--<button class="ui inverted blue button" data-ng-click="">YouTube</button>-->
+      <!--</div>-->
 
       <div class="row" data-ng-if="index.fragment.embed_url">
 
@@ -27,7 +36,16 @@
 
         </div>
         <div class="row"><br></div>
-        <button class="ui inverted blue button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Create fragment</button>
+        <button class="ui inverted blue button" data-ng-click="index.create()" data-ng-class="{loading: index.fragment.isCreating}">Create fragment</button>
+
+        <button class="ui inverted blue button" data-ng-click="info = ! info;">Create Info</button>
+        <!--<button class="ui inverted blue button" data-ng-click="info = ! info">Info</button>-->
+        <div data-ng-show="info">
+          <h1>Info</h1>
+          <div>{{index.postInfo}}</div>
+          <button class="ui inverted blue button" data-ng-click="info = ! info">close</button>
+        </div>
+
         <!--<div data-ng-if="index.create()">-->
           <!--<h3>Create</h3>-->
         <!--</div>-->
@@ -35,17 +53,17 @@
         <!--<button class="ui inverted blue button" data-ng-click="index.create()" data-ng-model="index.fragment.url">Upload on youtube</button>-->
 
 
-        <button class="ui inverted green button" data-ng-click="index.postInfo()"  data-ng-model="index.fragment.url" data-ng-class="{'ui inverted green button': index.postInfo(), 'ui inverted orange button': !index.postInfo()}">Video Info</button>
+        <!--<button class="ui inverted green button" data-ng-click="index.postInfo()"  data-ng-model="index.fragment.url" data-ng-class="{'ui inverted green button': index.postInfo(), 'ui inverted orange button': !index.postInfo()}">Video Info</button>-->
 
-        <!--<button class="ui inverted green button" data-ng-click="show ! = show" data-ng-class="{'ui inverted green button': show, 'ui inverted orange button': !show}">Video Info</button>-->
-        <!--<div data-ng-show="index.postInfo()">-->
-        <!--<button class="ui inverted green button" data-ng-click="show = ! show" data-ng-model="index.fragment.url" data-ng-class="{'ui inverted green button': show, 'ui inverted orange button': !show}">Video Info</button>-->
-        <!--<div data-ng-show="show">-->
-          <div>
-            <p>{{index.postInfo.channel_title}}</p>
-            <p>{{index.postInfo.published_at}}</p>
-            <p>{{index.postInfo.length}}</p>
-          </div>
+        <!--&lt;!&ndash;<button class="ui inverted green button" data-ng-click="show ! = show" data-ng-class="{'ui inverted green button': show, 'ui inverted orange button': !show}">Video Info</button>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div data-ng-show="index.postInfo()">&ndash;&gt;-->
+        <!--&lt;!&ndash;<button class="ui inverted green button" data-ng-click="show = ! show" data-ng-model="index.fragment.url" data-ng-class="{'ui inverted green button': show, 'ui inverted orange button': !show}">Video Info</button>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div data-ng-show="show">&ndash;&gt;-->
+          <!--<div>-->
+            <!--<p>{{index.postInfo.channel_title}}</p>-->
+            <!--<p>{{index.postInfo.published_at}}</p>-->
+            <!--<p>{{index.postInfo.length}}</p>-->
+          <!--</div>-->
         <!--</div>-->
 
           <!--@video.id,-->
@@ -61,10 +79,6 @@
         <!--</div>-->
 
       </div>
-
-
-
-
 
     </div>
   </div>

@@ -46,7 +46,7 @@ module Endpoints
     end
 
     post 'fragments/create' do
-       begin
+       #begin
         fragment = Fragment.create({
                                   url: params[:url],
                                   user_id: '28',
@@ -54,19 +54,20 @@ module Endpoints
                                   end: params[:end],
                                   status: 'new'
                                   })
-        if fragment.save
-          {
-              status: :success
-          }
-        else
-          error!(
-              {
-              status: :error, message: fragment.errors.full_messages.first
-              }) if fragment.errors
-        end
-      rescue ActiveRecord::RecordNotFound
-        error!({status: :error, message: :not_found}, 404)
-      end
+
+      #   if fragment.save
+      #     {
+      #         status: :success
+      #     }
+      #   else
+      #     error!(
+      #         {
+      #         status: :error, message: fragment.errors.full_messages.first
+      #         }) if fragment.errors
+      #   end
+      # rescue ActiveRecord::RecordNotFound
+      #   error!({status: :error, message: :not_found}, 404)
+      # end
 
     end
 
@@ -109,8 +110,20 @@ module Endpoints
       end
     end
 
-    post 'download/:id' do
-      fragment = Fragment.find(params[:id])
+    # params do
+    #   requires :user_id, type: Integer, desc: 'user_id'
+    # end
+    #
+    # delete 'fragments/delete_all' do
+    #   fragment = Fragment.where(user_id: params[:user_id]).delete
+    # end
+
+    params do
+      requires :user_id, type: Integer, desc: 'user_id'
+    end
+
+    post 'download' do
+      fragment = Fragment.where(user_id: params[:user_id]).last
       job_id = DownloadWorker.perform_async(fragment.id)
     end
     #
@@ -149,6 +162,15 @@ module Endpoints
       # video_id = respond['v'].first
       # video = Cloudinary::Api.resource(video_id, :resource_type => :video)
       job_id = CloudinaryWorker.perform_async(fragment.id)
+      stats = Sidekiq::Status::get_all job_id
+      stats['status']
+      #worker = all_stats["worker"]
+      #args = all_stats["args"]
+      #update_time = all_stats["update_time"]
+      #jid = all_stats["jid"]
+
+
+
     end
 
     params do

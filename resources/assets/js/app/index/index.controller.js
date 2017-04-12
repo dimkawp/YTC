@@ -11,16 +11,21 @@
 
     function IndexController(api, $sce)
     {
+
         var vm = this;
 
         vm.user = [];
         vm.fragment = [];
         vm.test = [];
         vm.postInfo = [];
+        vm.cloudinary = [];
+        vm.download = [];
 
         vm.preview = preview;
         vm.create = create;
-        // vm.postInfo = postInfo;
+        vm.postInfo = postInfo;
+        vm.cloudinary = cloudinary;
+        vm.download = download;
 
         getUser();
         postInfo();
@@ -29,9 +34,32 @@
          | Fragments Create
          |--------------------------------------------------------------------------------------------------------------
          */
+        // postInfo = function() {
+        //     vm.info = !vm.info;
+        // };
+
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Fragments Download
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function download() {
+
+            var data = {
+                user_id: '28'
+            };
+
+            api.download(data).then(function (data) {
+                vm.download = data;
+
+            });
+
+        }
 
         function postInfo()
         {
+
             var data = {
                 url: vm.fragment.url
             };
@@ -42,6 +70,33 @@
             });
         }
 
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Fragments Claudinary
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function cloudinary() {
+
+            var data = {
+                user_id: '28'
+            };
+
+            api.cloudinary(data).then(function (data) {
+                vm.cloudinary = data;
+
+            });
+
+        }
+
+
+
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Fragments Create
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
         function create()
         {
             var data = {
@@ -51,10 +106,16 @@
                 end: vm.fragment.end
             };
 
+            vm.fragment.isCreating = true;
+
             api.postFragmentCreate(data).then(function (data)
             {
                 vm.fragment = data;
+                // vm.fragment.isCreated = true;
+                download();
             });
+
+
 
         }
 
@@ -76,6 +137,7 @@
             {
                 vm.fragment.embed_url = $sce.trustAsResourceUrl(data);
             });
+
         }
 
         /*

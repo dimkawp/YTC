@@ -13,7 +13,9 @@
             "getEmbedUrl": getEmbedUrl,
             "getUser": getUser,
             "postFragmentCreate": postFragmentCreate,
-            "postInfo": postInfo
+            "postInfo": postInfo,
+            "cloudinary": cloudinary,
+            "download": download
         };
 
         function postInfo(data)
@@ -24,6 +26,21 @@
             });
         }
 
+        function cloudinary(data)
+        {
+            return $http.post('/api/cloudinary', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function download(data)
+        {
+            return $http.post('/api/download', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
 
         function getEmbedUrl(data)
         {
