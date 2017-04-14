@@ -60,23 +60,20 @@
     <script src="/packages/angular/js/angular.min.js"></script>
     <script src="/packages/semantic/js/semantic.min.js"></script>
     <script src="/assets/js/app.min.js"></script>
-
     <script>
         $(function ()
         {
-            $('form').form
+            $('#create-fragment').form
             ({
+                on: 'change',
                 fields: {
                     url: ['empty','url'],
                     start: ['empty', 'integer'],
                     end: ['empty', 'integer'],
                     title: ['empty']
-
                 }
             });
         })
-
     </script>
-
   </body>
 </html>

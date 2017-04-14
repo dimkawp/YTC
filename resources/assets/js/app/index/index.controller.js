@@ -11,91 +11,50 @@
     {
         var vm = this;
 
+        vm.video = [];
         vm.user = [];
         vm.fragment = [];
-        vm.fragments = [];
-        vm.test = [];
-        vm.postInfo = [];
-        vm.cloudinary = [];
 
-        vm.preview = preview;
-        vm.create = create;
-        vm.postInfo = postInfo;
-        vm.cloudinary = cloudinary;
-        vm.download = download;
-        vm.uploaded = uploaded;
+        // vm.fragments = [];
+        // vm.cloudinary = [];
+
+        vm.getVideoInfo = getVideoInfo;
+        vm.getVideoEmbedUrl = getVideoEmbedUrl;
+        vm.downloadVideo = downloadVideo;
+        vm.uploadVideo = uploadVideo;
+
+        vm.createFragment = createFragment;
+        // vm.cloudinary = cloudinary;
 
         getUser();
         getFragment();
-        // postInfo();
 
         /*
          |--------------------------------------------------------------------------------------------------------------
-         | Fragments Download
+         | Video
          |--------------------------------------------------------------------------------------------------------------
          */
 
-        function download()
+        function getVideoInfo()
         {
             var data = {
-                user_id: '28'
+                url: vm.fragment.url,
             };
 
-            api.download(data).then(function (data)
+            vm.video.isPreviewing = true;
+
+            api.getVideoInfo(data).then(function (data)
             {
-                //
+                vm.fragment.video_id = data.video_id;
+                vm.fragment.start = 1;
+                vm.fragment.end = data.end;
+                vm.fragment.title = data.title;
+                vm.fragment.description = data.description;
             });
         }
 
-        function uploaded()
-        {
-            var data = {
-                user_id: '28'
-            };
 
-            api.uploaded(data).then(function (data)
-            {
-                //
-            });
-        }
-
-        function postInfo()
-        {
-            var data = {
-                url: vm.fragment.url
-            };
-
-            api.postInfo(data).then(function (data)
-            {
-                vm.postInfo = data;
-            });
-        }
-
-        /*
-         |--------------------------------------------------------------------------------------------------------------
-         | Fragments Claudinary
-         |--------------------------------------------------------------------------------------------------------------
-         */
-
-        function cloudinary()
-        {
-            var data = {
-                user_id: '28'
-            };
-
-            api.cloudinary(data).then(function (data)
-            {
-                vm.cloudinary = data;
-            });
-        }
-
-        /*
-         |--------------------------------------------------------------------------------------------------------------
-         | Fragments
-         |--------------------------------------------------------------------------------------------------------------
-         */
-
-        function preview()
+        function getVideoEmbedUrl()
         {
             var data = {
                 url: vm.fragment.url,
@@ -103,41 +62,86 @@
                 end: vm.fragment.end
             };
 
-            vm.fragment.isPreviewing = true;
+            vm.video.isPreviewing = true;
 
-            api.getEmbedUrl(data).then(function (data)
+            api.getVideoEmbedUrl(data).then(function (data)
             {
                 vm.fragment.embed_url = $sce.trustAsResourceUrl(data);
             });
         }
 
-        function create()
+        function downloadVideo()
+        {
+            var data = {
+                id: vm.fragment.id
+            };
+
+            api.downloadVideo(data).then(function (data)
+            {
+                //
+            });
+        }
+
+        function uploadVideo()
+        {
+            var data = {
+                user_id: '28'
+            };
+
+            api.uploadVideo(data).then(function (data)
+            {
+                //
+            });
+        }
+
+        // /*
+        //  |--------------------------------------------------------------------------------------------------------------
+        //  | Fragments Claudinary
+        //  |--------------------------------------------------------------------------------------------------------------
+        //  */
+        //
+        // function cloudinary()
+        // {
+        //     var data = {
+        //         user_id: '28'
+        //     };
+        //
+        //     api.cloudinary(data).then(function (data)
+        //     {
+        //         vm.cloudinary = data;
+        //     });
+        // }
+
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Fragments
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function createFragment()
         {
             var data = {
                 url: vm.fragment.url,
                 start: vm.fragment.start,
                 end: vm.fragment.end,
-                title: vm.fragment.title
+                title: vm.fragment.title,
+                description: vm.fragment.description,
+                video_id: vm.fragment.video_id
             };
-
-            vm.fragment.isCreating = true;
 
             api.createFragment(data).then(function (data)
             {
                 vm.fragment = data;
+                vm.fragment.isCreated = true;
 
-                download();
-                cloudinary();
-                uploaded();
-
-
-                // download();
+                downloadVideo();
+                // cloudinary();
+                // uploaded();
             });
         }
 
         function getFragment()
         {
-
             api.getFragment().then(function (data)
             {
                 vm.fragments = data;

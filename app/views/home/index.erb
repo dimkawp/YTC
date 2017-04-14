@@ -1,44 +1,44 @@
 https://www.youtube.com/watch?v=Z7bfTV58F7A
 
 <div class="ui segment">
-    <div class="ui basic segment center aligned" data-ng-if="index.fragment.isPreviewing">
-      <iframe frameborder="0" width="800" height="400" data-ng-src="{{ index.fragment.embed_url }}"></iframe>
+  <div class="ui basic segment center aligned" data-ng-if="index.video.isPreviewing" data-ng-class="{loading: index.fragment.isCreated}">
+    <iframe frameborder="0" width="800" height="400" data-ng-src="{{ index.fragment.embed_url }}"></iframe>
+  </div>
+
+  <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreated">
+    <div class="required field">
+      <label>Youtube URL</label>
+
+      <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.getVideoInfo(); index.getVideoEmbedUrl();" data-ng-model="index.fragment.url">
     </div>
-  <form>
-    <div class="ui form" data-ng-hide="index.fragment.isCreating">
-      <div class="required field">
-        <label>Youtube URL</label>
-        <input name="url" type="url" placeholder="url" data-ng-change="index.preview();" data-ng-model="index.fragment.url">
-      </div>
-      <div data-ng-if="index.fragment.embed_url">
-        <div class="fields">
-          <div class="required field">
-            <label>Start</label>
+    <div data-ng-show="index.fragment.embed_url">
+      <div class="fields">
+        <div class="required field">
+          <label>Start</label>
 
-            <input name="start" type="number" placeholder="Start" data-ng-min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.start">
-          </div>
-          <div class="required field">
-            <label>End</label>
-
-            <input name="end" type="number" placeholder="End" data-ng-min="1" data-ng-change="index.preview()" data-ng-model="index.fragment.end">
-          </div>
+          <input type="number" name="start" min="1" placeholder="Start" data-ng-change="index.getVideoEmbedUrl()" data-ng-model="index.fragment.start">
         </div>
         <div class="required field">
-          <label>Title</label>
+          <label>End</label>
 
-          <input name="title" type="text" data-ng-model="index.fragment.title">
-        </div>
-        <div class="field">
-          <label>Description</label>
-
-          <textarea rows="3" data-ng-model="index.fragment.description"></textarea>
-        </div>
-        <div align="center">
-          <button type="submit" class="ui massive red button" data-ng-click="index.create()">Create fragment</button>
+          <input type="number" name="end" min="1" placeholder="End" data-ng-change="index.getVideoEmbedUrl()" data-ng-model="index.fragment.end">
         </div>
       </div>
+      <div class="required field">
+        <label>Title</label>
+
+        <input type="text" name="title" data-ng-model="index.fragment.title">
+      </div>
+      <div class="field">
+        <label>Description</label>
+
+        <textarea name="description" rows="3" data-ng-model="index.fragment.description"></textarea>
+      </div>
+      <div align="center">
+        <button class="ui massive red button" data-ng-click="index.createFragment()">Create fragment</button>
+      </div>
     </div>
-  </form>
+  </div>
 </div>
 
 

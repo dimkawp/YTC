@@ -22,62 +22,50 @@ module Endpoints
       # fragmen.save
     end
 
-
-    params do
-      requires :url, type: String, desc: 'URL'
-      optional :start, type: Integer, desc: 'start'
-      optional :end, type: Integer, desc: 'end'
-    end
-
-    post 'fragments/embed_url' do
-      @start = params[:start]
-      @end = params[:end]
-      url = URI.parse(params[:url])
-      respond = CGI.parse(url.query)
-      video_id = respond['v'].first
-      embed = "https://www.youtube.com/embed/#{video_id}?start=#{@start}&end=#{@end}&autoplay=1"
-    end
-
     params do
       requires :url, type: String, desc: 'URL'
       requires :start, type: Integer, desc: 'Start'
       requires :end, type: Integer, desc: 'End'
       requires :title, type: String, desc: 'Title'
+      optional :description, type: String, desc: 'Description'
+      optional :video_id, type: String, desc: 'Video ID'
     end
 
     post 'fragments' do
       user_id = User.last.id
 
       Fragment.create({user_id: user_id,
+                       video_id: params[:video_id],
                        url: params[:url],
                        start: params[:start],
                        end: params[:end],
+                       title: params[:title],
+                       description: params[:description],
                        status: 'new'})
     end
 
-    params do
-      optional :name, type: String, desc: 'name'
-      optional :cloud_url, type: String, desc: 'cloud_url'
-    end
-
-    post 'fragments/:id' do
-      begin
-        fragment = Fragment.find(params[:id])
-        fragment.name = params[:name]
-        fragment.cloud_url = params[:cloud_url]
-        if fragment.save
-          {
-              status: :success
-          }
-          else
-          error!({status: :error, message: fragment.errors.full_messages.first}) if fragment.errors.any?
-        end
-
-
-      rescue ActiveRecord::RecordNotFound
-        error!({status: :error, message: :not_found}, 404)
-      end
-    end
+    # params do
+    #   optional :name, type: String, desc: 'name'
+    #   optional :cloud_url, type: String, desc: 'cloud_url'
+    # end
+    #
+    # post 'fragments/:id' do
+    #   begin
+    #     fragment = Fragment.find(params[:id])
+    #     fragment.name = params[:name]
+    #     fragment.cloud_url = params[:cloud_url]
+    #     if fragment.save
+    #       {
+    #           status: :success
+    #       }
+    #       else
+    #       error!({status: :error, message: fragment.errors.full_messages.first}) if fragment.errors.any?
+    #     end
+    #
+    #   rescue ActiveRecord::RecordNotFound
+    #     error!({status: :error, message: :not_found}, 404)
+    #   end
+    # end
 
     params do
       requires :id, type: Integer, desc: 'id'
@@ -103,57 +91,6 @@ module Endpoints
     # end
 
     params do
-      requires :user_id, type: Integer, desc: 'user_id'
-    end
-
-    post 'fragments/download' do
-      fragment = Fragment.where(user_id: params[:user_id]).last
-      job_id = DownloadWorker.perform_async(fragment.id)
-    end
-
-    params do
-      requires :url, type: String, desc: 'url'
-    end
-
-    post 'fragments/download/url' do
-      url = params[:url]
-      url = URI.parse(url)
-      respond = CGI.parse(url.query)
-      video_id = respond['v'].first
-
-      job_id = DownloadWorker.perform_async(video_id)
-    end
-    #
-    params do
-      requires :start, type: Integer, desc: 'start'
-      requires :end, type: Integer, desc: 'end'
-      requires :url, type: String, desc: 'url'
-    end
-
-    post 'fragments/video/info' do
-
-      url = params[:url]
-      url = URI.parse(url)
-      respond = CGI.parse(url.query)
-      video_id = respond['v'].first
-
-      embed = "https://www.youtube.com/embed/#{video_id}?start=#{params[:start]}&end=#{params[:end]}&autoplay=1"
-
-      @video = Yt::Video.new id: video_id
-       [embed: embed,
-        id: @video.id,
-        title: @video.title,
-        description: @video.description,
-        published_at: @video.published_at,
-        thumbnail_url: @video.thumbnail_url,
-        channel_id: @video.channel_id,
-        channel_title: @video.channel_title,
-        category_id: @video.category_id,
-        category_title: @video.category_title,
-        length: @video.length].first
-    end
-
-    params do
       requires :user_id, type: String, desc: 'user_id'
     end
 
@@ -171,9 +108,6 @@ module Endpoints
       #args = all_stats["args"]
       #update_time = all_stats["update_time"]
       #jid = all_stats["jid"]
-
-
-
     end
 
     params do
