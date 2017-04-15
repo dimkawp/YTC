@@ -11,7 +11,7 @@ class DownloaderWorker
       # fragment.save
 
     rescue CloudinaryException
-      YoutubeDL.download "https://www.youtube.com/watch?v=#{fragment.video_id}", output: "tmp/video/#{fragment.video_id}.mp4" #, 'max-filesize': '40m'
+      YoutubeDL.download "https://www.youtube.com/watch?v=#{fragment.video_id}", output: "tmp/video/#{fragment.video_id}.mp4" , 'max-filesize': '40m'
 
       fragment.status = 'downloaded'
       fragment.save

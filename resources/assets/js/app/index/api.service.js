@@ -14,6 +14,8 @@
             "getVideoEmbedUrl": getVideoEmbedUrl,
             "downloadVideo": downloadVideo,
             "uploadVideo": uploadVideo,
+            "statusJob": statusJob,
+            "statusFragment": statusFragment,
 
             // "cloudinary": cloudinary,
             "getUser": getUser,
@@ -24,6 +26,22 @@
         function getVideoInfo(data)
         {
             return $http.post('/api/video/info', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function statusJob(data)
+        {
+            return $http.post('/api/status_job', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function statusFragment()
+        {
+            return $http.post('/api/fragments/status').then(function (response)
             {
                 return response.data;
             });
@@ -48,7 +66,7 @@
 
         function uploadVideo(data)
         {
-            return $http.post('/api/video/upload', data).then(function (response)
+            return $http.post('/api/fragments/uploaded_on_cloudinary', data).then(function (response)
             {
                 return response.data;
             });

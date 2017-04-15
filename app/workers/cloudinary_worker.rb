@@ -14,6 +14,8 @@ class CloudinaryWorker
       fragment.save
     rescue CloudinaryException
       Cloudinary::Uploader.upload("tmp/video/#{video_id}.mp4", :resource_type => :video, :public_id => "#{video_id}")
+      fragment.status = 'upload_on_cloud'
+      fragment.save
       # File.delete("tmp/video/#{video_id}.mp4")
     end
 

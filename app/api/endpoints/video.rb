@@ -35,6 +35,8 @@ module Endpoints
     end
 
     post 'video/download' do
+      fragment = Fragment.find(params[:id])
+
       # fragment = Fragment.find(params[:id])
 
       # YoutubeDL.download "https://www.youtube.com/watch?v=#{fragment.video_id}546546", output: "tmp/video/#{fragment.video_id}.mp4" #, 'max-filesize': '40m'
@@ -42,7 +44,9 @@ module Endpoints
       # fragment.status = '222';
       # fragment.save
 
-      DownloaderWorker.perform_async(params[:id])
+      job_id = DownloaderWorker.perform_async(params[:id])
+      fragment.status = job_id
+      fragment.save
     end
 
     # params do

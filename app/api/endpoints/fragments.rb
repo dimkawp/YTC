@@ -22,6 +22,13 @@ module Endpoints
       # fragmen.save
     end
 
+    post 'fragments/status' do
+      user_id = 28
+      fragment = Fragment.where(user_id: user_id).last
+      fragment.status
+
+    end
+
     params do
       requires :url, type: String, desc: 'URL'
       requires :start, type: Integer, desc: 'Start'
@@ -29,6 +36,7 @@ module Endpoints
       requires :title, type: String, desc: 'Title'
       optional :description, type: String, desc: 'Description'
       optional :video_id, type: String, desc: 'Video ID'
+      optional :status, type: String, desc: 'status'
     end
 
     post 'fragments' do
@@ -41,7 +49,7 @@ module Endpoints
                        end: params[:end],
                        title: params[:title],
                        description: params[:description],
-                       status: 'new'})
+                       status: params[:status]})
     end
 
     # params do
@@ -102,8 +110,8 @@ module Endpoints
       # video_id = respond['v'].first
       # video = Cloudinary::Api.resource(video_id, :resource_type => :video)
       job_id = CloudinaryWorker.perform_async(fragment.id)
-      stats = Sidekiq::Status::get_all job_id
-      stats['status']
+      # stats = Sidekiq::Status::get_all job_id
+      # stats['status']
       #worker = all_stats["worker"]
       #args = all_stats["args"]
       #update_time = all_stats["update_time"]
@@ -124,12 +132,30 @@ module Endpoints
       job_id = UploaderWorker.perform_async(title,description,cloud_uri)
     end
 
-    params do
-      requires :job_id, type: String, desc: 'job_id'
+    post 'status_job' do
+      user_id = 28
+
+      fragment = Fragment.where(user_id: user_id).last
+      job_id = fragment.status
+      allStats = Sidekiq::Status::get_all job_id
+      status = allStats['status']
+
+      #worker = all_stats["worker"]
+      #args = all_stats["args"]
+      #update_time = all_stats["update_time"]
+      #jid = all_stats["jid"]
     end
 
-    post 'status_job' do
-      Sidekiq::Status::get_all params[:job_id]
+    params do
+      requires :id, type: String, desc: 'id'
+
+    end
+
+    post 'status_job/id' do
+
+      allStats = Sidekiq::Status::get_all params[:id]
+      status = allStats['status']
+
       #worker = all_stats["worker"]
       #args = all_stats["args"]
       #update_time = all_stats["update_time"]
