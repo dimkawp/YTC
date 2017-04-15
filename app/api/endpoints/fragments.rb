@@ -196,7 +196,6 @@ module Endpoints
 
     post 'status_job' do
       Sidekiq::Status::get_all params[:job_id]
-      
       #worker = all_stats["worker"]
       #args = all_stats["args"]
       #update_time = all_stats["update_time"]
