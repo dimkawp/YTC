@@ -35,7 +35,7 @@ class FragmentController < ApplicationController
 
     if fragment.save
       #take fragment.id in worker download
-      @job_id = DownloadWorker.perform_async(fragment.id)
+      @job_id = DownloaderWorker.perform_async(fragment.id)
       session[:job_id] = @job_id
 
       redirect_to root_url
