@@ -14,8 +14,12 @@
             "getVideoEmbedUrl": getVideoEmbedUrl,
             "downloadVideo": downloadVideo,
             "uploadVideo": uploadVideo,
+
+            // "uploadVideoOnYouTube": uploadVideoOnYouTube,
+
             "statusJob": statusJob,
             "statusFragment": statusFragment,
+            "CloudChecker": CloudChecker,
 
             // "cloudinary": cloudinary,
             "getUser": getUser,
@@ -47,6 +51,14 @@
             });
         }
 
+        function CloudChecker(data)
+        {
+            return $http.post('/api/fragments/cloud_checker', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
+
 
         function getVideoEmbedUrl(data)
         {
@@ -64,13 +76,21 @@
             });
         }
 
-        function uploadVideo(data)
+        function uploadVideo()
         {
-            return $http.post('/api/fragments/uploaded_on_cloudinary', data).then(function (response)
+            return $http.post('/api/fragments/uploaded_on_cloudinary').then(function (response)
             {
                 return response.data;
             });
         }
+
+        // function uploadVideoOnYouTube(data)
+        // {
+        //     return $http.post('/api/fragments/uploaded_on_youtube', data).then(function (response)
+        //     {
+        //         return response.data;
+        //     });
+        // }
 
         // function cloudinary(data)
         // {

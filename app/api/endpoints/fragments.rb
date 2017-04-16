@@ -9,7 +9,7 @@ module Endpoints
     end
 
     get 'fragments/resources' do
-      user_id = 28
+      user_id = 29
       fragment = Fragment.where(user_id: user_id).last
       url = fragment.url
       url = URI.parse(url)
@@ -23,10 +23,9 @@ module Endpoints
     end
 
     post 'fragments/status' do
-      user_id = 28
+      user_id = 29
       fragment = Fragment.where(user_id: user_id).last
       fragment.status
-
     end
 
     params do
@@ -99,11 +98,18 @@ module Endpoints
     # end
 
     params do
-      requires :user_id, type: String, desc: 'user_id'
+      requires :video_id, type: String, desc: 'video_id'
+    end
+
+    post 'fragments/cloud_checker' do
+
+      video = Cloudinary::Api.resource(params[:video_id], :resource_type => :video)
+
     end
 
     post 'fragments/uploaded_on_cloudinary' do
-      fragment = Fragment.where(user_id: params[:user_id]).last
+      user_id = 29
+      fragment = Fragment.where(user_id: user_id).last
       # url = fragment.url
       # url = URI.parse(url)
       # respond = CGI.parse(url.query)
@@ -133,12 +139,12 @@ module Endpoints
     end
 
     post 'status_job' do
-      user_id = 28
+      user_id = 29
 
       fragment = Fragment.where(user_id: user_id).last
       job_id = fragment.status
-      allStats = Sidekiq::Status::get_all job_id
-      status = allStats['status']
+      all_stats = Sidekiq::Status::get_all job_id
+      status = all_stats['status']
 
       #worker = all_stats["worker"]
       #args = all_stats["args"]
@@ -153,8 +159,8 @@ module Endpoints
 
     post 'status_job/id' do
 
-      allStats = Sidekiq::Status::get_all params[:id]
-      status = allStats['status']
+      all_stats = Sidekiq::Status::get_all params[:id]
+      status = all_stats['status']
 
       #worker = all_stats["worker"]
       #args = all_stats["args"]
