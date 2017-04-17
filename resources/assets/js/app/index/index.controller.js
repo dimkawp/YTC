@@ -15,12 +15,17 @@
         vm.user = [];
         vm.fragment = [];
         vm.status_fragment = [];
+        vm.global_status = [];
+
+        vm.cloud_id = 'tZwRY1PznWc';
 
         vm.interval_status_job = [];
         vm.interval_status_fragment = [];
         vm.interval_cloud_video = [];
 
         vm.cloud_video_params = [];
+
+
 
         vm.test = [];
         vm.number = 1;
@@ -39,6 +44,7 @@
         // vm.uploadVideoOnYouTube = uploadVideoOnYouTube;
         vm.statusJob = statusJob;
         vm.statusFragment = statusFragment;
+        vm.globalStatusFragment = globalStatusFragment;
         vm.CloudChecker = CloudChecker;
 
         vm.Tester = Tester;
@@ -48,6 +54,7 @@
 
         getUser();
         getFragment();
+
 
 
         /*
@@ -110,6 +117,14 @@
             api.statusFragment().then(function (data)
             {
                 vm.status_fragment = data;
+            });
+        }
+
+        function globalStatusFragment()
+        {
+            api.globalStatusFragment().then(function (data)
+            {
+                vm.global_status = data;
             });
         }
 
@@ -182,9 +197,10 @@
 
             };
 
+
+
             api.createFragment(data).then(function (data)
             {
-
                 vm.fragment = data;
                 vm.fragment.isCreated = true;
 
@@ -192,28 +208,39 @@
 
                 vm.status = "new";
 
-                var status_job = (function () {
+                var status_job = $interval(function () {
+
                     statusJob();
-                });
 
-                if (vm.status === 'complete')
-                {
-                    $interval.cancel(vm.interval_status_job);
-                }
-                vm.interval_status_job = $interval(status_job, 100);
+                    if (vm.status === 'complete')
+                    {
+                        $interval.cancel(status_job);
+                    }
 
-                var status_fragment = (function () {
+                }, 500);
+
+                var uploader = $interval(function () {
+
                     statusFragment();
-                });
 
-                if (vm.status_fragment === 'downloaded')
-                {
-                    uploadVideo();
-                    $interval.cancel(vm.interval_status_fragment);
-                    //close crytilky
-                    vm.fragment.isCreated = false;
-                }
-                vm.interval_status_fragment = $interval(status_fragment, 100);
+                    if (vm.status_fragment === 'downloaded')
+                    {
+                        uploadVideo();
+                        $interval.cancel(uploader);
+                        vm.fragment.isCreated = false;
+                        vm.fragment.cloudCreated = true;
+                    }
+
+                    if (vm.status_fragment === 'video_on_cloud')
+                    {
+                        $interval.cancel(uploader);
+                        vm.fragment.isCreated = false;
+                        vm.fragment.cloudCreated = true;
+                    }
+
+                }, 500);
+
+
 
             });
         }
@@ -247,45 +274,56 @@
         // }
 
         function Tester()
-            {
-                var status_fragment_i = (function () {
-                    statusFragment();
-                });
+        {
+            // $interval(function () {
+            //
+            //     globalStatusFragment();
+            //
+            // }, 1500);
 
-                if (vm.status_fragment === 'downloaded')
-                {
-                    uploadVideo();
-
-                    $interval.cancel(vm.interval_status_fragment);
-                }
-                vm.interval_status_fragment = $interval(status_fragment_i, 500);
-
-                // var serch = (function () {
-                //
-                //     research();
-                //
-                // });
-                //
-                // if (vm.number == 5)
-                // {
-                //     $interval.cancel(vm.test);
-                //     alert('stop');
-                // }
-                //
-                // vm.test = $interval(serch, 1000);
+            vm.global_status = $interval(globalStatusFragment, 2500);
 
 
-            // statusJob();
-            // vm.test = "start";
-            // var counter = (function () {
-            //     vm.test = "Tester";
+            // var tester = $interval(function () {
+            //
+            //     statusFragment();
+            //
+            //     if (vm.status_fragment === 'upload_on_cloud')
+            //     {
+            //         uploadVideo();
+            //         $interval.cancel(tester);
+            //     }
+            //
+            // }, 600);
+
+            // vm.interval_status_fragment = $interval(status_fragment, 500);
+
+            // var serch = (function () {
+            //
+            //     research();
+            //
             // });
-            // $interval(counter, 2000);
-            // vm.status = "new";
-            // var status_job = (function () {
-            //     statusJob();
-            // });
-            // $interval(status_job, 2000);
+            //
+            // if (vm.number == 5)
+            // {
+            //     $interval.cancel(vm.test);
+            //     alert('stop');
+            // }
+            //
+            // vm.test = $interval(serch, 1000);
+
+
+        // statusJob();
+        // vm.test = "start";
+        // var counter = (function () {
+        //     vm.test = "Tester";
+        // });
+        // $interval(counter, 2000);
+        // vm.status = "new";
+        // var status_job = (function () {
+        //     statusJob();
+        // });
+        // $interval(status_job, 2000);
         }
 
 

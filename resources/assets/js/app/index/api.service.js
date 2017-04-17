@@ -19,6 +19,7 @@
 
             "statusJob": statusJob,
             "statusFragment": statusFragment,
+            "globalStatusFragment": globalStatusFragment,
             "CloudChecker": CloudChecker,
 
             // "cloudinary": cloudinary,
@@ -46,6 +47,14 @@
         function statusFragment()
         {
             return $http.post('/api/fragments/status').then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function globalStatusFragment()
+        {
+            return $http.post('/api/fragments/global/status').then(function (response)
             {
                 return response.data;
             });

@@ -10,6 +10,7 @@ class CloudinaryWorker
 
     begin
       video = Cloudinary::Api.resource(video_id, :resource_type => :video)
+
       fragment.status = 'cloud'
       fragment.save
     rescue CloudinaryException

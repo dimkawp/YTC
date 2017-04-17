@@ -34,19 +34,43 @@ module Endpoints
       requires :id, type: Integer, desc: 'Fragment ID'
     end
 
+    post 'video/download/id' do
+
+      begin
+        fragment = Fragment.find(params[:id])
+
+        video = Cloudinary::Api.resource(fragment.video_id, :resource_type => :video)
+
+        fragment.status = 'video_on_cloud'
+        fragment.cloud_url = video['secure_url']
+        fragment.save
+
+      rescue CloudinaryException
+        job_id = DownloaderWorker.perform_async(params[:id])
+        fragment.status = job_id
+        fragment.save
+      end
+
+    end
+
     post 'video/download' do
-      fragment = Fragment.find(params[:id])
 
-      # fragment = Fragment.find(params[:id])
+      begin
+        user_id = 29
+        fragment = Fragment.where(user_id: user_id).last
 
-      # YoutubeDL.download "https://www.youtube.com/watch?v=#{fragment.video_id}546546", output: "tmp/video/#{fragment.video_id}.mp4" #, 'max-filesize': '40m'
-      #
-      # fragment.status = '222';
-      # fragment.save
+        video = Cloudinary::Api.resource(fragment.video_id, :resource_type => :video)
 
-      job_id = DownloaderWorker.perform_async(params[:id])
-      fragment.status = job_id
-      fragment.save
+        fragment.status = 'video_on_cloud'
+        fragment.cloud_url = video['secure_url']
+        fragment.save
+
+      rescue CloudinaryException
+        job_id = DownloaderWorker.perform_async(params[:id])
+        fragment.status = job_id
+        fragment.save
+      end
+
     end
 
     # params do

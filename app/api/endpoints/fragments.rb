@@ -8,7 +8,7 @@ module Endpoints
         @fragments = Fragment.find(params[:id])
     end
 
-    get 'fragments/resources' do
+    post 'fragments/resources' do
       user_id = 29
       fragment = Fragment.where(user_id: user_id).last
       url = fragment.url
@@ -16,15 +16,46 @@ module Endpoints
       respond = CGI.parse(url.query)
       video_id = respond['v'].first
 
-      @video_from_cloud = Cloudinary::Api.resources_by_ids(video_id, :resource_type => :video)
+      video_from_cloud = Cloudinary::Api.resources_by_ids(video_id, :resource_type => :video)
+      video_from_cloud
       # cloud = video_from_cloud
       # fragment.cloud_url = cloud['resources'].last['url']
       # fragmen.save
     end
 
+    params do
+      requires :id, type: String, desc: 'Fragment ID'
+    end
+
+    post 'fragments/resources/id' do
+      fragment = Fragment.find(params[:id])
+      url = fragment.url
+      url = URI.parse(url)
+      respond = CGI.parse(url.query)
+      video_id = respond['v'].first
+
+      video_from_cloud = Cloudinary::Api.resources_by_ids(video_id, :resource_type => :video)
+      video_from_cloud
+    end
+
     post 'fragments/status' do
       user_id = 29
       fragment = Fragment.where(user_id: user_id).last
+      fragment.status
+    end
+
+    post 'fragments/global/status' do
+      user_id = 29
+      fragment = Fragment.where(user_id: user_id).last
+      fragment.status
+    end
+
+    params do
+      requires :id, type: String, desc: 'Fragment ID'
+    end
+
+    post 'fragments/status/id' do
+      fragment = Fragment.find(params[:id])
       fragment.status
     end
 
@@ -79,14 +110,15 @@ module Endpoints
     end
 
     delete 'fragments/delete/:id' do
-      begin
+      # begin
         fragment = Fragment.find(params[:id])
-        {
-            status: :success
-        } if fragment.delete
-      rescue ActiveRecord::RecordNotFound
-        error!({status: :error, message: :not_found}, 404)
-      end
+        fragment
+      #   {
+      #       status: :success
+      #   } if fragment.delete
+      # rescue ActiveRecord::RecordNotFound
+      #   error!({status: :error, message: :not_found}, 404)
+      # end
     end
 
     # params do
@@ -102,26 +134,17 @@ module Endpoints
     end
 
     post 'fragments/cloud_checker' do
-
-      video = Cloudinary::Api.resource(params[:video_id], :resource_type => :video)
-
+      Cloudinary::Api.resource(params[:video_id], :resource_type => :video)
     end
 
     post 'fragments/uploaded_on_cloudinary' do
       user_id = 29
       fragment = Fragment.where(user_id: user_id).last
-      # url = fragment.url
-      # url = URI.parse(url)
-      # respond = CGI.parse(url.query)
-      # video_id = respond['v'].first
-      # video = Cloudinary::Api.resource(video_id, :resource_type => :video)
+
       job_id = CloudinaryWorker.perform_async(fragment.id)
-      # stats = Sidekiq::Status::get_all job_id
-      # stats['status']
-      #worker = all_stats["worker"]
-      #args = all_stats["args"]
-      #update_time = all_stats["update_time"]
-      #jid = all_stats["jid"]
+      # fragment.status = job_id
+      # fragment.save
+
     end
 
     params do
@@ -131,7 +154,6 @@ module Endpoints
     end
 
     post 'fragments/uploaded_on_youtube' do
-      #fragment = Fragment.find(params[:id])
       cloud_uri = params[:cloud_uri]
       title = params[:title]
       description = params[:description]
@@ -144,8 +166,14 @@ module Endpoints
       fragment = Fragment.where(user_id: user_id).last
       job_id = fragment.status
       all_stats = Sidekiq::Status::get_all job_id
-      status = all_stats['status']
 
+      if job_id == 'downloaded' or 'upload_on_cloud'
+        status = 'complete'
+      else
+        status = all_stats['status']
+      end
+
+      status
       #worker = all_stats["worker"]
       #args = all_stats["args"]
       #update_time = all_stats["update_time"]
