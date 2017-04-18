@@ -21,10 +21,6 @@ module Endpoints
       fragment.cloud_url = video_params['secure_url']
       fragment.save
       video_params
-
-      # cloud = video_from_cloud
-      # fragment.cloud_url = cloud['resources'].last['url']
-      # fragmen.save
     end
 
     params do
@@ -46,6 +42,21 @@ module Endpoints
       user_id = 28
       fragment = Fragment.where(user_id: user_id).last
       fragment.status
+    end
+
+    post 'fragments/delete_video_file' do
+      user_id = 28
+      fragment = Fragment.where(user_id: user_id).last
+      url = fragment.url
+      url = URI.parse(url)
+      respond = CGI.parse(url.query)
+      video_id = respond['v'].first
+      begin
+        File.delete("tmp/video/#{video_id}.mp4")
+      rescue ActiveRecord::RecordNotFound
+        error!({status: :error, message: :not_found}, 404)
+      end
+
     end
 
     post 'fragments/global/status' do
@@ -144,11 +155,7 @@ module Endpoints
     post 'fragments/uploaded_on_cloudinary' do
       user_id = 28
       fragment = Fragment.where(user_id: user_id).last
-
       job_id = CloudinaryWorker.perform_async(fragment.id)
-      # fragment.status = job_id
-      # fragment.save
-
     end
 
     params do
@@ -169,6 +176,7 @@ module Endpoints
       user = User.find(user_id)
       token = user.token
       fragment = Fragment.where(user_id: user_id).last
+
       title = fragment.title
       description = fragment.description
       cloud_url = fragment.cloud_url
@@ -182,11 +190,7 @@ module Endpoints
       start = fragment.start
       i_end = fragment.end
 
-      url = "http://res.cloudinary.com/comedy/video/upload/eo_#{i_end},so_#{start}#{cloud_url}"
-
-      account = Yt::Account.new access_token: token
-      respond = account.upload_video url, title: title, description: description
-      # job_id = UploaderWorker.perform_async(token,title,description,cloud_url,start,i_end)
+      job_id = UploaderWorker.perform_async(token,title,description,cloud_url,start,i_end)
     end
 
     post 'status_job' do
@@ -203,10 +207,7 @@ module Endpoints
       end
 
       status
-      #worker = all_stats["worker"]
-      #args = all_stats["args"]
-      #update_time = all_stats["update_time"]
-      #jid = all_stats["jid"]
+
     end
 
     params do
@@ -240,6 +241,7 @@ module Endpoints
       account = Yt::Account.new refresh_token: token
       channel = Yt::Channel.new id: 'UCFRA75dCkcCD9X-QevTu4Qw', auth: account
       channel.title
+
     end
   end
 end

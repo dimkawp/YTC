@@ -14,6 +14,7 @@
             "getVideoEmbedUrl": getVideoEmbedUrl,
             "downloadVideo": downloadVideo,
             "uploadVideo": uploadVideo,
+            "deleteVideoFile": deleteVideoFile,
             "uploadVideoOnYouTube": uploadVideoOnYouTube,
 
             "statusJob": statusJob,
@@ -87,6 +88,14 @@
         function uploadVideo()
         {
             return $http.post('/api/fragments/uploaded_on_cloudinary').then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function deleteVideoFile()
+        {
+            return $http.post('/api/fragments/delete_video_file').then(function (response)
             {
                 return response.data;
             });
