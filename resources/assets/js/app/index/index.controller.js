@@ -17,21 +17,18 @@
         vm.status_fragment = [];
         vm.global_status = [];
 
-        vm.cloud_id = 'tZwRY1PznWc';
+        vm.cloud_id = [];
 
         vm.interval_status_job = [];
         vm.interval_status_fragment = [];
         vm.interval_cloud_video = [];
 
         vm.cloud_video_params = [];
-
-
-
-        vm.test = [];
-        vm.number = 1;
+        vm.cloud_video = [];
 
         vm.upload_job_id = [];
         vm.download_job_id = [];
+        vm.upload_yt_job_id = [];
         vm.status = [];
 
         // vm.fragments = [];
@@ -41,13 +38,13 @@
         vm.getVideoEmbedUrl = getVideoEmbedUrl;
         vm.downloadVideo = downloadVideo;
         vm.uploadVideo = uploadVideo;
-        // vm.uploadVideoOnYouTube = uploadVideoOnYouTube;
+        vm.uploadVideoOnYouTube = uploadVideoOnYouTube;
         vm.statusJob = statusJob;
         vm.statusFragment = statusFragment;
         vm.globalStatusFragment = globalStatusFragment;
-        vm.CloudChecker = CloudChecker;
+        vm.resources = resources;
 
-        vm.Tester = Tester;
+        // vm.Tester = Tester;
 
         vm.createFragment = createFragment;
         // vm.cloudinary = cloudinary;
@@ -149,17 +146,13 @@
             });
         }
 
-        // function uploadVideoOnYouTube()
-        // {
-        //     var data = {
-        //         user_id: '28'
-        //     };
-        //
-        //     api.uploadVideoOnYouTube(data).then(function (data)
-        //     {
-        //         vm.upload_yt_job_id = data;
-        //     });
-        // }
+        function uploadVideoOnYouTube()
+        {
+            api.uploadVideoOnYouTube().then(function (data)
+            {
+                vm.upload_yt_job_id = data;
+            });
+        }
 
         // /*
         //  |--------------------------------------------------------------------------------------------------------------
@@ -198,11 +191,11 @@
             };
 
 
-
             api.createFragment(data).then(function (data)
             {
                 vm.fragment = data;
                 vm.fragment.isCreated = true;
+                vm.cloud_id = vm.fragment.video_id;
 
                 downloadVideo();
 
@@ -227,8 +220,7 @@
                     {
                         uploadVideo();
                         $interval.cancel(uploader);
-                        vm.fragment.isCreated = false;
-                        vm.fragment.cloudCreated = true;
+
                     }
 
                     if (vm.status_fragment === 'video_on_cloud')
@@ -240,7 +232,19 @@
 
                 }, 500);
 
+                var cloud_video = $interval(function () {
 
+                    resources();
+
+                    if (vm.cloud_video_params['public_id'] === vm.fragment.video_id)
+                    {
+                        uploadVideoOnYouTube();
+                        $interval.cancel(cloud_video);
+                        vm.fragment.isCreated = false;
+                        vm.fragment.cloudCreated = true;
+                    }
+
+                }, 2500);
 
             });
         }
@@ -254,13 +258,10 @@
         }
 
 
-        function CloudChecker()
+        function resources()
         {
-            var data = {
-                video_id: vm.fragment.video_id
-            };
 
-            api.CloudChecker(data).then(function (data)
+            api.resources().then(function (data)
             {
                 vm.cloud_video_params = data;
             });
@@ -273,58 +274,74 @@
         //
         // }
 
-        function Tester()
-        {
-            // $interval(function () {
-            //
-            //     globalStatusFragment();
-            //
-            // }, 1500);
-
-            vm.global_status = $interval(globalStatusFragment, 2500);
-
-
-            // var tester = $interval(function () {
-            //
-            //     statusFragment();
-            //
-            //     if (vm.status_fragment === 'upload_on_cloud')
-            //     {
-            //         uploadVideo();
-            //         $interval.cancel(tester);
-            //     }
-            //
-            // }, 600);
-
-            // vm.interval_status_fragment = $interval(status_fragment, 500);
-
-            // var serch = (function () {
-            //
-            //     research();
-            //
-            // });
-            //
-            // if (vm.number == 5)
-            // {
-            //     $interval.cancel(vm.test);
-            //     alert('stop');
-            // }
-            //
-            // vm.test = $interval(serch, 1000);
-
-
-        // statusJob();
-        // vm.test = "start";
-        // var counter = (function () {
-        //     vm.test = "Tester";
-        // });
-        // $interval(counter, 2000);
-        // vm.status = "new";
-        // var status_job = (function () {
-        //     statusJob();
-        // });
-        // $interval(status_job, 2000);
-        }
+        // function Tester()
+        // {
+        //
+        //     // $interval(function () {
+        //     //
+        //     //     globalStatusFragment();
+        //     //
+        //     // }, 1500);
+        //
+        //     // var cloud_video = $interval(function () {
+        //     //
+        //     //     resources();
+        //     //
+        //     //     if (vm.cloud_video_params['public_id'] === vm.fragment.video_id)
+        //     //     {
+        //     //         $interval.cancel(cloud_video);
+        //     //     }
+        //     //
+        //     // }, 2500);
+        //
+        //     // vm.cloud_video = $interval(resources, 2500);
+        //     // if (vm.cloud_video_params['public_id'] === vm.fragment.video_id)
+        //     // {
+        //     //     $interval.cancel(vm.cloud_video);
+        //     // }
+        //
+        //
+        //     // var tester = $interval(function () {
+        //     //
+        //     //     statusFragment();
+        //     //
+        //     //     if (vm.status_fragment === 'upload_on_cloud')
+        //     //     {
+        //     //         uploadVideo();
+        //     //         $interval.cancel(tester);
+        //     //     }
+        //     //
+        //     // }, 600);
+        //
+        //     // vm.interval_status_fragment = $interval(status_fragment, 500);
+        //
+        //     // var serch = (function () {
+        //     //
+        //     //     research();
+        //     //
+        //     // });
+        //     //
+        //     // if (vm.number == 5)
+        //     // {
+        //     //     $interval.cancel(vm.test);
+        //     //     alert('stop');
+        //     // }
+        //     //
+        //     // vm.test = $interval(serch, 1000);
+        //
+        //
+        // // statusJob();
+        // // vm.test = "start";
+        // // var counter = (function () {
+        // //     vm.test = "Tester";
+        // // });
+        // // $interval(counter, 2000);
+        // // vm.status = "new";
+        // // var status_job = (function () {
+        // //     statusJob();
+        // // });
+        // // $interval(status_job, 2000);
+        // }
 
 
 

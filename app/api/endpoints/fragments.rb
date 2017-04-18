@@ -9,7 +9,7 @@ module Endpoints
     end
 
     post 'fragments/resources' do
-      user_id = 29
+      user_id = 28
       fragment = Fragment.where(user_id: user_id).last
       url = fragment.url
       url = URI.parse(url)
@@ -17,7 +17,11 @@ module Endpoints
       video_id = respond['v'].first
 
       video_from_cloud = Cloudinary::Api.resources_by_ids(video_id, :resource_type => :video)
-      video_from_cloud
+      video_params = video_from_cloud['resources'].last
+      fragment.cloud_url = video_params['secure_url']
+      fragment.save
+      video_params
+
       # cloud = video_from_cloud
       # fragment.cloud_url = cloud['resources'].last['url']
       # fragmen.save
@@ -39,13 +43,13 @@ module Endpoints
     end
 
     post 'fragments/status' do
-      user_id = 29
+      user_id = 28
       fragment = Fragment.where(user_id: user_id).last
       fragment.status
     end
 
     post 'fragments/global/status' do
-      user_id = 29
+      user_id = 28
       fragment = Fragment.where(user_id: user_id).last
       fragment.status
     end
@@ -70,7 +74,7 @@ module Endpoints
     end
 
     post 'fragments' do
-      user_id = User.last.id
+      user_id = 28
 
       Fragment.create({user_id: user_id,
                        video_id: params[:video_id],
@@ -121,13 +125,13 @@ module Endpoints
       # end
     end
 
-    # params do
-    #   requires :user_id, type: Integer, desc: 'user_id'
-    # end
-    #
-    # delete 'fragments/delete_all' do
-    #   fragment = Fragment.where(user_id: params[:user_id]).delete
-    # end
+    params do
+      requires :user_id, type: Integer, desc: 'user_id'
+    end
+
+    delete 'fragments/delete_all' do
+      #Fragment.where(user_id: params[:user_id]).delete
+    end
 
     params do
       requires :video_id, type: String, desc: 'video_id'
@@ -138,7 +142,7 @@ module Endpoints
     end
 
     post 'fragments/uploaded_on_cloudinary' do
-      user_id = 29
+      user_id = 28
       fragment = Fragment.where(user_id: user_id).last
 
       job_id = CloudinaryWorker.perform_async(fragment.id)
@@ -160,8 +164,33 @@ module Endpoints
       job_id = UploaderWorker.perform_async(title,description,cloud_uri)
     end
 
+    post 'fragments/uploaded_video_on_youtube' do
+      user_id = 28
+      user = User.find(user_id)
+      token = user.token
+      fragment = Fragment.where(user_id: user_id).last
+      title = fragment.title
+      description = fragment.description
+      cloud_url = fragment.cloud_url
+
+      url = URI.parse(cloud_url)
+      respond = CGI.parse(url.path).first
+      url = respond.first
+      url = url[20..url.size]
+      cloud_url = url
+
+      start = fragment.start
+      i_end = fragment.end
+
+      url = "http://res.cloudinary.com/comedy/video/upload/eo_#{i_end},so_#{start}#{cloud_url}"
+
+      account = Yt::Account.new access_token: token
+      respond = account.upload_video url, title: title, description: description
+      # job_id = UploaderWorker.perform_async(token,title,description,cloud_url,start,i_end)
+    end
+
     post 'status_job' do
-      user_id = 29
+      user_id = 28
 
       fragment = Fragment.where(user_id: user_id).last
       job_id = fragment.status
@@ -189,11 +218,28 @@ module Endpoints
 
       all_stats = Sidekiq::Status::get_all params[:id]
       status = all_stats['status']
+      status
 
       #worker = all_stats["worker"]
       #args = all_stats["args"]
       #update_time = all_stats["update_time"]
       #jid = all_stats["jid"]
+    end
+
+    # params do
+    #   requires :id, type: String, desc: 'channel ID'
+    # end
+
+    post 'channel' do
+
+      user = User.find(28)
+      user_id = user.id
+      token = user.token
+      name = user.email
+      # owner = Yt::ContentOwner.new owner_name: name, refresh_token: token
+      account = Yt::Account.new refresh_token: token
+      channel = Yt::Channel.new id: 'UCFRA75dCkcCD9X-QevTu4Qw', auth: account
+      channel.title
     end
   end
 end

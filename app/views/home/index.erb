@@ -1,18 +1,18 @@
 https://www.youtube.com/watch?v=Z7bfTV58F7A
 
+
 <div class="ui segment">
   <div class="ui basic segment center aligned" data-ng-if="index.video.isPreviewing" data-ng-class="{loading: index.fragment.isCreated}">
     <iframe frameborder="0" width="800" height="400" data-ng-src="{{ index.fragment.embed_url }}"></iframe>
   </div>
     <div data-ng-if="index.fragment.cloudCreated">
       <div>
-        <%= cl_video_tag("tZwRY1PznWc", :width=>"#{200}") %>
+        <a href="{{ index.cloud_video_params.url }}">{{ index.cloud_video_params.url }}</a>
       </div>
     </div>
   <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreated">
     <div class="required field">
       <label>Youtube URL</label>
-
       <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.getVideoInfo(); index.getVideoEmbedUrl();" data-ng-model="index.fragment.url">
     </div>
     <div data-ng-show="index.fragment.embed_url">
@@ -45,8 +45,8 @@ https://www.youtube.com/watch?v=Z7bfTV58F7A
   </div>
 </div>
 
-<div align="center">
-  <button class="ui massive red button" data-ng-click="index.Tester()">Tester</button>
-</div>
+<!--<div align="center">-->
+  <!--<button class="ui massive red button" data-ng-click="index.Tester()">Tester</button>-->
+<!--</div>-->
 
 

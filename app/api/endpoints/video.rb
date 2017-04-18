@@ -56,7 +56,7 @@ module Endpoints
     post 'video/download' do
 
       begin
-        user_id = 29
+        user_id = 28
         fragment = Fragment.where(user_id: user_id).last
 
         video = Cloudinary::Api.resource(fragment.video_id, :resource_type => :video)
