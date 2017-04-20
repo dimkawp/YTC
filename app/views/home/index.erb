@@ -1,4 +1,8 @@
-<div class="ui segment">
+<div class="ui segment" data-ng-show="index.user.id">
+  <a class="ui red ribbon label">
+    <i class="video play icon"></i>
+  </a>
+
   <div class="ui form">
     <div class="field">
       <label>Youtube URL</label>
@@ -14,53 +18,4 @@
   <div class="ui segment" data-ng-if="index.fragment.embed_url">
     <div class="ui embed" data-source="youtube" data-url="{{ index.fragment.embed_url }}" data-app-embed></div>
   </div>
-
-  <!--<div class="ui segment" data-ng-if="index.fragment.embed_url">-->
-    <!--<iframe ng-src="{{ index.fragment.embed_url }}" data-test="{{ index.fragment.embed_url }}" frameborder="0"></iframe>-->
-  <!--</div>-->
-</div>
-
-<div class="ui divider"></div>
-
-<div class="ui form">
-  <%= form_tag({controller: 'fragment', action: 'create'}, method: 'post') do %>
-      <div class="field">
-        <%= label_tag('Youtube URL') %>
-        <%= text_field(:fragment, :url, placeholder: 'url') %>
-      </div>
-      <div class="two fields">
-        <div class="field">
-          <%= label_tag('Start') %>
-          <%= text_field(:offset, :start, placeholder: 'start') %>
-        </div>
-        <div class="field">
-          <%= label_tag('End') %>
-          <%= text_field(:offset, :end, placeholder: 'end') %>
-        </div>
-      </div>
-      <%= submit_tag 'Download', class: 'ui button' %>
-  <% end %>
-</div>
-
-<div class="ui divider"></div>
-
-<div class="ui header">Youtube Link</div>
-
-<div class="ui form">
-  <%= form_tag({controller: 'fragment', action: 'create'}, method: 'post') do %>
-    <div class="field">
-      <%= label_tag('Url') %>
-      <%= text_field(:fragment, :url, placeholder: 'url') %>
-    </div>
-    <%= submit_tag 'Download', class: 'ui green button' %>
-  <% end %>
-</div>
-
-<div class="ui divider"></div>
-
-<div class="ui buttons">
-  <%= button_to 'Info about YouTube Video', {:controller => 'fragment', :action => 'video_info'}, :method => :post, class: 'ui button' %>
-  <%= button_to 'Check_status_job', {:controller => 'fragment', :action => 'check_status_job'}, :method => :post, class: 'ui button' %>
-  <%= button_to 'Upload on cloudinary', {:controller => 'fragment', :action => 'cloudinary'}, :method => :post, class: 'ui button' %>
-  <%= button_to 'Check video from cloudinary', {:controller => 'fragment', :action => 'cloud_public_id'}, :method => :post, class: 'ui button' %>
 </div>

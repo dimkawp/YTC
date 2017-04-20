@@ -5,18 +5,40 @@
     angular.module('app.index')
            .controller('IndexController', IndexController);
 
-    IndexController.$inject = ['api', '$sce'];
+    IndexController.$inject = ['$auth', '$sce', 'api'];
 
-    function IndexController(api, $sce)
+    function IndexController($auth, $sce, api)
     {
         var vm = this;
 
-        vm.user = [];
+        vm.user = $auth.user;
         vm.fragment = [];
 
+        vm.login = login;
+        vm.logout = logout;
         vm.preview = preview;
 
-        getUser();
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Auth
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function login()
+        {
+            $auth.authenticate('google').then(function (response)
+            {
+                //
+            });
+        }
+
+        function logout()
+        {
+            $auth.signOut().then(function (response)
+            {
+                //
+            });
+        }
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -41,13 +63,5 @@
          | Users
          |--------------------------------------------------------------------------------------------------------------
          */
-
-        function getUser()
-        {
-            api.getUser().then(function (data)
-            {
-                vm.user = data;
-            });
-        }
     }
 })();
