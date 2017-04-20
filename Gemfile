@@ -54,6 +54,3 @@ gem 'omniauth-google-oauth2'
 gem 'cloudinary'
 gem 'youtube-dl.rb'
 gem 'yt'
-
-# active type for upload video
-gem 'active_type'

@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "The third-party packages of project.",
   "dependencies": {
-    "jquery": "3.1.1",
     "angular": "1.5.11",
     "angular-cookie": "4.1.0",
     "ng-token-auth": "0.0.29",
+    "jquery": "3.1.1",
     "semantic-ui": "2.2.10"
   },
   "devDependencies": {

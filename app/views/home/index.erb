@@ -3,19 +3,48 @@
     <i class="video play icon"></i>
   </a>
 
-  <div class="ui form">
-    <div class="field">
-      <label>Youtube URL</label>
-
-      <div class="ui action input">
-        <input type="text" data-ng-model="index.fragment.url">
-
-        <button class="ui button" data-ng-click="index.preview()">Preview</button>
+  <div class="ui segment" data-ng-if="index.fragment.embed_url">
+    <div class="ui basic segment center aligned" data-ng-if="index.video.isPreviewing" data-ng-class="{loading: index.fragment.isCreated}">
+      <iframe frameborder="0" width="800" height="400" data-ng-src="{{ index.fragment.embed_url }}"></iframe>
+    </div>
+    <div data-ng-if="index.fragment.cloudCreated">
+      <div>
+        <a href="{{ index.cloud_video_params.url }}">{{ index.cloud_video_params.url }}</a>
       </div>
     </div>
   </div>
 
-  <div class="ui segment" data-ng-if="index.fragment.embed_url">
-    <div class="ui embed" data-source="youtube" data-url="{{ index.fragment.embed_url }}" data-app-embed></div>
+  <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreated">
+    <div class="required field">
+      <label>Youtube URL</label>
+      <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.getVideoInfo(); index.getVideoEmbedUrl();" data-ng-model="index.fragment.url">
+    </div>
+    <div data-ng-show="index.fragment.embed_url">
+      <div class="fields">
+        <div class="required field">
+          <label>Start</label>
+
+          <input type="number" name="start" min="1" placeholder="Start" data-ng-change="index.getVideoEmbedUrl()" data-ng-model="index.fragment.start">
+        </div>
+        <div class="required field">
+          <label>End</label>
+
+          <input type="number" name="end" min="1" placeholder="End" data-ng-change="index.getVideoEmbedUrl()" data-ng-model="index.fragment.end">
+        </div>
+      </div>
+      <div class="required field">
+        <label>Title</label>
+
+        <input type="text" name="title" data-ng-model="index.fragment.title">
+      </div>
+      <div class="field">
+        <label>Description</label>
+
+        <textarea name="description" rows="3" data-ng-model="index.fragment.description"></textarea>
+      </div>
+      <div align="center">
+        <button class="ui massive red button" data-ng-click="index.createFragment()">Create fragment</button>
+      </div>
+    </div>
   </div>
 </div>

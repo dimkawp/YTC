@@ -5,6 +5,7 @@ module Api
     format :json
     formatter :json, Grape::Formatter::Jbuilder
 
+    mount Endpoints::Video
     mount Endpoints::Users
     mount Endpoints::Fragments
 

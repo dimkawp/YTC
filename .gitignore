@@ -31,3 +31,5 @@ config/database.yml
 
 # Ignore env
 .env
+# node_modules
+/node_modules

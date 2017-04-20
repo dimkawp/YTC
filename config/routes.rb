@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   root 'home#index'
 
   get '/' => 'home#index'
+  # get '/omniauth/:provider/callback', to: 'home#token'
 
   mount Api::API => '/api'
   mount Sidekiq::Web => '/sidekiq'
