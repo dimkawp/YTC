@@ -42,17 +42,17 @@
             });
         }
 
-        function statusFragment()
+        function statusFragment(data)
         {
-            return $http.post('/api/fragments/status').then(function (response)
+            return $http.post('/api/fragments/status', data).then(function (response)
             {
                 return response.data;
             });
         }
 
-        function globalStatusFragment()
+        function globalStatusFragment(data)
         {
-            return $http.post('/api/fragments/global/status').then(function (response)
+            return $http.post('/api/fragments/global/status', data).then(function (response)
             {
                 return response.data;
             });
@@ -83,25 +83,25 @@
             });
         }
 
-        function uploadVideo()
+        function uploadVideo(data)
         {
-            return $http.post('/api/fragments/uploaded_on_cloudinary').then(function (response)
+            return $http.post('/api/fragments/uploaded_on_cloudinary', data).then(function (response)
             {
                 return response.data;
             });
         }
 
-        function deleteVideoFile()
+        function deleteVideoFile(data)
         {
-            return $http.post('/api/fragments/delete_video_file').then(function (response)
+            return $http.post('/api/fragments/delete_video_file', data).then(function (response)
             {
                 return response.data;
             });
         }
 
-        function uploadVideoOnYouTube()
+        function uploadVideoOnYouTube(data)
         {
-            return $http.post('/api/fragments/uploaded_video_on_youtube').then(function (response)
+            return $http.post('/api/fragments/uploaded_video_on_youtube', data).then(function (response)
             {
                 return response.data;
             });

@@ -8,8 +8,12 @@ module Endpoints
         @fragments = Fragment.find(params[:id])
     end
 
+    params do
+      requires :user_id, type: String, desc: 'User ID'
+    end
+
     post 'fragments/resources' do
-      user_id = 28
+      user_id = params[:user_id]
       fragment = Fragment.where(user_id: user_id).last
       url = fragment.url
       url = URI.parse(url)
@@ -38,14 +42,22 @@ module Endpoints
       video_from_cloud
     end
 
+    params do
+      requires :user_id, type: String, desc: 'User ID'
+    end
+
     post 'fragments/status' do
-      user_id = 28
+      user_id = params[:user_id]
       fragment = Fragment.where(user_id: user_id).last
       fragment.status
     end
 
+    params do
+      requires :user_id, type: String, desc: 'User ID'
+    end
+
     post 'fragments/delete_video_file' do
-      user_id = 28
+      user_id = params[:user_id]
       fragment = Fragment.where(user_id: user_id).last
       url = fragment.url
       url = URI.parse(url)
@@ -59,8 +71,12 @@ module Endpoints
 
     end
 
+    params do
+      requires :user_id, type: String, desc: 'User ID'
+    end
+
     post 'fragments/global/status' do
-      user_id = 28
+      user_id = params[:user_id]
       fragment = Fragment.where(user_id: user_id).last
       fragment.status
     end
@@ -75,6 +91,7 @@ module Endpoints
     end
 
     params do
+      requires :user_id, type: String, desc: 'User ID'
       requires :url, type: String, desc: 'URL'
       requires :start, type: Integer, desc: 'Start'
       requires :end, type: Integer, desc: 'End'
@@ -85,7 +102,7 @@ module Endpoints
     end
 
     post 'fragments' do
-      user_id = 28
+      user_id = params[:user_id]
 
       Fragment.create({user_id: user_id,
                        video_id: params[:video_id],
@@ -152,8 +169,12 @@ module Endpoints
       Cloudinary::Api.resource(params[:video_id], :resource_type => :video)
     end
 
+    params do
+      requires :user_id, type: String, desc: 'User ID'
+    end
+
     post 'fragments/uploaded_on_cloudinary' do
-      user_id = 28
+      user_id = params[:user_id]
       fragment = Fragment.where(user_id: user_id).last
       job_id = CloudinaryWorker.perform_async(fragment.id)
     end
@@ -171,8 +192,12 @@ module Endpoints
       job_id = UploaderWorker.perform_async(title,description,cloud_uri)
     end
 
+    params do
+      requires :user_id, type: String, desc: 'User ID'
+    end
+
     post 'fragments/uploaded_video_on_youtube' do
-      user_id = 28
+      user_id = params[:user_id]
       user = User.find(user_id)
       token = user.token
       fragment = Fragment.where(user_id: user_id).last
@@ -193,22 +218,22 @@ module Endpoints
       job_id = UploaderWorker.perform_async(token,title,description,cloud_url,start,i_end)
     end
 
-    post 'status_job' do
-      user_id = 28
-
-      fragment = Fragment.where(user_id: user_id).last
-      job_id = fragment.status
-      all_stats = Sidekiq::Status::get_all job_id
-
-      if job_id == 'downloaded' || job_id == 'upload_on_cloud'
-        status = 'complete'
-      else
-        status = all_stats['status']
-      end
-
-      status
-
-    end
+    # post 'status_job' do
+    #   user_id = 28
+    #
+    #   fragment = Fragment.where(user_id: user_id).last
+    #   job_id = fragment.status
+    #   all_stats = Sidekiq::Status::get_all job_id
+    #
+    #   if job_id == 'downloaded' || 'upload_on_cloud'
+    #     status = 'complete'
+    #   else
+    #     status = all_stats['status']
+    #   end
+    #
+    #   status
+    #
+    # end
 
     params do
       requires :id, type: String, desc: 'id'

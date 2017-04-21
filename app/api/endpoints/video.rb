@@ -53,10 +53,14 @@ module Endpoints
 
     end
 
+    params do
+      requires :user_id, type: Integer, desc: 'User ID'
+    end
+
     post 'video/download' do
 
       begin
-        user_id = 28
+        user_id = params[:user_id]
         fragment = Fragment.where(user_id: user_id).last
 
         video = Cloudinary::Api.resource(fragment.video_id, :resource_type => :video)

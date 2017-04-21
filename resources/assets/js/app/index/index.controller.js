@@ -122,7 +122,11 @@
 
         function statusFragment()
         {
-            api.statusFragment().then(function (data)
+            var data = {
+                id: vm.user.id
+            };
+
+            api.statusFragment(data).then(function (data)
             {
                 vm.status_fragment = data;
             });
@@ -130,7 +134,11 @@
 
         function globalStatusFragment()
         {
-            api.globalStatusFragment().then(function (data)
+            var data = {
+                id: vm.user.id
+            };
+
+            api.globalStatusFragment(data).then(function (data)
             {
                 vm.global_status = data;
             });
@@ -139,7 +147,7 @@
         function downloadVideo()
         {
             var data = {
-                id: vm.fragment.id
+                id: vm.user.id
             };
 
             api.downloadVideo(data).then(function (data)
@@ -151,7 +159,11 @@
 
         function uploadVideo()
         {
-            api.uploadVideo().then(function (data)
+            var data = {
+                id: vm.user.id
+            };
+
+            api.uploadVideo(data).then(function (data)
             {
                 vm.upload_job_id = data;
             });
@@ -159,7 +171,11 @@
 
         function deleteVideoFile()
         {
-            api.deleteVideoFile().then(function (data)
+            var data = {
+                id: vm.user.id
+            };
+
+            api.deleteVideoFile(data).then(function (data)
             {
 
             });
@@ -167,7 +183,11 @@
 
         function uploadVideoOnYouTube()
         {
-            api.uploadVideoOnYouTube().then(function (data)
+            var data = {
+                id: vm.user.id
+            };
+
+            api.uploadVideoOnYouTube(data).then(function (data)
             {
                 vm.upload_yt_job_id = data;
             });
