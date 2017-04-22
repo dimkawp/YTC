@@ -5,13 +5,12 @@ Rails.application.routes.draw do
   root 'home#index'
 
   get '/' => 'home#index'
-  # get '/omniauth/:provider/callback', to: 'home#token'
 
   mount Api::API => '/api'
   mount Sidekiq::Web => '/sidekiq'
   mount GrapeSwaggerRails::Engine => '/swagger'
 
-  mount_devise_token_auth_for 'User', at: '/api/auth'
+  mount_devise_token_auth_for 'User', at: '/api/auth', :controllers => {:omniauth_callbacks => 'omniauth_callbacks'}
 
   as :user do
     # Define routes for User within this block.
