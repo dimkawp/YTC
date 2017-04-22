@@ -296,6 +296,17 @@
                         $interval.cancel(yt_video);
 
                     }
+
+                    if (vm.global_status === 'failed')
+                    {
+                        alert('failed error');
+                        vm.fragment.ytCreated = true;
+                        vm.fragment.isCreated = false;
+                        $interval.cancel(yt_video);
+
+                    }
+
+
                 }, 2500);
             });
         }

@@ -104,8 +104,13 @@ module Endpoints
     post 'fragments' do
       user_id = params[:user_id]
 
+      url = params[:url]
+      url = URI.parse(url)
+      respond = CGI.parse(url.query)
+      video_id = respond['v'].first
+
       Fragment.create({user_id: user_id,
-                       video_id: params[:video_id],
+                       video_id: video_id,
                        url: params[:url],
                        start: params[:start],
                        end: params[:end],
@@ -216,7 +221,7 @@ module Endpoints
       start = fragment.start
       i_end = fragment.end
 
-      job_id = UploaderWorker.perform_async(fragment.id,token,title,description,cloud_url,start,i_end)
+      job_id = UploaderWorker.perform_async(fragment.id,token,cloud_url)
     end
 
     params do

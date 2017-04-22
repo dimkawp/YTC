@@ -37,14 +37,13 @@ module Endpoints
 
     post 'video/download/id' do
 
+      fragment = Fragment.find(params[:id])
       begin
-        fragment = Fragment.find(params[:id])
-
         video = Cloudinary::Api.resource(fragment.video_id, :resource_type => :video)
-
         fragment.status = 'video_on_cloud'
         fragment.cloud_url = video['secure_url']
         fragment.save
+        video
 
       rescue CloudinaryException
         job_id = DownloaderWorker.perform_async(params[:id])
@@ -72,9 +71,10 @@ module Endpoints
         fragment.save
 
       rescue CloudinaryException
-        job_id = DownloaderWorker.perform_async(params[:user_id])
+        job_id = DownloaderWorker.perform_async(fragment.id)
         fragment.status = job_id
         fragment.save
+        job_id
       end
 
     end
