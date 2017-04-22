@@ -16,6 +16,7 @@
         vm.fragment = [];
         vm.status_fragment = [];
         vm.global_status = [];
+        vm.test = vm.user.id;
 
         vm.login = login;
         vm.logout = logout;
@@ -123,7 +124,7 @@
         function statusFragment()
         {
             var data = {
-                id: vm.user.id
+                user_id: vm.user.id
             };
 
             api.statusFragment(data).then(function (data)
@@ -135,7 +136,7 @@
         function globalStatusFragment()
         {
             var data = {
-                id: vm.user.id
+                user_id: vm.user.id
             };
 
             api.globalStatusFragment(data).then(function (data)
@@ -147,7 +148,7 @@
         function downloadVideo()
         {
             var data = {
-                id: vm.user.id
+                user_id: vm.user.id
             };
 
             api.downloadVideo(data).then(function (data)
@@ -160,7 +161,7 @@
         function uploadVideo()
         {
             var data = {
-                id: vm.user.id
+                user_id: vm.user.id
             };
 
             api.uploadVideo(data).then(function (data)
@@ -172,7 +173,7 @@
         function deleteVideoFile()
         {
             var data = {
-                id: vm.user.id
+                user_id: vm.user.id
             };
 
             api.deleteVideoFile(data).then(function (data)
@@ -184,7 +185,7 @@
         function uploadVideoOnYouTube()
         {
             var data = {
-                id: vm.user.id
+                user_id: vm.user.id
             };
 
             api.uploadVideoOnYouTube(data).then(function (data)
@@ -202,6 +203,7 @@
         function createFragment()
         {
             var data = {
+                user_id: vm.user.id,
                 url: vm.fragment.url,
                 start: vm.fragment.start,
                 end: vm.fragment.end,
@@ -246,7 +248,6 @@
                     {
                         $interval.cancel(uploader);
 
-                        vm.fragment.isCreated = false;
                         vm.fragment.cloudCreated = true;
                     }
 
@@ -272,7 +273,12 @@
 
         function resources()
         {
-            api.resources().then(function (data)
+            var data = {
+                user_id: vm.user.id
+            };
+
+
+            api.resources(data).then(function (data)
             {
                 vm.cloud_video_params = data;
             });

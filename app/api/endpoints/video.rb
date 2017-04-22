@@ -59,8 +59,8 @@ module Endpoints
 
     post 'video/download' do
 
+      user_id = params[:user_id]
       begin
-        user_id = params[:user_id]
         fragment = Fragment.where(user_id: user_id).last
 
         video = Cloudinary::Api.resource(fragment.video_id, :resource_type => :video)
@@ -70,7 +70,7 @@ module Endpoints
         fragment.save
 
       rescue CloudinaryException
-        job_id = DownloaderWorker.perform_async(params[:id])
+        job_id = DownloaderWorker.perform_async(params[:user_id])
         fragment.status = job_id
         fragment.save
       end

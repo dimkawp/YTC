@@ -27,20 +27,20 @@ module Endpoints
       video_params
     end
 
-    params do
-      requires :id, type: String, desc: 'Fragment ID'
-    end
-
-    post 'fragments/resources/id' do
-      fragment = Fragment.find(params[:id])
-      url = fragment.url
-      url = URI.parse(url)
-      respond = CGI.parse(url.query)
-      video_id = respond['v'].first
-
-      video_from_cloud = Cloudinary::Api.resources_by_ids(video_id, :resource_type => :video)
-      video_from_cloud
-    end
+    # params do
+    #   requires :id, type: String, desc: 'Fragment ID'
+    # end
+    #
+    # post 'fragments/resources/id' do
+    #   fragment = Fragment.find(params[:id])
+    #   url = fragment.url
+    #   url = URI.parse(url)
+    #   respond = CGI.parse(url.query)
+    #   video_id = respond['v'].first
+    #
+    #   video_from_cloud = Cloudinary::Api.resources_by_ids(video_id, :resource_type => :video)
+    #   video_from_cloud
+    # end
 
     params do
       requires :user_id, type: String, desc: 'User ID'
@@ -218,39 +218,42 @@ module Endpoints
       job_id = UploaderWorker.perform_async(token,title,description,cloud_url,start,i_end)
     end
 
-    # post 'status_job' do
-    #   user_id = 28
-    #
-    #   fragment = Fragment.where(user_id: user_id).last
-    #   job_id = fragment.status
-    #   all_stats = Sidekiq::Status::get_all job_id
-    #
-    #   if job_id == 'downloaded' || 'upload_on_cloud'
-    #     status = 'complete'
-    #   else
-    #     status = all_stats['status']
-    #   end
-    #
-    #   status
-    #
-    # end
-
     params do
-      requires :id, type: String, desc: 'id'
-
+      requires :id, type: String, desc: 'Fragment ID'
     end
 
-    post 'status_job/id' do
+    post 'status_job' do
+      # user_id = params[:user_id]
+      # fragment = Fragment.where(user_id: user_id).last
+      fragment = Fragment.find(params[:id])
+      job_id = fragment.status
+      all_stats = Sidekiq::Status::get_all job_id
 
-      all_stats = Sidekiq::Status::get_all params[:id]
-      status = all_stats['status']
+      if job_id == 'downloaded' || job_id == 'upload_on_cloud'
+        status = 'complete'
+      else
+        status = all_stats['status']
+      end
+
       status
 
-      #worker = all_stats["worker"]
-      #args = all_stats["args"]
-      #update_time = all_stats["update_time"]
-      #jid = all_stats["jid"]
     end
+
+    # params do
+    #   requires :id, type: String, desc: 'id'
+    # end
+    #
+    # post 'status_job/id' do
+    #
+    #   all_stats = Sidekiq::Status::get_all params[:id]
+    #   status = all_stats['status']
+    #   status
+    #
+    #   #worker = all_stats["worker"]
+    #   #args = all_stats["args"]
+    #   #update_time = all_stats["update_time"]
+    #   #jid = all_stats["jid"]
+    # end
 
     # params do
     #   requires :id, type: String, desc: 'channel ID'

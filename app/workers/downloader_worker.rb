@@ -1,8 +1,8 @@
 class DownloaderWorker
   include Sidekiq::Worker
 
-  def perform(id)
-    fragment = Fragment.find(id)
+  def perform(user_id)
+    fragment = Fragment.where(user_id: user_id).last
 
     begin
       video = Cloudinary::Api.resource(fragment.video_id, :resource_type => :video)

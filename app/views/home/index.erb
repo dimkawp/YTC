@@ -3,7 +3,7 @@
     <i class="video play icon"></i>
   </a>
 
-  <div class="ui segment" data-ng-if="index.fragment.embed_url">
+  <div class="ui segment" data-ng-if="index.video.isPreviewing">
     <div class="ui basic segment center aligned" data-ng-if="index.video.isPreviewing" data-ng-class="{loading: index.fragment.isCreated}">
       <iframe frameborder="0" width="800" height="400" data-ng-src="{{ index.fragment.embed_url }}"></iframe>
     </div>

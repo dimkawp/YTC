@@ -58,9 +58,9 @@
             });
         }
 
-        function resources()
+        function resources(data)
         {
-            return $http.post('/api/fragments/resources').then(function (response)
+            return $http.post('/api/fragments/resources', data).then(function (response)
             {
                 return response.data;
             });
