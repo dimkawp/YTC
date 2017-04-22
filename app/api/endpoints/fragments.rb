@@ -200,7 +200,7 @@ module Endpoints
       job_id = fragment.status
       all_stats = Sidekiq::Status::get_all job_id
 
-      if job_id == 'downloaded' or 'upload_on_cloud'
+      if job_id == 'downloaded' || job_id == 'upload_on_cloud'
         status = 'complete'
       else
         status = all_stats['status']
