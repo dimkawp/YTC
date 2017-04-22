@@ -22,6 +22,7 @@
             "globalStatusFragment": globalStatusFragment,
             "resources": resources,
 
+            "getNewUrl": getNewUrl,
             "getFragment": getFragment,
             "createFragment": createFragment
         };
@@ -118,6 +119,14 @@
         function getFragment()
         {
             return $http.get('/api/fragments').then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function getNewUrl(data)
+        {
+            return $http.get('/api/new_url', data).then(function (response)
             {
                 return response.data;
             });

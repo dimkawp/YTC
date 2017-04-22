@@ -1,5 +1,6 @@
 module Endpoints
   class Video < Grape::API
+
     params do
       requires :url, type: String, desc: 'Youtube URL'
     end
@@ -49,6 +50,7 @@ module Endpoints
         job_id = DownloaderWorker.perform_async(params[:id])
         fragment.status = job_id
         fragment.save
+        job_id
       end
 
     end
@@ -59,8 +61,8 @@ module Endpoints
 
     post 'video/download' do
 
-      user_id = params[:user_id]
       begin
+        user_id = params[:user_id]
         fragment = Fragment.where(user_id: user_id).last
 
         video = Cloudinary::Api.resource(fragment.video_id, :resource_type => :video)

@@ -34,6 +34,8 @@
         vm.upload_yt_job_id = [];
         vm.status = [];
 
+        vm.new_url = [];
+
         vm.getVideoInfo = getVideoInfo;
         vm.getVideoEmbedUrl = getVideoEmbedUrl;
         vm.downloadVideo = downloadVideo;
@@ -44,6 +46,8 @@
         vm.statusFragment = statusFragment;
         vm.globalStatusFragment = globalStatusFragment;
         vm.resources = resources;
+
+        vm.getNewUrl = getNewUrl;
 
         vm.createFragment = createFragment;
 
@@ -93,6 +97,18 @@
             });
         }
 
+        function getNewUrl()
+        {
+            var data = {
+                user_id: user.id
+            };
+
+            api.getNewUrl(data).then(function (data)
+            {
+             vm.new_url = data;
+            });
+        }
+
         function getVideoEmbedUrl()
         {
             var data = {
@@ -136,7 +152,7 @@
         function globalStatusFragment()
         {
             var data = {
-                user_id: vm.user.id
+                id: vm.upload_yt_job_id
             };
 
             api.globalStatusFragment(data).then(function (data)
@@ -264,8 +280,21 @@
 
                         $interval.cancel(cloud_video);
 
-                        vm.fragment.isCreated = false;
                         vm.fragment.cloudCreated = true;
+                    }
+                }, 2500);
+
+                var yt_video = $interval(function ()
+                {
+                    globalStatusFragment();
+
+                    if (vm.global_status === 'complete')
+                    {
+                        vm.fragment.ytCreated = true;
+                        getNewUrl();
+                        vm.fragment.isCreated = false;
+                        $interval.cancel(yt_video);
+
                     }
                 }, 2500);
             });

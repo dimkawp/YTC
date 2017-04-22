@@ -12,6 +12,11 @@
         <a href="{{ index.cloud_video_params.url }}">{{ index.cloud_video_params.url }}</a>
       </div>
     </div>
+    <div data-ng-if="index.fragment.ytCreated">
+      <div>
+        <a href="{{ index.new_url }}">{{ index.new_url }}</a>
+      </div>
+    </div>
   </div>
 
   <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreated">

@@ -72,13 +72,13 @@ module Endpoints
     end
 
     params do
-      requires :user_id, type: String, desc: 'User ID'
+      requires :id, type: String, desc: 'Job ID'
     end
 
     post 'fragments/global/status' do
-      user_id = params[:user_id]
-      fragment = Fragment.where(user_id: user_id).last
-      fragment.status
+      all_stats = Sidekiq::Status::get_all params[:id]
+      status = all_stats['status']
+      status
     end
 
     params do
@@ -202,6 +202,7 @@ module Endpoints
       token = user.token
       fragment = Fragment.where(user_id: user_id).last
 
+
       title = fragment.title
       description = fragment.description
       cloud_url = fragment.cloud_url
@@ -215,7 +216,7 @@ module Endpoints
       start = fragment.start
       i_end = fragment.end
 
-      job_id = UploaderWorker.perform_async(token,title,description,cloud_url,start,i_end)
+      job_id = UploaderWorker.perform_async(fragment.id,token,title,description,cloud_url,start,i_end)
     end
 
     params do
@@ -258,6 +259,17 @@ module Endpoints
     # params do
     #   requires :id, type: String, desc: 'channel ID'
     # end
+
+
+    params do
+      requires :id, type: String, desc: 'User ID'
+    end
+
+    post 'new_url' do
+      fragment = Fragment.where(user_id: params[:id]).last
+      fragment.url
+
+    end
 
     post 'channel' do
 
