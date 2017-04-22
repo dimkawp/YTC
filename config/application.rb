@@ -13,6 +13,7 @@ module YTC
     # -- all .rb files in that directory are automatically loaded.
 
     config.assets.enabled = true
+    config.assets.initialize_on_precompile = false
     config.active_job.queue_adapter = :sidekiq
 
     config.middleware.use(Rack::Config) do |env|
