@@ -10,7 +10,7 @@
     function authConfig($authProvider)
     {
         $authProvider.configure({
-            apiUrl: '/api',
+            apiUrl: '/api'
         });
     }
 })();
