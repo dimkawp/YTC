@@ -21,9 +21,6 @@ config/database.yml
 !/log/.keep
 !/tmp/.keep
 
-# Ignore Byebug command history file.
-.byebug_history
-
 # Ignore rvm
 .rvmrc
 .ruby-gemset
@@ -31,5 +28,6 @@ config/database.yml
 
 # Ignore env
 .env
-# node_modules
+
+# Ignore npm
 /node_modules

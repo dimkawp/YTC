@@ -18,8 +18,7 @@ elixir(function (mix) {
         'app/index/index.module.js',
         'app/index/index.controller.js',
         'app/index/auth.config.js',
-        'app/index/api.service.js',
-        'app/index/app-embed.directive.js',
+        'app/index/api.service.js'
     ],  'public/assets/js/app.min.js');
 });
 
