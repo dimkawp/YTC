@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="app">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <%= csrf_meta_tags %>
+
+    <title>YTC</title>
+
+    <link href="/favicon.ico" rel="shortcut icon">
+
+    <link href="/packages/semantic/css/semantic.min.css" rel="stylesheet">
+    <link href="/assets/css/app.min.css" rel="stylesheet">
+  </head>
+  <body data-ng-controller="IndexController as index">
+    <div class="ui container">
+      <section class="content">
+        <div class="ui segment">
+          <a class="ui red ribbon label">
+            <i class="user icon"></i>
+          </a>
+
+          {{ index.user.name }}
+
+          <button class="ui youtube button" data-ng-click="index.login()" data-ng-hide="index.user.id">
+            <i class="sign in icon"></i> Login with YouTube
+          </button>
+
+          <button class="ui button" data-ng-click="index.logout()" data-ng-show="index.user.id">
+            <i class="sign out icon"></i> Logout
+          </button>
+        </div>
+
+        <%= yield %>
+      </section>
+    </div>
+
+    <script src="/packages/jquery/js/jquery.min.js"></script>
+    <script src="/packages/angular/js/angular.min.js"></script>
+    <script src="/packages/angular-cookie/js/cookie.min.js"></script>
+    <script src="/packages/angular-token-auth/js/token-auth.min.js"></script>
+    <script src="/packages/semantic/js/semantic.min.js"></script>
+    <script src="/assets/js/app.min.js"></script>
+    <script>
+        $(function ()
+        {
+            $('#create-fragment').form
+            ({
+                on: 'change',
+                fields: {
+                    url: ['empty','url'],
+                    start: ['empty', 'integer'],
+                    end: ['empty', 'integer'],
+                    title: ['empty']
+                }
+            });
+        })
+    </script>
+  </body>
+</html>
