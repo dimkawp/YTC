@@ -100,7 +100,7 @@
         function getNewUrl()
         {
             var data = {
-                user_id: user.id
+                id: vm.fragment.id
             };
 
             api.getNewUrl(data).then(function (data)
@@ -290,9 +290,11 @@
 
                     if (vm.global_status === 'complete')
                     {
-                        vm.fragment.ytCreated = true;
                         getNewUrl();
+
+                        vm.fragment.ytCreated = true;
                         vm.fragment.isCreated = false;
+
                         $interval.cancel(yt_video);
 
                     }

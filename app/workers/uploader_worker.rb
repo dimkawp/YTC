@@ -12,6 +12,7 @@ class UploaderWorker
     @respond = account.upload_video url, title: fragment.title, description: fragment.description
     new_url = "https://www.youtube.com/watch?v=#{@respond.id}"
     fragment.url = new_url
+    fragment.status = 'uploaded_on_yt'
     fragment.save
   end
 end

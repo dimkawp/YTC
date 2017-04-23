@@ -79,17 +79,5 @@ module Endpoints
 
     end
 
-    # params do
-    #   requires :url, type: String, desc: 'url'
-    # end
-    #
-    # post 'fragments/download/url' do
-    #   url = params[:url]
-    #   url = URI.parse(url)
-    #   respond = CGI.parse(url.query)
-    #   video_id = respond['v'].first
-    #
-    #   job_id = DownloaderWorker.perform_async(video_id)
-    # end
   end
 end

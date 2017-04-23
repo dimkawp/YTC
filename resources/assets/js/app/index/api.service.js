@@ -126,7 +126,7 @@
 
         function getNewUrl(data)
         {
-            return $http.get('/api/new_url', data).then(function (response)
+            return $http.post('/api/new_url', data).then(function (response)
             {
                 return response.data;
             });

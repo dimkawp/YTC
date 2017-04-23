@@ -27,21 +27,6 @@ module Endpoints
       video_params
     end
 
-    # params do
-    #   requires :id, type: String, desc: 'Fragment ID'
-    # end
-    #
-    # post 'fragments/resources/id' do
-    #   fragment = Fragment.find(params[:id])
-    #   url = fragment.url
-    #   url = URI.parse(url)
-    #   respond = CGI.parse(url.query)
-    #   video_id = respond['v'].first
-    #
-    #   video_from_cloud = Cloudinary::Api.resources_by_ids(video_id, :resource_type => :video)
-    #   video_from_cloud
-    # end
-
     params do
       requires :user_id, type: String, desc: 'User ID'
     end
@@ -119,43 +104,19 @@ module Endpoints
                        status: params[:status]})
     end
 
-    # params do
-    #   optional :name, type: String, desc: 'name'
-    #   optional :cloud_url, type: String, desc: 'cloud_url'
-    # end
-    #
-    # post 'fragments/:id' do
-    #   begin
-    #     fragment = Fragment.find(params[:id])
-    #     fragment.name = params[:name]
-    #     fragment.cloud_url = params[:cloud_url]
-    #     if fragment.save
-    #       {
-    #           status: :success
-    #       }
-    #       else
-    #       error!({status: :error, message: fragment.errors.full_messages.first}) if fragment.errors.any?
-    #     end
-    #
-    #   rescue ActiveRecord::RecordNotFound
-    #     error!({status: :error, message: :not_found}, 404)
-    #   end
-    # end
-
     params do
       requires :id, type: Integer, desc: 'id'
     end
 
     delete 'fragments/delete/:id' do
-      # begin
+      begin
         fragment = Fragment.find(params[:id])
-        fragment
-      #   {
-      #       status: :success
-      #   } if fragment.delete
-      # rescue ActiveRecord::RecordNotFound
-      #   error!({status: :error, message: :not_found}, 404)
-      # end
+        {
+            status: :success
+        } if fragment.delete
+      rescue ActiveRecord::RecordNotFound
+        error!({status: :error, message: :not_found}, 404)
+      end
     end
 
     params do
@@ -181,20 +142,18 @@ module Endpoints
     post 'fragments/uploaded_on_cloudinary' do
       user_id = params[:user_id]
       fragment = Fragment.where(user_id: user_id).last
-      job_id = CloudinaryWorker.perform_async(fragment.id)
-    end
 
-    params do
-      requires :cloud_uri, type: String, desc: 'URL'
-      optional :title, type: String, desc: 'title'
-      optional :description, type: String, desc: 'description'
-    end
+      begin
+        video = Cloudinary::Api.resource(fragment.video_id, :resource_type => :video)
 
-    post 'fragments/uploaded_on_youtube' do
-      cloud_uri = params[:cloud_uri]
-      title = params[:title]
-      description = params[:description]
-      job_id = UploaderWorker.perform_async(title,description,cloud_uri)
+        fragment.status = 'video_on_cloud'
+        fragment.cloud_url = video['secure_url']
+        fragment.save
+      rescue CloudinaryException
+        job_id = CloudinaryWorker.perform_async(fragment.id)
+        fragment.status = job_id
+        fragment.save
+      end
     end
 
     params do
@@ -207,9 +166,6 @@ module Endpoints
       token = user.token
       fragment = Fragment.where(user_id: user_id).last
 
-
-      title = fragment.title
-      description = fragment.description
       cloud_url = fragment.cloud_url
 
       url = URI.parse(cloud_url)
@@ -217,9 +173,6 @@ module Endpoints
       url = respond.first
       url = url[20..url.size]
       cloud_url = url
-
-      start = fragment.start
-      i_end = fragment.end
 
       job_id = UploaderWorker.perform_async(fragment.id,token,cloud_url)
     end
@@ -229,8 +182,6 @@ module Endpoints
     end
 
     post 'status_job' do
-      # user_id = params[:user_id]
-      # fragment = Fragment.where(user_id: user_id).last
       fragment = Fragment.find(params[:id])
       job_id = fragment.status
       all_stats = Sidekiq::Status::get_all job_id
@@ -245,48 +196,14 @@ module Endpoints
 
     end
 
-    # params do
-    #   requires :id, type: String, desc: 'id'
-    # end
-    #
-    # post 'status_job/id' do
-    #
-    #   all_stats = Sidekiq::Status::get_all params[:id]
-    #   status = all_stats['status']
-    #   status
-    #
-    #   #worker = all_stats["worker"]
-    #   #args = all_stats["args"]
-    #   #update_time = all_stats["update_time"]
-    #   #jid = all_stats["jid"]
-    # end
-
-    # params do
-    #   requires :id, type: String, desc: 'channel ID'
-    # end
-
-
     params do
-      requires :id, type: String, desc: 'User ID'
+      requires :id, type: Integer, desc: 'Fragment ID'
     end
 
     post 'new_url' do
-      fragment = Fragment.where(user_id: params[:id]).last
+      fragment = Fragment.find(params[:id])
       fragment.url
-
     end
 
-    post 'channel' do
-
-      user = User.find(28)
-      user_id = user.id
-      token = user.token
-      name = user.email
-      # owner = Yt::ContentOwner.new owner_name: name, refresh_token: token
-      account = Yt::Account.new refresh_token: token
-      channel = Yt::Channel.new id: 'UCFRA75dCkcCD9X-QevTu4Qw', auth: account
-      channel.title
-
-    end
   end
 end
