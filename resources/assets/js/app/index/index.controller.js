@@ -5,29 +5,17 @@
     angular.module('app.index')
            .controller('IndexController', IndexController);
 
-    IndexController.$inject = ['$auth', '$sce', '$interval', 'api'];
+    IndexController.$inject = ['$log', '$auth', '$sce', '$interval', 'api'];
 
-    function IndexController($auth, $sce, $interval, api)
+    function IndexController($log, $auth, $sce, $interval, api)
     {
         var vm = this;
 
         vm.video = [];
         vm.user = $auth.user;
         vm.fragment = [];
-        vm.status_fragment = [];
-        vm.global_status = [];
-        vm.test = vm.user.id;
-        vm.cloud_id = [];
-        vm.interval_status_job = [];
-        vm.interval_status_fragment = [];
-        vm.interval_cloud_video = [];
-        vm.cloud_video_params = [];
-        vm.cloud_video = [];
-        vm.upload_job_id = [];
-        vm.download_job_id = [];
-        vm.upload_yt_job_id = [];
-        vm.status = [];
-        vm.new_url = [];
+        // vm.cloud_video_params = [];
+        // vm.cloud_video = [];
 
         vm.login = login;
         vm.logout = logout;
@@ -37,12 +25,10 @@
         vm.uploadVideo = uploadVideo;
         vm.deleteVideoFile = deleteVideoFile;
         vm.uploadVideoOnYouTube = uploadVideoOnYouTube;
-        vm.statusJob = statusJob;
-        vm.statusFragment = statusFragment;
-        vm.globalStatusFragment = globalStatusFragment;
-        vm.resources = resources;
         vm.getNewUrl = getNewUrl;
         vm.createFragment = createFragment;
+        vm.getFragmentStatus = getFragmentStatus;
+        // vm.resources = resources;
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -52,18 +38,12 @@
 
         function login()
         {
-            $auth.authenticate('google').then(function (response)
-            {
-                //
-            });
+            $auth.authenticate('google');
         }
 
         function logout()
         {
-            $auth.signOut().then(function (response)
-            {
-                //
-            });
+            $auth.signOut();
         }
 
         /*
@@ -90,18 +70,6 @@
             });
         }
 
-        function getNewUrl()
-        {
-            var data = {
-                id: vm.fragment.id
-            };
-
-            api.getNewUrl(data).then(function (data)
-            {
-                vm.new_url = data;
-            });
-        }
-
         function getVideoEmbedUrl()
         {
             var data = {
@@ -118,87 +86,92 @@
             });
         }
 
-        function statusJob()
-        {
-            var data = {
-                id: vm.fragment.id
-            };
-
-            api.statusJob(data).then(function (data)
-            {
-                vm.status = data;
-            });
-        }
-
-        function statusFragment()
-        {
-            var data = {
-                user_id: vm.user.id
-            };
-
-            api.statusFragment(data).then(function (data)
-            {
-                vm.status_fragment = data;
-            });
-        }
-
-        function globalStatusFragment()
-        {
-            var data = {
-                id: vm.upload_yt_job_id
-            };
-
-            api.globalStatusFragment(data).then(function (data)
-            {
-                vm.global_status = data;
-            });
-        }
-
         function downloadVideo()
         {
-            var data = {
-                user_id: vm.user.id
-            };
+            $log.debug('ACTION - download from youtube');
 
-            api.downloadVideo(data).then(function (data)
+            api.downloadVideo(vm.fragment.id).then(function (data)
             {
-                vm.download_job_id = data;
+                vm.fragment.status = data.status;
             });
+
+            var status = $interval(function ()
+            {
+                if (vm.fragment.status == 'downloaded')
+                {
+                    uploadVideo();
+                }
+
+                if (vm.fragment.status == 'video_on_cloud')
+                {
+                    uploadVideoOnYouTube();
+                }
+
+                if (vm.fragment.status == 'downloaded' || vm.fragment.status == 'video_on_cloud')
+                {
+                    $interval.cancel(status);
+                }
+
+                getFragmentStatus();
+            }, 5000);
         }
 
         function uploadVideo()
         {
-            var data = {
-                user_id: vm.user.id
-            };
+            $log.debug('ACTION - upload on cloudnary');
 
-            api.uploadVideo(data).then(function (data)
+            api.uploadVideo(vm.fragment.id).then(function (data)
             {
-                vm.upload_job_id = data;
+                vm.fragment.status = data.status;
             });
-        }
 
-        function deleteVideoFile()
-        {
-            var data = {
-                user_id: vm.user.id
-            };
-
-            api.deleteVideoFile(data).then(function (data)
+            var status = $interval(function ()
             {
-                //
-            });
+                if (vm.fragment.status == 'upload_on_cloud' || vm.fragment.status == 'video_on_cloud')
+                {
+                    uploadVideoOnYouTube();
+
+                    vm.fragment.cloudCreated = true;
+
+                    $interval.cancel(status);
+                }
+
+                getFragmentStatus();
+            }, 5000);
         }
 
         function uploadVideoOnYouTube()
         {
-            var data = {
-                user_id: vm.user.id
-            };
+            $log.debug('ACTION - upload on youtube');
 
-            api.uploadVideoOnYouTube(data).then(function (data)
+            api.uploadVideoOnYouTube(vm.fragment.id).then(function ()
             {
-                vm.upload_yt_job_id = data;
+                deleteVideoFile();
+            });
+
+            var status = $interval(function ()
+            {
+                if (vm.fragment.status == 'uploaded_on_yt')
+                {
+                    getNewUrl();
+
+                    vm.fragment.ytCreated = true;
+                    vm.fragment.isCreated = false;
+
+                    $interval.cancel(status);
+                }
+
+                getFragmentStatus();
+            }, 5000);
+        }
+
+        function deleteVideoFile()
+        {
+            $log.debug('ACTION - delete file');
+
+            api.deleteVideoFile(vm.fragment.id).then(function ()
+            {
+                //
             });
         }
 
@@ -224,92 +197,43 @@
             {
                 vm.fragment = data;
                 vm.fragment.isCreated = true;
-                vm.cloud_id = vm.fragment.video_id;
 
                 downloadVideo();
-
-                vm.status = 'new';
-
-                var status_job = $interval(function ()
-                {
-                    statusJob();
-
-                    if (vm.status === 'complete')
-                    {
-                        $interval.cancel(status_job);
-                    }
-                }, 500);
-
-                var uploader = $interval(function ()
-                {
-                    statusFragment();
-
-                    if (vm.status_fragment === 'downloaded')
-                    {
-                        uploadVideo();
-
-                        $interval.cancel(uploader);
-                    }
-
-                    if (vm.status_fragment === 'video_on_cloud')
-                    {
-                        $interval.cancel(uploader);
-
-                        vm.fragment.cloudCreated = true;
-                    }
-
-                }, 500);
-
-                var cloud_video = $interval(function ()
-                {
-                    resources();
-
-                    if (vm.cloud_video_params['public_id'] === vm.fragment.video_id)
-                    {
-                        deleteVideoFile();
-                        uploadVideoOnYouTube();
-
-                        $interval.cancel(cloud_video);
-
-                        vm.fragment.cloudCreated = true;
-                    }
-                }, 2500);
-
-                var yt_video = $interval(function ()
-                {
-                    globalStatusFragment();
-
-                    if (vm.global_status === 'complete')
-                    {
-                        getNewUrl();
-
-                        vm.fragment.ytCreated = true;
-                        vm.fragment.isCreated = false;
-
-                        $interval.cancel(yt_video);
-                    }
-
-                    if (vm.global_status === 'failed')
-                    {
-                        alert('failed error');
-                        vm.fragment.ytCreated = true;
-                        vm.fragment.isCreated = false;
-                        $interval.cancel(yt_video);
-                    }
-                }, 2500);
             });
         }
 
-        function resources()
+        function getFragmentStatus()
+        {
+            api.getFragmentStatus(vm.fragment.id).then(function (data)
+            {
+                $log.debug('STATUS - ' + data.status);
+
+                vm.fragment.status = data.status;
+            });
+        }
+
+        function getNewUrl()
         {
             var data = {
-                user_id: vm.user.id
+                id: vm.fragment.id
             };
 
-            api.resources(data).then(function (data)
+            api.getNewUrl(data).then(function (data)
             {
-                vm.cloud_video_params = data;
+                vm.new_url = data;
             });
         }
+
+        // function resources()
+        // {
+        //     var data = {
+        //         user_id: vm.user.id
+        //     };
+        //
+        //     api.resources(data).then(function (data)
+        //     {
+        //         vm.cloud_video_params = data;
+        //     });
+        // }
     }
 })();

@@ -42,4 +42,8 @@ elixir(function (mix) {
     mix.copy('resources/packages/semantic/dist/themes/default', 'public/packages/semantic/css/themes/default');
     mix.copy('resources/packages/semantic/dist/semantic.min.css', 'public/packages/semantic/css/semantic.min.css');
     mix.copy('resources/packages/semantic/dist/semantic.min.js', 'public/packages/semantic/js/semantic.min.js');
+
+    // Semantic UI Range
+    mix.copy('node_modules/semantic-ui-range/range.css', 'public/packages/semantic-range/css/range.css');
+    mix.copy('node_modules/semantic-ui-range/range.js', 'public/packages/semantic-range/js/range.js');
 });
