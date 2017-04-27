@@ -25,7 +25,7 @@ module Endpoints
       data = CGI.parse(url.query)
       video_id = data['v'].first
 
-      "https://www.youtube.com/embed/#{video_id}?start=#{params[:start]}&end=#{params[:end]}&autoplay=1"
+      {embed_url: "https://www.youtube.com/embed/#{video_id}?start=#{params[:start]}&end=#{params[:end]}&autoplay=1"}
     end
   end
 end

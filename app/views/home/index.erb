@@ -13,9 +13,13 @@
       </p>
     </div>
     <div data-ng-if="index.fragment.ytCreated">
-      <p>
-        <a href="{{ index.new_url }}">{{ index.new_url }}</a>
-      </p>
+      <div class="ui fluid action input">
+        <input id="foo" value="{{ index.new_url}}">
+        <button class="btn ui teal right labeled icon button" data-clipboard-target="#foo">
+          <i class="copy icon"></i>
+          Copy
+        </button>
+      </div>
     </div>
   </div>
 
@@ -55,6 +59,10 @@
 </div>
 
 <hr>
+  <div class="sharethis-inline-share-buttons"></div>
+
+<!-- Target -->
+
 
 <!--<div class="ui container">-->
   <!--<h1>SUI popup</h1>-->

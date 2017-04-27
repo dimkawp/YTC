@@ -15,16 +15,13 @@ module Endpoints
     post 'fragments/resources' do
       user_id = params[:user_id]
       fragment = Fragment.where(user_id: user_id).last
-      url = fragment.url
-      url = URI.parse(url)
-      respond = CGI.parse(url.query)
-      video_id = respond['v'].first
+      video_id = fragment.video_id
 
       video_from_cloud = Cloudinary::Api.resources_by_ids(video_id, :resource_type => :video)
       video_params = video_from_cloud['resources'].last
       fragment.cloud_url = video_params['secure_url']
       fragment.save
-      video_params
+      {params: video_params}
     end
 
     params do
@@ -157,6 +154,7 @@ module Endpoints
     post 'new_url' do
       fragment = Fragment.find(params[:id])
       fragment.url
+      {url: fragment.url}
     end
 
     params do

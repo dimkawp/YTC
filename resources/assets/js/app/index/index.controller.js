@@ -82,7 +82,7 @@
 
             api.getVideoEmbedUrl(data).then(function (data)
             {
-                vm.fragment.embed_url = $sce.trustAsResourceUrl(data);
+                vm.fragment.embed_url = $sce.trustAsResourceUrl(data.embed_url);
             });
         }
 
@@ -220,7 +220,7 @@
 
             api.getNewUrl(data).then(function (data)
             {
-                vm.new_url = data;
+                vm.new_url = data.url;
             });
         }
 
@@ -232,7 +232,7 @@
         //
         //     api.resources(data).then(function (data)
         //     {
-        //         vm.cloud_video_params = data;
+        //         vm.cloud_video_params = data.params;
         //     });
         // }
     }

@@ -14,6 +14,7 @@
     <link href="/packages/semantic/css/semantic.min.css" rel="stylesheet">
     <link href="/packages/semantic-range/css/range.css" rel="stylesheet">
     <link href="/assets/css/app.min.css" rel="stylesheet">
+
   </head>
   <body data-ng-controller="IndexController as index">
     <div class="ui container">
@@ -45,6 +46,17 @@
     <script src="/packages/semantic/js/semantic.min.js"></script>
     <script src="/packages/semantic-range/js/range.js"></script>
     <script src="/assets/js/app.min.js"></script>
+    <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5901d83fbfca890011a62a27&product=inline-share-buttons' async='async'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js"></script>
+    <script>
+        var clipboard = new Clipboard('.btn');
+        clipboard.on('success', function(e) {
+            console.log(e);
+        });
+        clipboard.on('error', function(e) {
+            console.log(e);
+        });
+    </script>
     <script>
         $(function ()
         {
