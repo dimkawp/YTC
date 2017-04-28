@@ -1,10 +1,6 @@
 var gulp = require('gulp'),
     elixir = require('laravel-elixir');
 
-gulp.task('watch-ui', require('./resources/packages/semantic/tasks/watch'));
-gulp.task('build-ui', require('./resources/packages/semantic/tasks/build'));
-gulp.task('clean-ui', require('./resources/packages/semantic/tasks/clean'));
-
 // Assets
 elixir(function (mix) {
     // CSS
@@ -38,8 +34,12 @@ elixir(function (mix) {
     // Angular Token Auth
     mix.copy('node_modules/ng-token-auth/dist/ng-token-auth.min.js', 'public/packages/angular-token-auth/js/token-auth.min.js');
 
+    // Angular Range
+    mix.copy('node_modules/angular-rangeslider/angular.rangeSlider.css', 'public/packages/angular-rangeslider/css/rangeslider.css');
+    mix.copy('node_modules/angular-rangeslider/angular.rangeSlider.js', 'public/packages/angular-rangeslider/js/rangeslider.js');
+
     // Semantic UI
-    mix.copy('resources/packages/semantic/dist/themes/default', 'public/packages/semantic/css/themes/default');
-    mix.copy('resources/packages/semantic/dist/semantic.min.css', 'public/packages/semantic/css/semantic.min.css');
-    mix.copy('resources/packages/semantic/dist/semantic.min.js', 'public/packages/semantic/js/semantic.min.js');
+    mix.copy('node_modules/semantic-ui/dist/themes/default', 'public/packages/semantic/css/themes/default');
+    mix.copy('node_modules/semantic-ui/dist/semantic.min.css', 'public/packages/semantic/css/semantic.min.css');
+    mix.copy('node_modules/semantic-ui/dist/semantic.min.js', 'public/packages/semantic/js/semantic.min.js');
 });
