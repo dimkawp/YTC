@@ -12,9 +12,8 @@
     <link href="/favicon.ico" rel="shortcut icon">
 
     <link href="/packages/semantic/css/semantic.min.css" rel="stylesheet">
-    <link href="/packages/semantic-range/css/range.css" rel="stylesheet">
+    <link href="/packages/angular-rangeslider/css/rangeslider.css" rel="stylesheet">
     <link href="/assets/css/app.min.css" rel="stylesheet">
-
   </head>
   <body data-ng-controller="IndexController as index">
     <div class="ui container">
@@ -43,23 +42,16 @@
     <script src="/packages/angular/js/angular.min.js"></script>
     <script src="/packages/angular-cookie/js/cookie.min.js"></script>
     <script src="/packages/angular-token-auth/js/token-auth.min.js"></script>
+    <script src="/packages/angular-rangeslider/js/rangeslider.js"></script>
     <script src="/packages/semantic/js/semantic.min.js"></script>
-    <script src="/packages/semantic-range/js/range.js"></script>
     <script src="/assets/js/app.min.js"></script>
-    <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5901d83fbfca890011a62a27&product=inline-share-buttons' async='async'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js"></script>
-    <script>
-        var clipboard = new Clipboard('.btn');
-        clipboard.on('success', function(e) {
-            console.log(e);
-        });
-        clipboard.on('error', function(e) {
-            console.log(e);
-        });
-    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js"></script>
+    <script src="//platform-api.sharethis.com/js/sharethis.js#property=5901d83fbfca890011a62a27&product=inline-share-buttons"></script>
     <script>
         $(function ()
         {
+            new Clipboard('#copy-button');
+
             $('#create-fragment').form
             ({
                 on: 'change',
@@ -71,91 +63,6 @@
                 }
             });
         })
-
-        $(function() {
-//            // Semantic UI popup
-//            $('.js_popup')
-//                .popup({
-//                    on : 'click'
-//                });
-//
-//
-//            // Semantic UI Range
-//            $('.ui.range').range({
-//                min: 0,
-//                max: 10,
-//                start: 5,
-//                step: 1,
-//            });
-//
-//            $('#smooth').range({
-//                min: 0,
-//                max: 10,
-//                start: 5,
-//                smooth: true,
-//            });
-
-            $('#double').range({
-                min: 0,
-                max: 10,
-                start: 5,
-                step: 1,
-                verbose: true,
-                debug: true
-//                onChange: function(value) {
-//                    var
-//                        $self = $(this),
-//                        firstVal = $self.range('get thumb value'),
-//                        secVal = $self.range('get thumb value', 'second');
-//                    $('#display-d').html('|' + firstVal + " - " + secVal + '| = ' + value);
-//                }
-            });
-
-//            $('#range-0').range({
-//                min: 0,
-//                max: 10,
-//                start: 5,
-//                labelType: 'letter'
-//            });
-//
-//            // No Step
-//            $('#range-1').range({
-//                min: 0,
-//                max: 10,
-//                start: 5,
-//                step: 0,
-//                onChange: function(value) {
-//                    $('#display-1').html(value);
-//                }
-//            });
-//
-//            // Place value in an input
-//            $('#range-2').range({
-//                min: 0,
-//                max: 10,
-//                start: 5,
-//                input: '#input-2'
-//            });
-//
-//            // Or use a custom callback
-//            $('#range-3').range({
-//                min: 0,
-//                max: 10,
-//                start: 5,
-//                onChange: function(value) {
-//                    $('#display-3').html(value);
-//                }
-//            });
-//
-//            // Set custom step
-//            $('#range-4').range({
-//                min: 0,
-//                max: 10,
-//                start: 4,
-//                step: 2,
-//                input: '#input-4'
-//            });
-        });
     </script>
   </body>
 </html>

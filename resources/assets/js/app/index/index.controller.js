@@ -5,17 +5,15 @@
     angular.module('app.index')
            .controller('IndexController', IndexController);
 
-    IndexController.$inject = ['$log', '$auth', '$sce', '$interval', 'api'];
+    IndexController.$inject = ['$auth', '$sce', '$interval', 'api'];
 
-    function IndexController($log, $auth, $sce, $interval, api)
+    function IndexController($auth, $sce, $interval, api)
     {
         var vm = this;
 
         vm.video = [];
         vm.user = $auth.user;
         vm.fragment = [];
-        // vm.cloud_video_params = [];
-        // vm.cloud_video = [];
 
         vm.login = login;
         vm.logout = logout;
@@ -28,7 +26,6 @@
         vm.getNewUrl = getNewUrl;
         vm.createFragment = createFragment;
         vm.getFragmentStatus = getFragmentStatus;
-        // vm.resources = resources;
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -58,10 +55,12 @@
                 url: vm.fragment.url
             };
 
-            vm.video.isPreviewing = true;
+            vm.video.preview = true;
 
             api.getVideoInfo(data).then(function (data)
             {
+                vm.video.end = data.end;
+
                 vm.fragment.video_id = data.video_id;
                 vm.fragment.start = 1;
                 vm.fragment.end = data.end;
@@ -78,7 +77,7 @@
                 end: vm.fragment.end
             };
 
-            vm.video.isPreviewing = true;
+            vm.video.preview = true;
 
             api.getVideoEmbedUrl(data).then(function (data)
             {
@@ -88,8 +87,6 @@
 
         function downloadVideo()
         {
-            $log.debug('ACTION - download from youtube');
-
             api.downloadVideo(vm.fragment.id).then(function (data)
             {
                 vm.fragment.status = data.status;
@@ -118,8 +115,6 @@
 
         function uploadVideo()
         {
-            $log.debug('ACTION - upload on cloudnary');
-
             api.uploadVideo(vm.fragment.id).then(function (data)
             {
                 vm.fragment.status = data.status;
@@ -131,8 +126,6 @@
                 {
                     uploadVideoOnYouTube();
 
-                    vm.fragment.cloudCreated = true;
-
                     $interval.cancel(status);
                 }
 
@@ -142,8 +135,6 @@
 
         function uploadVideoOnYouTube()
         {
-            $log.debug('ACTION - upload on youtube');
-
             api.uploadVideoOnYouTube(vm.fragment.id).then(function ()
             {
                 deleteVideoFile();
@@ -155,8 +146,8 @@
                 {
                     getNewUrl();
 
-                    vm.fragment.ytCreated = true;
-                    vm.fragment.isCreated = false;
+                    vm.fragment.isCreating = false;
+                    vm.fragment.isCreated = true;
 
                     $interval.cancel(status);
                 }
@@ -167,8 +158,6 @@
 
         function deleteVideoFile()
         {
-            $log.debug('ACTION - delete file');
-
             api.deleteVideoFile(vm.fragment.id).then(function ()
             {
                 //
@@ -196,7 +185,7 @@
             api.createFragment(data).then(function (data)
             {
                 vm.fragment = data;
-                vm.fragment.isCreated = true;
+                vm.fragment.isCreating = true;
 
                 downloadVideo();
             });
@@ -206,8 +195,6 @@
         {
             api.getFragmentStatus(vm.fragment.id).then(function (data)
             {
-                $log.debug('STATUS - ' + data.status);
-
                 vm.fragment.status = data.status;
             });
         }
@@ -223,17 +210,5 @@
                 vm.new_url = data.url;
             });
         }
-
-        // function resources()
-        // {
-        //     var data = {
-        //         user_id: vm.user.id
-        //     };
-        //
-        //     api.resources(data).then(function (data)
-        //     {
-        //         vm.cloud_video_params = data.params;
-        //     });
-        // }
     }
 })();

@@ -16,12 +16,9 @@
             "uploadVideo": uploadVideo,
             "deleteVideoFile": deleteVideoFile,
             "uploadVideoOnYouTube": uploadVideoOnYouTube,
-            // "getFragment": getFragment,
             "createFragment": createFragment,
             "getFragmentStatus": getFragmentStatus,
             "getNewUrl": getNewUrl,
-
-            // "resources": resources,
         };
 
         function getVideoInfo(data)
@@ -88,14 +85,6 @@
             });
         }
 
-        // function getFragment()
-        // {
-        //     return $http.get('/api/fragments').then(function (response)
-        //     {
-        //         return response.data;
-        //     });
-        // }
-
         function getNewUrl(data)
         {
             return $http.post('/api/new_url', data).then(function (response)
@@ -103,13 +92,5 @@
                 return response.data;
             });
         }
-
-        // function resources(data)
-        // {
-        //     return $http.post('/api/fragments/resources', data).then(function (response)
-        //     {
-        //         return response.data;
-        //     });
-        // }
     }
 })();

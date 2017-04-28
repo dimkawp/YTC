@@ -3,43 +3,41 @@
     <i class="video play icon"></i>
   </a>
 
-  <div class="ui segment" data-ng-if="index.video.isPreviewing">
-    <div class="ui basic segment center aligned" data-ng-if="index.video.isPreviewing" data-ng-class="{loading: index.fragment.isCreated}">
-      <iframe frameborder="0" width="800" height="400" data-ng-src="{{ index.fragment.embed_url }}"></iframe>
+  <div class="ui segments" data-ng-show="index.video.preview">
+    <div class="ui segment" data-ng-if="index.video.preview" data-ng-class="{loading: index.fragment.isCreating}">
+      <iframe frameborder="0" width="100%" height="600" data-ng-src="{{ index.fragment.embed_url }}"></iframe>
     </div>
-    <div data-ng-if="index.fragment.cloudCreated">
-      <p>
-        <a href="{{ index.cloud_video_params.url }}">{{ index.cloud_video_params.url }}</a>
-      </p>
-    </div>
-    <div data-ng-if="index.fragment.ytCreated">
-      <div class="ui fluid action input">
-        <input id="foo" value="{{ index.new_url}}">
-        <button class="btn ui teal right labeled icon button" data-clipboard-target="#foo">
-          <i class="copy icon"></i>
-          Copy
-        </button>
+    <div class="ui segment" data-ng-show="index.fragment.isCreated">
+      <div class="ui form">
+        <div class="field">
+          <label>New Youtube URL</label>
+
+          <div class="ui fluid action input">
+            <input id="new-url" value="{{ index.new_url }}">
+
+            <button id="copy-button" class="ui red icon labeled button" data-clipboard-target="#new-url">
+              <i class="copy icon"></i> Copy
+            </button>
+          </div>
+        </div>
       </div>
+    </div>
+    <div class="ui segment" data-ng-show="index.fragment.isCreated">
+      <div class="sharethis-inline-share-buttons"></div>
     </div>
   </div>
 
-  <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreated">
+  <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreating || index.fragment.isCreated">
     <div class="required field">
       <label>Youtube URL</label>
+
       <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.getVideoInfo(); index.getVideoEmbedUrl();" data-ng-model="index.fragment.url">
     </div>
     <div data-ng-show="index.fragment.embed_url">
-      <div class="fields">
-        <div class="required field">
-          <label>Start</label>
+      <div class="required field">
+        <label>Duration</label>
 
-          <input type="number" name="start" min="1" placeholder="Start" data-ng-change="index.getVideoEmbedUrl()" data-ng-model="index.fragment.start">
-        </div>
-        <div class="required field">
-          <label>End</label>
-
-          <input type="number" name="end" min="1" placeholder="End" data-ng-change="index.getVideoEmbedUrl()" data-ng-model="index.fragment.end">
-        </div>
+        <div min="1" max="index.video.end" model-min="index.fragment.start" model-max="index.fragment.end" show-values="true" attach-handle-values="true" on-handle-up="index.getVideoEmbedUrl()" on-handle-down="index.getVideoEmbedUrl()" data-range-slider></div>
       </div>
       <div class="required field">
         <label>Title</label>
@@ -49,7 +47,7 @@
       <div class="field">
         <label>Description</label>
 
-        <textarea name="description" rows="3" data-ng-model="index.fragment.description"></textarea>
+        <textarea name="description" rows="5" data-ng-model="index.fragment.description"></textarea>
       </div>
       <div align="center">
         <button class="ui massive red button" data-ng-click="index.createFragment()">Create fragment</button>
@@ -57,182 +55,3 @@
     </div>
   </div>
 </div>
-
-<hr>
-  <div class="sharethis-inline-share-buttons"></div>
-
-<!-- Target -->
-
-
-<!--<div class="ui container">-->
-  <!--<h1>SUI popup</h1>-->
-  <!--<div href="" class="ui red button js_popup">Show popup (open developer console beforehand)</div>-->
-  <!--<div class="ui flowing popup transition hidden">-->
-    <!--<div class="ui padded basic segment">-->
-      <!--<h4 class="ui disabled header">-->
-        <!--Popup!-->
-      <!--</h4>-->
-    <!--</div>-->
-  <!--</div>-->
-
-  <!--<br>-->
-  <!--<h1>Semantic UI Range</h1>-->
-
-  <!--<div class="ui segment">-->
-    <!--<div class="ui range"></div>-->
-    <!--<p>Smooth</p>-->
-    <!--<div class="ui range" id="smooth"></div>-->
-  <!--</div>-->
-
-  <div class="ui segment">
-    <div id="double" class="ui double range"></div>
-    <p id="display-d"></p>
-  </div>
-
-  <!--<h2>Vertical</h2>-->
-  <!--<div class="ui segment" style="display: flex; height: 30em;">-->
-    <!--<div class="ui vertical range"></div>-->
-    <!--<div class="ui vertical hover labeled range"></div>-->
-    <!--<div class="ui vertical reversed range"></div>-->
-    <!--<div class="ui small vertical range"></div>-->
-    <!--<div class="ui large vertical range"></div>-->
-    <!--<div class="ui big vertical range"></div>-->
-    <!--<div class="ui double vertical range"></div>-->
-  <!--</div>-->
-
-  <!--<h2>Labeled</h2>-->
-  <!--<div class="ui segment">-->
-    <!--<div class="ui labeled range" id="range-0"></div>-->
-    <!--<div class="ui labeled range"></div>-->
-  <!--</div>-->
-
-  <!--<h2>Custom Labeled</h2>-->
-  <!--<div class="ui segment">-->
-    <!--<div class="ui labeled range" id="range-0">-->
-      <!--<ul class="labels">-->
-        <!--<li class="label">-->
-          <!--<</li>-->
-        <!--<li class="label">=</li>-->
-        <!--<li class="label">></li>-->
-      <!--</ul>-->
-    <!--</div>-->
-  <!--</div>-->
-
-  <!--<h2>Undefined Step</h2>-->
-  <!--<div class="ui segment">-->
-    <!--<div id="range-1" class="ui range"></div>-->
-    <!--<p id="display-1"></p>-->
-  <!--</div>-->
-
-  <!--<h2>Or use a custom callback</h2>-->
-  <!--<div class="ui segment">-->
-    <!--<div class="ui range" id="range-3"></div>-->
-    <!--<br> Value: <span id="display-3"></span>-->
-  <!--</div>-->
-
-  <!--<h2>Set custom step</h2> (Here the step is 2)-->
-  <!--<div class="ui segment">-->
-    <!--<div class="ui range" id="range-4"></div>-->
-  <!--</div>-->
-
-  <!--<h2>States</h2>-->
-  <!--<div class="ui segment">-->
-    <!--<p>Disabled</p>-->
-    <!--<div class="ui disabled range"></div>-->
-    <!--<p>Reversed</p>-->
-    <!--<div class="ui reversed range"></div>-->
-  <!--</div>-->
-
-  <!--<h1>Variations</h1>-->
-
-  <!--<h2>Hover</h2>-->
-  <!--<div class="ui segment">-->
-    <!--<div class="ui hover range"></div>-->
-  <!--</div>-->
-  <!--<h2>Color</h2>-->
-  <!--<div class="ui segment">-->
-    <!--<div class="ui red range"></div>-->
-    <!--<div class="ui orange range"></div>-->
-    <!--<div class="ui yellow range"></div>-->
-    <!--<div class="ui olive range"></div>-->
-    <!--<div class="ui green range"></div>-->
-    <!--<div class="ui teal range"></div>-->
-    <!--<div class="ui blue range"></div>-->
-    <!--<div class="ui violet range"></div>-->
-    <!--<div class="ui purple range"></div>-->
-    <!--<div class="ui pink range"></div>-->
-    <!--<div class="ui brown range"></div>-->
-    <!--<div class="ui grey range"></div>-->
-    <!--<div class="ui black range"></div>-->
-  <!--</div>-->
-  <!--<h2>Inverted</h2>-->
-  <!--<div class="ui inverted segment">-->
-    <!--<div class="ui inverted range"></div>-->
-  <!--</div>-->
-  <!--<h2 class="ui sub header">Colored</h2>-->
-  <!--<div class="ui inverted segment">-->
-    <!--<div class="ui inverted red range"></div>-->
-    <!--<div class="ui inverted orange range"></div>-->
-    <!--<div class="ui inverted yellow range"></div>-->
-    <!--<div class="ui inverted olive range"></div>-->
-    <!--<div class="ui inverted green range"></div>-->
-    <!--<div class="ui inverted teal range"></div>-->
-    <!--<div class="ui inverted blue range"></div>-->
-    <!--<div class="ui inverted violet range"></div>-->
-    <!--<div class="ui inverted purple range"></div>-->
-    <!--<div class="ui inverted pink range"></div>-->
-    <!--<div class="ui inverted brown range"></div>-->
-    <!--<div class="ui inverted grey range"></div>-->
-    <!--<div class="ui inverted black range"></div>-->
-  <!--</div>-->
-  <!--<h2>Basic</h2>-->
-  <!--<div class="ui segment">-->
-    <!--<div class="ui basic range"></div>-->
-  <!--</div>-->
-  <!--<h2 class="ui sub header">Colored</h2>-->
-  <!--<div class="ui segment">-->
-    <!--<div class="ui basic orange range"></div>-->
-    <!--<div class="ui basic yellow range"></div>-->
-    <!--<div class="ui basic olive range"></div>-->
-    <!--<div class="ui basic green range"></div>-->
-    <!--<div class="ui basic teal range"></div>-->
-    <!--<div class="ui basic blue range"></div>-->
-    <!--<div class="ui basic violet range"></div>-->
-    <!--<div class="ui basic purple range"></div>-->
-    <!--<div class="ui basic pink range"></div>-->
-    <!--<div class="ui basic brown range"></div>-->
-    <!--<div class="ui basic grey range"></div>-->
-    <!--<div class="ui basic black range"></div>-->
-  <!--</div>-->
-  <!--<h3>Inverted</h3>-->
-  <!--<div class="ui inverted segment">-->
-    <!--<div class="ui basic inverted range"></div>-->
-  <!--</div>-->
-  <!--<h2 class="ui sub header">Colored</h2>-->
-  <!--<div class="ui inverted segment">-->
-    <!--<div class="ui basic inverted orange range"></div>-->
-    <!--<div class="ui basic inverted yellow range"></div>-->
-    <!--<div class="ui basic inverted olive range"></div>-->
-    <!--<div class="ui basic inverted green range"></div>-->
-    <!--<div class="ui basic inverted teal range"></div>-->
-    <!--<div class="ui basic inverted blue range"></div>-->
-    <!--<div class="ui basic inverted violet range"></div>-->
-    <!--<div class="ui basic inverted purple range"></div>-->
-    <!--<div class="ui basic inverted pink range"></div>-->
-    <!--<div class="ui basic inverted brown range"></div>-->
-    <!--<div class="ui basic inverted grey range"></div>-->
-    <!--<div class="ui basic inverted black range"></div>-->
-  <!--</div>-->
-
-  <!--<h2>Sizing</h2>-->
-  <!--<div class="ui segment">-->
-    <!--<p>Small</p>-->
-    <!--<div class="ui range small"></div>-->
-    <!--<p>Normal</p>-->
-    <!--<div class="ui range"></div>-->
-    <!--<p>Lage</p>-->
-    <!--<div class="ui range large"></div>-->
-    <!--<p>Big</p>-->
-    <!--<div class="ui range big"></div>-->
-  <!--</div>-->
-<!--</div>-->
