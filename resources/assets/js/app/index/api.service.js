@@ -16,50 +16,14 @@
             "uploadVideo": uploadVideo,
             "deleteVideoFile": deleteVideoFile,
             "uploadVideoOnYouTube": uploadVideoOnYouTube,
-            "statusJob": statusJob,
-            "statusFragment": statusFragment,
-            "globalStatusFragment": globalStatusFragment,
-            "resources": resources,
+            "createFragment": createFragment,
+            "getFragmentStatus": getFragmentStatus,
             "getNewUrl": getNewUrl,
-            "getFragment": getFragment,
-            "createFragment": createFragment
         };
 
         function getVideoInfo(data)
         {
             return $http.post('/api/video/info', data).then(function (response)
-            {
-                return response.data;
-            });
-        }
-
-        function statusJob(data)
-        {
-            return $http.post('/api/status_job', data).then(function (response)
-            {
-                return response.data;
-            });
-        }
-
-        function statusFragment(data)
-        {
-            return $http.post('/api/fragments/status', data).then(function (response)
-            {
-                return response.data;
-            });
-        }
-
-        function globalStatusFragment(data)
-        {
-            return $http.post('/api/fragments/global/status', data).then(function (response)
-            {
-                return response.data;
-            });
-        }
-
-        function resources(data)
-        {
-            return $http.post('/api/fragments/resources', data).then(function (response)
             {
                 return response.data;
             });
@@ -73,33 +37,33 @@
             });
         }
 
-        function downloadVideo(data)
+        function downloadVideo(id)
         {
-            return $http.post('/api/video/download', data).then(function (response)
+            return $http.get('/api/fragments/' + id + '/download').then(function (response)
             {
                 return response.data;
             });
         }
 
-        function uploadVideo(data)
+        function uploadVideo(id)
         {
-            return $http.post('/api/fragments/uploaded_on_cloudinary', data).then(function (response)
+            return $http.get('/api/fragments/' + id + '/uploaded_on_cloudinary').then(function (response)
             {
                 return response.data;
             });
         }
 
-        function deleteVideoFile(data)
+        function deleteVideoFile(id)
         {
-            return $http.post('/api/fragments/delete_video_file', data).then(function (response)
+            return $http.get('/api/fragments/' + id + '/delete_video_file').then(function (response)
             {
                 return response.data;
             });
         }
 
-        function uploadVideoOnYouTube(data)
+        function uploadVideoOnYouTube(id)
         {
-            return $http.post('/api/fragments/uploaded_video_on_youtube', data).then(function (response)
+            return $http.get('/api/fragments/' + id + '/upload_video_on_youtube').then(function (response)
             {
                 return response.data;
             });
@@ -113,9 +77,9 @@
             });
         }
 
-        function getFragment()
+        function getFragmentStatus(id)
         {
-            return $http.get('/api/fragments').then(function (response)
+            return $http.get('/api/fragments/' + id + '/status').then(function (response)
             {
                 return response.data;
             });

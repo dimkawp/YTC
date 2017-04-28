@@ -12,6 +12,7 @@
     <link href="/favicon.ico" rel="shortcut icon">
 
     <link href="/packages/semantic/css/semantic.min.css" rel="stylesheet">
+    <link href="/packages/angular-rangeslider/css/rangeslider.css" rel="stylesheet">
     <link href="/assets/css/app.min.css" rel="stylesheet">
   </head>
   <body data-ng-controller="IndexController as index">
@@ -41,11 +42,16 @@
     <script src="/packages/angular/js/angular.min.js"></script>
     <script src="/packages/angular-cookie/js/cookie.min.js"></script>
     <script src="/packages/angular-token-auth/js/token-auth.min.js"></script>
+    <script src="/packages/angular-rangeslider/js/rangeslider.js"></script>
     <script src="/packages/semantic/js/semantic.min.js"></script>
     <script src="/assets/js/app.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js"></script>
+    <script src="//platform-api.sharethis.com/js/sharethis.js#property=5901d83fbfca890011a62a27&product=inline-share-buttons"></script>
     <script>
         $(function ()
         {
+            new Clipboard('#copy-button');
+
             $('#create-fragment').form
             ({
                 on: 'change',

@@ -2,5 +2,5 @@
 {
     'use strict';
 
-    angular.module('app.index', ['ng-token-auth']);
+    angular.module('app.index', ['ng-token-auth', 'ui-rangeSlider']);
 })();
