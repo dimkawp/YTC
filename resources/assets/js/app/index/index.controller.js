@@ -11,13 +11,17 @@
     {
         var vm = this;
 
-        vm.video    = [];
-        vm.user     = $auth.user;
-        vm.fragment = [];
+        vm.video         = [];
+        vm.user          = $auth.user;
+        vm.fragment      = [];
+        vm.user_profile  = [];
+        vm.all_fragments = [];
 
         vm.reloadPage        = reloadPage;
         vm.login             = login;
         vm.logout            = logout;
+        vm.UserProfile       = UserProfile;
+        vm.AllFragments      = AllFragments;
         vm.createVideo       = createVideo;
         vm.downloadVideo     = downloadVideo;
         vm.uploadVideo       = uploadVideo;
@@ -54,6 +58,24 @@
          | Videos
          |--------------------------------------------------------------------------------------------------------------
          */
+
+        function UserProfile() {
+            var data = {
+                user_id: vm.user.id
+            };
+
+            api.UserProfile(data).then(function (data) {
+                vm.user_profile = data;
+
+            });
+        }
+
+        function AllFragments() {
+
+            api.AllFragments().then(function (data) {
+                vm.all_fragments = data;
+            });
+        }
 
         function createVideo()
         {

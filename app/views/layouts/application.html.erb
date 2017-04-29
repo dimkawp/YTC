@@ -41,6 +41,16 @@
         {
             new Clipboard('#copy-button');
 
+            $('.menu .item')
+                .tab()
+            ;
+
+            $('.ui.search')
+                .search({
+                    source: all_fragments.title
+                })
+            ;
+
             $('#create-fragment').form
             ({
                 on: 'change',

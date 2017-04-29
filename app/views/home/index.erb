@@ -18,7 +18,6 @@
   <a class="ui red ribbon label">
     <i class="video play icon"></i>
   </a>
-
   <div class="ui segments" data-ng-show="index.video.isPreviewing">
     <div class="ui segment" data-ng-if="index.video.isPreviewing" data-ng-class="{loading: index.fragment.isCreating}">
       <iframe frameborder="0" width="100%" height="600" data-ng-src="{{ index.video.embed_url }}"></iframe>
@@ -51,31 +50,92 @@
     </div>
   </div>
 
-  <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreating || index.fragment.isCreated">
-    <div class="required field">
-      <label>Youtube URL</label>
 
-      <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.createVideo();" data-ng-model="index.video.url" data-ng-disabled="index.video.id">
-    </div>
-    <div data-ng-show="index.video.embed_url">
+
+  <div class="ui top attached tabular menu">
+    <a class="active item" data-tab="CreateFragment">Create Fragment</a>
+    <a class="item" data-tab="Profile" data-ng-click="index.UserProfile()">Profile</a>
+    <a class="item" data-tab="AllVideo" data-ng-click="index.AllFragments()">All Video</a>
+  </div>
+  <div class="ui bottom attached active tab segment" data-tab="CreateFragment">
+
+    <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreating || index.fragment.isCreated">
       <div class="required field">
-        <label>Duration</label>
+        <label>Youtube URL</label>
 
-        <div min="0" max="index.video.duration" model-min="index.fragment.start_from" model-max="index.fragment.end_from" show-values="true" attach-handle-values="true" on-handle-up="index.getVideoEmbedUrl()" on-handle-down="index.getVideoEmbedUrl()" data-range-slider></div>
+        <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.createVideo();" data-ng-model="index.video.url" data-ng-disabled="index.video.id">
       </div>
-      <div class="required field">
-        <label>Title</label>
+      <div data-ng-show="index.video.embed_url">
+        <div class="required field">
+          <label>Duration</label>
 
-        <input type="text" name="title" data-ng-model="index.fragment.title">
-      </div>
-      <div class="field">
-        <label>Description</label>
+          <div min="0" max="index.video.duration" model-min="index.fragment.start_from" model-max="index.fragment.end_from" show-values="true" attach-handle-values="true" on-handle-up="index.getVideoEmbedUrl()" on-handle-down="index.getVideoEmbedUrl()" data-range-slider></div>
+        </div>
+        <div class="required field">
+          <label>Title</label>
 
-        <textarea name="description" rows="5" data-ng-model="index.fragment.description"></textarea>
-      </div>
-      <div align="center">
-        <button class="ui massive red button" data-ng-click="index.createFragment()">Create fragment</button>
+          <input type="text" name="title" data-ng-model="index.fragment.title">
+        </div>
+        <div class="field">
+          <label>Description</label>
+
+          <textarea name="description" rows="5" data-ng-model="index.fragment.description"></textarea>
+        </div>
+        <div align="center">
+          <button class="ui massive red button" data-ng-click="index.createFragment()">Create fragment</button>
+        </div>
       </div>
     </div>
+  </div>
+  <div class="ui bottom attached tab segment" data-tab="Profile">
+    <p></p>
+    <div>
+      <div class="ui card">
+        <div class="image">
+          <img src="{{ user.image }}">
+        </div>
+        <div class="content">
+          <a class="header">{{ user.name }}</a>
+          <div class="meta">
+            <span class="info_email">{{ user.email }}</span>
+          </div>
+          <div class="description">
+
+          </div>
+        </div>
+        <div class="video content">
+          <a>
+            <i class="video icon"></i>
+            22 Videos
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="ui grid">
+          <div class="four wide column" data-ng-repeat="profile in index.user_profile.profile">
+            <h4 class="four wide column">{{ profile.title }}</h4>
+            <div class="ui embed" data-source="youtube" data-id="{{profile.video_id}}" data-placeholder="/images/image-16by9.png">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ui bottom attached tab segment" data-tab="AllVideo">
+    <div class="ui search right">
+      <div class="ui icon input">
+        <input class="prompt" type="text" placeholder="Search countries...">
+        <i class="search icon"></i>
+      </div>
+      <div class="results"></div>
+    </div>
+    <ul>
+      <li data-ng-repeat="url in index.all_fragments.fragments">
+        <span>{{ url.title }}</span>
+        <a href="{{ url.url }}">{{ url.url }}</a>
+      </li>
+    </ul>
   </div>
 </div>

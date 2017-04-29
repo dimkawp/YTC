@@ -10,6 +10,8 @@
     function api($http)
     {
         return {
+            "UserProfile": UserProfile,
+            "AllFragments": AllFragments,
             "createVideo": createVideo,
             "downloadVideo": downloadVideo,
             "uploadVideo": uploadVideo,
@@ -20,6 +22,23 @@
             "getFragmentUrl": getFragmentUrl,
             "getFragmentStatus": getFragmentStatus,
         };
+
+
+        function UserProfile(data)
+        {
+            return $http.post('/api/user/profile', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function AllFragments()
+        {
+            return $http.get('/api/fragments').then(function (response)
+            {
+                return response.data;
+            });
+        }
 
         /*
          |--------------------------------------------------------------------------------------------------------------
