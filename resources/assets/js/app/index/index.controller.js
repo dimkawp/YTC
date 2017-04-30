@@ -14,6 +14,7 @@
         vm.video         = [];
         vm.user          = $auth.user;
         vm.fragment      = [];
+        vm.embed_uri     = "https://www.youtube.com/embed/";
         vm.user_profile  = [];
         vm.all_fragments = [];
 
@@ -66,6 +67,8 @@
 
             api.UserProfile(data).then(function (data) {
                 vm.user_profile = data;
+                vm.counter = vm.user_profile.profile.length;
+                // vm.user_profile = $sce.trustAsResourceUrl(data.url);
 
             });
         }
