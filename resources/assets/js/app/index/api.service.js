@@ -10,20 +10,42 @@
     function api($http)
     {
         return {
-            "getVideoInfo": getVideoInfo,
-            "getVideoEmbedUrl": getVideoEmbedUrl,
+            "createVideo": createVideo,
             "downloadVideo": downloadVideo,
             "uploadVideo": uploadVideo,
-            "deleteVideoFile": deleteVideoFile,
-            "uploadVideoOnYouTube": uploadVideoOnYouTube,
+            "getVideoEmbedUrl": getVideoEmbedUrl,
+            "getVideoStatus": getVideoStatus,
             "createFragment": createFragment,
+            "uploadFragment": uploadFragment,
+            "getFragmentUrl": getFragmentUrl,
             "getFragmentStatus": getFragmentStatus,
-            "getNewUrl": getNewUrl,
         };
 
-        function getVideoInfo(data)
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Videos
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function createVideo(data)
         {
-            return $http.post('/api/video/info', data).then(function (response)
+            return $http.post('/api/videos', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function downloadVideo(data)
+        {
+            return $http.get('/api/videos/' + data.id + '/download').then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function uploadVideo(data)
+        {
+            return $http.get('/api/videos/' + data.id + '/upload').then(function (response)
             {
                 return response.data;
             });
@@ -31,43 +53,25 @@
 
         function getVideoEmbedUrl(data)
         {
-            return $http.post('/api/video/embed_url', data).then(function (response)
+            return $http.post('/api/videos/' + data.id + '/embed_url', data).then(function (response)
             {
                 return response.data;
             });
         }
 
-        function downloadVideo(id)
+        function getVideoStatus(data)
         {
-            return $http.get('/api/fragments/' + id + '/download').then(function (response)
+            return $http.get('/api/videos/' + data.id + '/status').then(function (response)
             {
                 return response.data;
             });
         }
 
-        function uploadVideo(id)
-        {
-            return $http.get('/api/fragments/' + id + '/uploaded_on_cloudinary').then(function (response)
-            {
-                return response.data;
-            });
-        }
-
-        function deleteVideoFile(id)
-        {
-            return $http.get('/api/fragments/' + id + '/delete_video_file').then(function (response)
-            {
-                return response.data;
-            });
-        }
-
-        function uploadVideoOnYouTube(id)
-        {
-            return $http.get('/api/fragments/' + id + '/upload_video_on_youtube').then(function (response)
-            {
-                return response.data;
-            });
-        }
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Fragments
+         |--------------------------------------------------------------------------------------------------------------
+         */
 
         function createFragment(data)
         {
@@ -77,17 +81,25 @@
             });
         }
 
-        function getFragmentStatus(id)
+        function uploadFragment(data)
         {
-            return $http.get('/api/fragments/' + id + '/status').then(function (response)
+            return $http.get('/api/fragments/' + data.id + '/upload').then(function (response)
             {
                 return response.data;
             });
         }
 
-        function getNewUrl(data)
+        function getFragmentUrl(data)
         {
-            return $http.post('/api/new_url', data).then(function (response)
+            return $http.get('/api/fragments/' + data.id + '/url').then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function getFragmentStatus(data)
+        {
+            return $http.get('/api/fragments/' + data.id + '/status').then(function (response)
             {
                 return response.data;
             });

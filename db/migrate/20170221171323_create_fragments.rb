@@ -2,13 +2,12 @@ class CreateFragments < ActiveRecord::Migration[5.0]
   def change
     create_table :fragments do |t|
       t.belongs_to :user
-      t.string :video_id
-      t.string :title
-      t.text :description
+      t.belongs_to :video
       t.string :url
-      t.string :cloud_url
-      t.integer :start
-      t.integer :end
+      t.string :title
+      t.integer :start_from
+      t.integer :end_from
+      t.text :description
       t.string :status
       t.timestamps
     end
