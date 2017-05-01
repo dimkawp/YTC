@@ -50,8 +50,6 @@
     </div>
   </div>
 
-
-
   <div class="ui top attached tabular menu">
     <a class="active item" data-tab="CreateFragment">Create Fragment</a>
     <a class="item" data-tab="Profile" data-ng-click="index.UserProfile()">Profile</a>
@@ -88,57 +86,92 @@
     </div>
   </div>
   <div class="ui bottom attached tab segment" data-tab="Profile">
-    <p></p>
-    <div>
-      <div class="ui card">
-        <div class="image">
-          <img src="{{ user.image }}">
-        </div>
-        <div class="content">
-          <a class="header">{{ user.name }}</a>
-          <div class="meta">
-            <span class="info_email">{{ user.email }}</span>
+
+    <div class="ui grid">
+      <div class="ui card four wide column">
+        <div class="ui card">
+          <div class="image">
+            <img src="{{ user.image }}">
           </div>
-          <div class="description">
+          <div class="content">
+            <a class="header">{{ user.name }}</a>
+            <div class="meta">
+              <span class="info_email">{{ user.email }}</span>
+            </div>
+            <div class="description">
 
-          </div>
-        </div>
-        <div class="video content">
-          <a>
-            <i class="video icon"></i>
-            {{index.counter}} Videos
-          </a>
-        </div>
-      </div>
-      <div>
-        <div class="ui grid">
-          <div class="four wide column" data-ng-repeat="profile in index.user_profile.profile">
-            <h4 class="four wide column">{{ profile.title }}</h4>
-
-
-            <iframe frameborder="0" width="100%" height="100%" data-ng-src="{{index.embed_uri}}{{profile.video_id}}"></iframe>
-
-            <!--<div class="ui embed" data-source="youtube" data-id="{{profile.video_id}}" data-placeholder="/images/image-16by9.png">-->
             </div>
           </div>
+          <div class="video content">
+            <a>
+              <i class="video icon"></i>
+              {{index.counter}} Videos
+            </a>
+          </div>
         </div>
       </div>
+
+      <div class="ui twelve wide column">
+        <div>
+          <div align="center">
+            <h2>Profile</h2>
+          </div>
+          <br>
+          <div class="ui grid">
+            <div class="four wide column" data-ng-repeat="profile in index.user_profile.profile">
+              <div>
+                <div class="profile_title">
+                  <h4>{{ profile.title }}</h4>
+                </div>
+                <a href="{{ profile.url }}">
+                  <i class="youtube play icon"></i>
+                </a>
+                <a href="{{ profile.cloud_url }}">
+                  <i class="cloud upload icon"></i>
+                </a>
+                <a href="/delete">
+                  <i class="bitbucket icon"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
     </div>
+  </div>
 
     <div class="ui bottom attached tab segment" data-tab="AllVideo">
-      <div class="ui search right">
+      <div class="ui search right" align="right">
         <div class="ui icon input">
-          <input class="prompt" type="text" placeholder="Search">
+          <input class="prompt" type="text" placeholder="Search" data-ng-model="searchBox">
           <i class="search icon"></i>
         </div>
         <div class="results"></div>
       </div>
-      <ul>
-        <li data-ng-repeat="url in index.all_fragments.fragments">
-          <span>{{ url.title }}</span>
-          <a href="{{ url.url }}">{{ url.url }}</a>
-        </li>
-      </ul>
+      <!--<ul>-->
+        <!--<li data-ng-repeat="url in index.all_fragments.fragments | filter:searchBox">-->
+          <!--<span>{{ url.title }}</span>-->
+          <!--<a href="{{ url.url }}">{{ url.url }}</a>-->
+
+        <!--</li>-->
+      <!--</ul>-->
+
+      <div class="ui middle aligned divided list" data-ng-repeat="url in index.all_fragments.fragments | filter:searchBox">
+        <div class="item">
+          <div class="right floated content">
+            <div class="ui button">Add</div>
+          </div>
+          <i class="search icon"></i>
+          <div class="content">
+            <span>{{ url.title }}</span>
+            <a href="{{ url.url }}">{{ url.url }}</a>
+          </div>
+        </div>
+      </div>
+
     </div>
 </div>
 

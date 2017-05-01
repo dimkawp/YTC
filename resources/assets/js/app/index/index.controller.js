@@ -27,6 +27,7 @@
         vm.downloadVideo     = downloadVideo;
         vm.uploadVideo       = uploadVideo;
         vm.getVideoEmbedUrl  = getVideoEmbedUrl;
+        // vm.deleteFragment = deleteFragment;
         vm.getVideoStatus    = getVideoStatus;
         vm.createFragment    = createFragment;
         vm.uploadFragment    = uploadFragment;
@@ -181,6 +182,17 @@
                 vm.video.status = data.status;
             });
         }
+
+        // function deleteFragment()
+        // {
+        //     var data = {
+        //         id: profile.id
+        //     };
+        //     api.deleteFragment(data).then(function ()
+        //     {
+        //         //
+        //     });
+        // }
 
         /*
          |--------------------------------------------------------------------------------------------------------------

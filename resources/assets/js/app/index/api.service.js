@@ -16,6 +16,7 @@
             "downloadVideo": downloadVideo,
             "uploadVideo": uploadVideo,
             "getVideoEmbedUrl": getVideoEmbedUrl,
+            // "deleteFragment": deleteFragment,
             "getVideoStatus": getVideoStatus,
             "createFragment": createFragment,
             "uploadFragment": uploadFragment,
