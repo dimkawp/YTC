@@ -14,14 +14,11 @@
         vm.video         = [];
         vm.user          = $auth.user;
         vm.fragment      = [];
-        vm.embed_uri     = "https://www.youtube.com/embed/";
         vm.user_profile  = [];
-        vm.all_fragments = [];
 
-        vm.reloadPage        = reloadPage;
         vm.login             = login;
         vm.logout            = logout;
-        vm.UserProfile       = UserProfile;
+        vm.userProfile       = userProfile;
         vm.createVideo       = createVideo;
         vm.downloadVideo     = downloadVideo;
         vm.uploadVideo       = uploadVideo;
@@ -32,11 +29,7 @@
         vm.uploadFragment    = uploadFragment;
         vm.getFragmentStatus = getFragmentStatus;
         vm.getFragmentUrl    = getFragmentUrl;
-
-        function reloadPage()
-        {
-            location.reload();
-        }
+        vm.reloadPage        = reloadPage;
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -56,29 +49,28 @@
 
         /*
          |--------------------------------------------------------------------------------------------------------------
-         | Videos
+         | Users
          |--------------------------------------------------------------------------------------------------------------
          */
 
-        function UserProfile() {
+        function userProfile()
+        {
             var data = {
                 user_id: vm.user.id
             };
 
-            api.UserProfile(data).then(function (data) {
+            api.userProfile(data).then(function (data)
+            {
                 vm.user_profile = data;
                 vm.counter = vm.user_profile.profile.length;
-                // vm.user_profile = $sce.trustAsResourceUrl(data.url);
-
             });
         }
 
-        // function AllFragments() {
-        //
-        //     api.AllFragments().then(function (data) {
-        //         vm.all_fragments = data;
-        //     });
-        // }
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Videos
+         |--------------------------------------------------------------------------------------------------------------
+         */
 
         function createVideo()
         {
@@ -265,6 +257,16 @@
             {
                 vm.fragment.url = data.url;
             });
+        }
+
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Other
+         |--------------------------------------------------------------------------------------------------------------
+         */
+        function reloadPage()
+        {
+            location.reload();
         }
     }
 })();

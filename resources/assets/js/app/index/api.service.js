@@ -10,8 +10,7 @@
     function api($http)
     {
         return {
-            "UserProfile": UserProfile,
-            // "AllFragments": AllFragments,
+            "userProfile": userProfile,
             "createVideo": createVideo,
             "downloadVideo": downloadVideo,
             "uploadVideo": uploadVideo,
@@ -24,22 +23,19 @@
             "getFragmentStatus": getFragmentStatus,
         };
 
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Users
+         |--------------------------------------------------------------------------------------------------------------
+         */
 
-        function UserProfile(data)
+        function userProfile(data)
         {
-            return $http.post('/api/user/profile', data).then(function (response)
+            return $http.post('/api/users/profile', data).then(function (response)
             {
                 return response.data;
             });
         }
-
-        // function AllFragments()
-        // {
-        //     return $http.get('/api/fragments').then(function (response)
-        //     {
-        //         return response.data;
-        //     });
-        // }
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -103,7 +99,7 @@
 
         function deleteFragment(data)
         {
-            return $http.delete('/api/fragments/delete/' + data + '').then(function (response)
+            return $http.delete('/api/fragments/' + data.id).then(function (response)
             {
                 return response.data;
             });

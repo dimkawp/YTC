@@ -78,18 +78,13 @@ module Endpoints
 
       # delete fragment
       params do
-        requires :id, type: Integer, desc: 'id'
+        requires :id, type: Integer, desc: 'ID'
       end
 
-      delete 'delete/:id' do
-        begin
-          fragment = Fragment.find(params[:id])
-          {
-              status: :success
-          } if fragment.delete
-        rescue ActiveRecord::RecordNotFound
-          error!({status: :error, message: :not_found}, 404)
-        end
+      delete ':id' do
+        fragment = Fragment.find(params[:id])
+
+        fragment.delete
       end
     end
   end
