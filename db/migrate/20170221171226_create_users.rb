@@ -42,6 +42,10 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       ## Tokens
       t.json :tokens
 
+      ## Access
+      t.string :access_token
+      t.integer :access_expires_at
+
       t.timestamps
     end
 

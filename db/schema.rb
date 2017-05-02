@@ -10,24 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170422130617) do
+ActiveRecord::Schema.define(version: 20170221171323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "fragments", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "video_id"
-    t.string   "title"
-    t.text     "description"
+    t.integer  "video_id"
     t.string   "url"
-    t.string   "cloud_url"
-    t.integer  "start"
-    t.integer  "end"
+    t.string   "title"
+    t.integer  "start_from"
+    t.integer  "end_from"
+    t.text     "description"
     t.string   "status"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.index ["user_id"], name: "index_fragments_on_user_id", using: :btree
+    t.index ["video_id"], name: "index_fragments_on_video_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -51,13 +51,27 @@ ActiveRecord::Schema.define(version: 20170422130617) do
     t.string   "image"
     t.string   "email"
     t.json     "tokens"
+    t.string   "access_token"
+    t.integer  "access_expires_at"
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
-    t.string   "token"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
+  end
+
+  create_table "videos", force: :cascade do |t|
+    t.string   "v"
+    t.string   "url"
+    t.string   "title"
+    t.integer  "duration"
+    t.text     "description"
+    t.json     "cloudinary"
+    t.string   "status"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["v"], name: "index_videos_on_v", unique: true, using: :btree
   end
 
 end
