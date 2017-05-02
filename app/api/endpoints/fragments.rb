@@ -75,6 +75,17 @@ module Endpoints
                         description: params[:description],
                         status: 'new'
       end
+
+      # delete fragment
+      params do
+        requires :id, type: Integer, desc: 'ID'
+      end
+
+      delete ':id' do
+        fragment = Fragment.find(params[:id])
+
+        fragment.delete
+      end
     end
   end
 end

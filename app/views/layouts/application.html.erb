@@ -41,6 +41,8 @@
         {
             new Clipboard('#copy-button');
 
+            $('.menu .item').tab();
+
             $('#create-fragment').form
             ({
                 on: 'change',
@@ -51,7 +53,7 @@
                     title: ['empty']
                 }
             });
-        })
+        });
     </script>
   </body>
 </html>

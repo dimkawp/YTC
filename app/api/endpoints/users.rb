@@ -14,6 +14,16 @@ module Endpoints
       get ':id', jbuilder: 'user' do
         @user = User.find(params[:id])
       end
+
+      params do
+        requires :id, type: Integer, desc: 'ID'
+      end
+
+      get ':id/fragments', jbuilder: 'fragments' do
+        user = User.find(params[:id])
+
+        @fragments = user.fragments
+      end
     end
   end
 end

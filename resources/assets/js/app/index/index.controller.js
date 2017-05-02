@@ -11,27 +11,24 @@
     {
         var vm = this;
 
-        vm.video    = [];
         vm.user     = $auth.user;
+        vm.video    = [];
         vm.fragment = [];
 
-        vm.reloadPage        = reloadPage;
         vm.login             = login;
         vm.logout            = logout;
+        vm.getUserFragments  = getUserFragments;
         vm.createVideo       = createVideo;
         vm.downloadVideo     = downloadVideo;
         vm.uploadVideo       = uploadVideo;
         vm.getVideoEmbedUrl  = getVideoEmbedUrl;
         vm.getVideoStatus    = getVideoStatus;
         vm.createFragment    = createFragment;
+        vm.deleteFragment    = deleteFragment;
         vm.uploadFragment    = uploadFragment;
         vm.getFragmentStatus = getFragmentStatus;
         vm.getFragmentUrl    = getFragmentUrl;
-
-        function reloadPage()
-        {
-            location.reload();
-        }
+        vm.reloadPage        = reloadPage;
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -47,6 +44,24 @@
         function logout()
         {
             $auth.signOut();
+        }
+
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Users
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function getUserFragments()
+        {
+            var data = {
+                id: vm.user.id
+            };
+
+            api.getUserFragments(data).then(function (data)
+            {
+                vm.user.fragments = data;
+            });
         }
 
         /*
@@ -157,6 +172,18 @@
             });
         }
 
+        function deleteFragment(fragment)
+        {
+            var data = {
+                id: fragment.id
+            };
+
+            api.deleteFragment(data).then(function ()
+            {
+                getUserFragments();
+            });
+        }
+
         /*
          |--------------------------------------------------------------------------------------------------------------
          | Fragments
@@ -232,6 +259,16 @@
             {
                 vm.fragment.url = data.url;
             });
+        }
+
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Other
+         |--------------------------------------------------------------------------------------------------------------
+         */
+        function reloadPage()
+        {
+            location.reload();
         }
     }
 })();

@@ -10,16 +10,32 @@
     function api($http)
     {
         return {
+            "getUserFragments": getUserFragments,
             "createVideo": createVideo,
             "downloadVideo": downloadVideo,
             "uploadVideo": uploadVideo,
             "getVideoEmbedUrl": getVideoEmbedUrl,
             "getVideoStatus": getVideoStatus,
             "createFragment": createFragment,
+            "deleteFragment": deleteFragment,
             "uploadFragment": uploadFragment,
             "getFragmentUrl": getFragmentUrl,
             "getFragmentStatus": getFragmentStatus,
         };
+
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Users
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function getUserFragments(data)
+        {
+            return $http.get('/api/users/' + data.id + '/fragments').then(function (response)
+            {
+                return response.data;
+            });
+        }
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -76,6 +92,14 @@
         function createFragment(data)
         {
             return $http.post('/api/fragments', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function deleteFragment(data)
+        {
+            return $http.delete('/api/fragments/' + data.id).then(function (response)
             {
                 return response.data;
             });
