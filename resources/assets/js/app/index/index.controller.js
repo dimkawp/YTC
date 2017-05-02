@@ -22,14 +22,13 @@
         vm.login             = login;
         vm.logout            = logout;
         vm.UserProfile       = UserProfile;
-        vm.AllFragments      = AllFragments;
         vm.createVideo       = createVideo;
         vm.downloadVideo     = downloadVideo;
         vm.uploadVideo       = uploadVideo;
         vm.getVideoEmbedUrl  = getVideoEmbedUrl;
-        // vm.deleteFragment = deleteFragment;
         vm.getVideoStatus    = getVideoStatus;
         vm.createFragment    = createFragment;
+        vm.deleteFragment    = deleteFragment;
         vm.uploadFragment    = uploadFragment;
         vm.getFragmentStatus = getFragmentStatus;
         vm.getFragmentUrl    = getFragmentUrl;
@@ -74,12 +73,12 @@
             });
         }
 
-        function AllFragments() {
-
-            api.AllFragments().then(function (data) {
-                vm.all_fragments = data;
-            });
-        }
+        // function AllFragments() {
+        //
+        //     api.AllFragments().then(function (data) {
+        //         vm.all_fragments = data;
+        //     });
+        // }
 
         function createVideo()
         {
@@ -183,16 +182,13 @@
             });
         }
 
-        // function deleteFragment()
-        // {
-        //     var data = {
-        //         id: profile.id
-        //     };
-        //     api.deleteFragment(data).then(function ()
-        //     {
-        //         //
-        //     });
-        // }
+        function deleteFragment(data)
+        {
+            api.deleteFragment(data).then(function ()
+            {
+                //
+            });
+        }
 
         /*
          |--------------------------------------------------------------------------------------------------------------

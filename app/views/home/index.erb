@@ -53,7 +53,8 @@
   <div class="ui top attached tabular menu">
     <a class="active item" data-tab="CreateFragment">Create Fragment</a>
     <a class="item" data-tab="Profile" data-ng-click="index.UserProfile()">Profile</a>
-    <a class="item" data-tab="AllVideo" data-ng-click="index.AllFragments()">All Video</a>
+    <!--<a class="item" data-tab="AllVideo" data-ng-click="index.AllFragments()">All Video</a>-->
+
   </div>
   <div class="ui bottom attached active tab segment" data-tab="CreateFragment">
 
@@ -91,12 +92,12 @@
       <div class="ui card four wide column">
         <div class="ui card">
           <div class="image">
-            <img src="{{ user.image }}">
+            <img src="{{ index.user.image }}">
           </div>
           <div class="content">
-            <a class="header">{{ user.name }}</a>
+            <a class="header">{{ index.user.name }}</a>
             <div class="meta">
-              <span class="info_email">{{ user.email }}</span>
+              <span class="info_email">{{ index.user.email }}</span>
             </div>
             <div class="description">
 
@@ -116,62 +117,71 @@
           <div align="center">
             <h2>Profile</h2>
           </div>
+          <div class="ui search right" align="right">
+            <div class="ui icon input">
+              <input class="prompt" type="text" placeholder="Search" data-ng-model="searchBox">
+              <i class="search icon"></i>
+            </div>
+            <div class="results"></div>
+          </div>
           <br>
           <div class="ui grid">
-            <div class="four wide column" data-ng-repeat="profile in index.user_profile.profile">
+            <div class="four wide column" data-ng-repeat="profile in index.user_profile.profile | filter:searchBox">
               <div>
                 <div class="profile_title">
                   <h4>{{ profile.title }}</h4>
                 </div>
-                <a href="{{ profile.url }}">
+                <div>
+                  <img src="http://img.youtube.com/vi/{{profile.video_id}}/1.jpg">
+                </div>
+                <a href="/" data-ng-click="profileVideo = ! profileVideo">
                   <i class="youtube play icon"></i>
                 </a>
-                <a href="{{ profile.cloud_url }}">
+                <a target="_blank" href="{{ profile.cloud_url }}">
                   <i class="cloud upload icon"></i>
                 </a>
-                <a href="/delete">
+                <a href="/" data-ng-click="index.deleteFragment(profile.id); index.UserProfile();">
                   <i class="bitbucket icon"></i>
                 </a>
               </div>
+              <div data-ng-show="profileVideo">
+                <a target="_blank" href="{{ profile.url }}">{{ profile.url }}</a>
+              </div>
             </div>
           </div>
-
         </div>
       </div>
-
-
     </div>
   </div>
+    <!--<div class="ui bottom attached tab segment" data-tab="AllVideo">-->
+      <!--<div class="ui search right" align="right">-->
+        <!--<div class="ui icon input">-->
+          <!--<input class="prompt" type="text" placeholder="Search" data-ng-model="searchBox">-->
+          <!--<i class="search icon"></i>-->
+        <!--</div>-->
+        <!--<div class="results"></div>-->
+      <!--</div>-->
+      <!--&lt;!&ndash;<ul>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li data-ng-repeat="url in index.all_fragments.fragments | filter:searchBox">&ndash;&gt;-->
+          <!--&lt;!&ndash;<span>{{ url.title }}</span>&ndash;&gt;-->
+          <!--&lt;!&ndash;<a href="{{ url.url }}">{{ url.url }}</a>&ndash;&gt;-->
 
-    <div class="ui bottom attached tab segment" data-tab="AllVideo">
-      <div class="ui search right" align="right">
-        <div class="ui icon input">
-          <input class="prompt" type="text" placeholder="Search" data-ng-model="searchBox">
-          <i class="search icon"></i>
-        </div>
-        <div class="results"></div>
-      </div>
-      <!--<ul>-->
-        <!--<li data-ng-repeat="url in index.all_fragments.fragments | filter:searchBox">-->
-          <!--<span>{{ url.title }}</span>-->
-          <!--<a href="{{ url.url }}">{{ url.url }}</a>-->
+        <!--&lt;!&ndash;</li>&ndash;&gt;-->
+      <!--&lt;!&ndash;</ul>&ndash;&gt;-->
 
-        <!--</li>-->
-      <!--</ul>-->
+      <!--<div class="ui middle aligned divided list" data-ng-repeat="url in index.all_fragments.fragments | filter:searchBox">-->
+        <!--<div class="item">-->
+          <!--<div class="right floated content">-->
+            <!--<div class="ui button">Add</div>-->
+          <!--</div>-->
+          <!--<i class="search icon"></i>-->
+          <!--<div class="content">-->
+            <!--<span>{{ url.title }}</span>-->
+            <!--<a href="{{ url.url }}">{{ url.url }}</a>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
 
-      <div class="ui middle aligned divided list" data-ng-repeat="url in index.all_fragments.fragments | filter:searchBox">
-        <div class="item">
-          <div class="right floated content">
-            <div class="ui button">Add</div>
-          </div>
-          <i class="search icon"></i>
-          <div class="content">
-            <span>{{ url.title }}</span>
-            <a href="{{ url.url }}">{{ url.url }}</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
+    <!--</div>-->
 </div>
 

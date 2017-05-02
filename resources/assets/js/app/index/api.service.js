@@ -11,14 +11,14 @@
     {
         return {
             "UserProfile": UserProfile,
-            "AllFragments": AllFragments,
+            // "AllFragments": AllFragments,
             "createVideo": createVideo,
             "downloadVideo": downloadVideo,
             "uploadVideo": uploadVideo,
             "getVideoEmbedUrl": getVideoEmbedUrl,
-            // "deleteFragment": deleteFragment,
             "getVideoStatus": getVideoStatus,
             "createFragment": createFragment,
+            "deleteFragment": deleteFragment,
             "uploadFragment": uploadFragment,
             "getFragmentUrl": getFragmentUrl,
             "getFragmentStatus": getFragmentStatus,
@@ -33,13 +33,13 @@
             });
         }
 
-        function AllFragments()
-        {
-            return $http.get('/api/fragments').then(function (response)
-            {
-                return response.data;
-            });
-        }
+        // function AllFragments()
+        // {
+        //     return $http.get('/api/fragments').then(function (response)
+        //     {
+        //         return response.data;
+        //     });
+        // }
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -96,6 +96,14 @@
         function createFragment(data)
         {
             return $http.post('/api/fragments', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function deleteFragment(data)
+        {
+            return $http.delete('/api/fragments/delete/' + data + '').then(function (response)
             {
                 return response.data;
             });
