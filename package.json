@@ -4,7 +4,8 @@
   "description": "The third-party packages of project.",
   "dependencies": {
     "ng-token-auth": "0.0.29",
-    "angular-socialshare": "2.3.8"
+    "angular-socialshare": "2.3.8",
+    "ngclipboard": "1.1.1"
   },
   "devDependencies": {
     "napa": "2.3.0",

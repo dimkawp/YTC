@@ -5,6 +5,15 @@ module Api
     format :json
     formatter :json, Grape::Formatter::Jbuilder
 
+    helpers do
+      def get_v(url)
+        components = URI.parse(url)
+
+        params = CGI.parse(components.query)
+        params['v'].first
+      end
+    end
+
     mount Endpoints::Videos
     mount Endpoints::Users
     mount Endpoints::Fragments

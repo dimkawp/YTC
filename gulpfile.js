@@ -14,7 +14,8 @@ elixir(function (mix) {
         'app/index/index.module.js',
         'app/index/index.controller.js',
         'app/index/auth.config.js',
-        'app/index/api.service.js'
+        'app/index/api.service.js',
+        'app/index/app-tab.directive.js'
     ],  'public/assets/js/app.min.js');
 });
 
@@ -25,6 +26,9 @@ elixir(function (mix) {
 
     // Angular Socialshare
     mix.copy('node_modules/angular-socialshare/dist/angular-socialshare.min.js', 'public/packages/angular-socialshare/js/socialshare.min.js');
+
+    // Angular Clipboard
+    mix.copy('node_modules/ngclipboard/dist/ngclipboard.min.js', 'public/packages/angular-clipboard/js/clipboard.min.js');
 
     // Angular Range
     mix.copy('node_modules/angular-rangeslider/angular.rangeSlider.css', 'public/packages/angular-rangeslider/css/rangeslider.css');

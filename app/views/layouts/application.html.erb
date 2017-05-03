@@ -18,7 +18,7 @@
   <body data-ng-controller="IndexController as index">
     <div class="ui container">
       <header class="header">
-        <a class="logo" href="#" data-ng-click="index.reloadPage()">
+        <a class="logo" data-ng-href="/">
           <img src="/assets/images/logo.png" alt="Logo"> YTC
         </a>
       </header>
@@ -29,27 +29,24 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular-route.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-cookie/4.1.0/angular-cookie.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.1/clipboard.min.js"></script>
     <script src="/packages/angular-token-auth/js/token-auth.min.js"></script>
     <script src="/packages/angular-socialshare/js/socialshare.min.js"></script>
+    <script src="/packages/angular-clipboard/js/clipboard.min.js"></script>
     <script src="/packages/angular-rangeslider/js/rangeslider.js"></script>
     <script src="/assets/js/app.min.js"></script>
     <script>
         $(function ()
         {
-            new Clipboard('#copy-button');
-
-            $('.menu .item').tab();
-
             $('#create-fragment').form
             ({
                 on: 'change',
+                inline: true,
                 fields: {
-                    url: ['empty','url'],
-                    start_from: ['empty', 'integer'],
-                    end_from: ['empty', 'integer'],
+                    url: ['empty', 'url', 'regExp[/(www.youtube.com)/]'],
                     title: ['empty']
                 }
             });

@@ -6,10 +6,10 @@ module Endpoints
         requires :url, type: String, desc: 'Youtube URL' , regexp: /(www.youtube.com)/
       end
 
-      post '' do
+      post '', jbuilder: 'video' do
         v = get_v(params[:url]);
 
-        Video.find_or_create_by(v: v) do |video|
+        @video = Video.find_or_create_by(v: v) do |video|
           @video = Yt::Video.new id: video.v
 
           video.url         = params[:url]
@@ -52,6 +52,13 @@ module Endpoints
         {status: video.status}
       end
 
+      # get video status
+      get ':id/status' do
+        video = Video.find(params[:id])
+
+        {status: video.status}
+      end
+
       # get video embed url
       params do
         requires :id, type: Integer, desc: 'ID'
@@ -60,27 +67,11 @@ module Endpoints
       end
 
       post ':id/embed_url' do
-        video = Video::find(params[:id]);
+        video = Video::find(params[:id])
 
         v = get_v(video.url);
 
         {embed_url: "https://www.youtube.com/embed/#{v}?start=#{params[:start_from]}&end=#{params[:end_from]}&autoplay=1"}
-      end
-
-      # get video status
-      get ':id/status' do
-        video = Video.find(params[:id])
-
-        {status: video.status}
-      end
-    end
-
-    helpers do
-      def get_v(url)
-        components = URI.parse(url)
-
-        params = CGI.parse(components.query)
-        params['v'].first
       end
     end
   end
