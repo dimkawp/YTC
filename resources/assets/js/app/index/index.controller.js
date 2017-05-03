@@ -14,21 +14,23 @@
         vm.user     = $auth.user;
         vm.video    = [];
         vm.fragment = [];
+        vm.results  = [];
 
-        vm.login             = login;
-        vm.logout            = logout;
-        vm.getUserFragments  = getUserFragments;
-        vm.createVideo       = createVideo;
-        vm.downloadVideo     = downloadVideo;
-        vm.uploadVideo       = uploadVideo;
-        vm.getVideoEmbedUrl  = getVideoEmbedUrl;
-        vm.getVideoStatus    = getVideoStatus;
-        vm.createFragment    = createFragment;
-        vm.deleteFragment    = deleteFragment;
-        vm.uploadFragment    = uploadFragment;
-        vm.getFragmentStatus = getFragmentStatus;
-        vm.getFragmentUrl    = getFragmentUrl;
-        vm.reloadPage        = reloadPage;
+        vm.login               = login;
+        vm.logout              = logout;
+        vm.getUserFragments    = getUserFragments;
+        vm.createVideo         = createVideo;
+        vm.downloadVideo       = downloadVideo;
+        vm.uploadVideo         = uploadVideo;
+        vm.getVideoStatus      = getVideoStatus;
+        vm.getVideoEmbedUrl    = getVideoEmbedUrl;
+        vm.newFragment         = newFragment;
+        vm.createFragment      = createFragment;
+        vm.deleteFragment      = deleteFragment;
+        vm.uploadFragment      = uploadFragment;
+        vm.getFragmentStatus   = getFragmentStatus;
+        vm.getFragmentUrl      = getFragmentUrl;
+        vm.getFragmentEmbedUrl = getFragmentEmbedUrl;
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -79,7 +81,7 @@
             api.createVideo(data).then(function (data)
             {
                 vm.video = data;
-                vm.video.isPreviewing = true;
+                vm.video.isCreated = true;
 
                 vm.fragment.start_from  = 0;
                 vm.fragment.end_from    = vm.video.duration;
@@ -99,27 +101,27 @@
             api.downloadVideo(data).then(function (data)
             {
                 vm.video.status = data.status;
-            });
 
-            var status = $interval(function ()
-            {
-                if (vm.video.status == 'downloaded' || vm.video.status == 'uploaded')
+                var status = $interval(function ()
                 {
-                    if (vm.video.status == 'downloaded')
+                    if (vm.video.status == 'downloaded' || vm.video.status == 'uploaded')
                     {
-                        uploadVideo();
+                        if (vm.video.status == 'downloaded')
+                        {
+                            uploadVideo();
+                        }
+
+                        if (vm.video.status == 'uploaded')
+                        {
+                            uploadFragment();
+                        }
+
+                        $interval.cancel(status);
                     }
 
-                    if (vm.video.status == 'uploaded')
-                    {
-                        uploadFragment();
-                    }
-
-                    $interval.cancel(status);
-                }
-
-                getVideoStatus();
-            }, 5000);
+                    getVideoStatus();
+                }, 5000);
+            });
         }
 
         function uploadVideo()
@@ -131,19 +133,19 @@
             api.uploadVideo(data).then(function (data)
             {
                 vm.video.status = data.status;
-            });
 
-            var status = $interval(function ()
-            {
-                if (vm.video.status == 'uploaded')
+                var status = $interval(function ()
                 {
-                    uploadFragment();
+                    if (vm.video.status == 'uploaded')
+                    {
+                        uploadFragment();
 
-                    $interval.cancel(status);
-                }
+                        $interval.cancel(status);
+                    }
 
-                getVideoStatus();
-            }, 5000);
+                    getVideoStatus();
+                }, 5000);
+            });
         }
 
         function getVideoEmbedUrl()
@@ -190,6 +192,12 @@
          |--------------------------------------------------------------------------------------------------------------
          */
 
+        function newFragment()
+        {
+            vm.video    = [];
+            vm.fragment = [];
+        }
+
         function createFragment()
         {
             var data = {
@@ -218,23 +226,22 @@
 
             api.uploadFragment(data).then(function ()
             {
-
-            });
-
-            var status = $interval(function ()
-            {
-                if (vm.fragment.status == 'uploaded')
+                var status = $interval(function ()
                 {
-                    getFragmentUrl();
+                    if (vm.fragment.status == 'uploaded')
+                    {
+                        getFragmentUrl();
 
-                    vm.fragment.isCreating = false;
-                    vm.fragment.isCreated = true;
+                        vm.video.isCreated = false;
+                        vm.fragment.isCreating = false;
+                        vm.fragment.isCreated = true;
 
-                    $interval.cancel(status);
-                }
+                        $interval.cancel(status);
+                    }
 
-                getFragmentStatus();
-            }, 5000);
+                    getFragmentStatus();
+                }, 5000);
+            });
         }
 
         function getFragmentStatus()
@@ -258,17 +265,21 @@
             api.getFragmentUrl(data).then(function (data)
             {
                 vm.fragment.url = data.url;
+
+                getFragmentEmbedUrl();
             });
         }
 
-        /*
-         |--------------------------------------------------------------------------------------------------------------
-         | Other
-         |--------------------------------------------------------------------------------------------------------------
-         */
-        function reloadPage()
+        function getFragmentEmbedUrl()
         {
-            location.reload();
+            var data = {
+                id: vm.fragment.id
+            };
+
+            api.getFragmentEmbedUrl(data).then(function (data)
+            {
+                vm.fragment.embed_url = $sce.trustAsResourceUrl(data.embed_url);
+            });
         }
     }
 })();

@@ -20,6 +20,7 @@
             "deleteFragment": deleteFragment,
             "uploadFragment": uploadFragment,
             "getFragmentUrl": getFragmentUrl,
+            "getFragmentEmbedUrl": getFragmentEmbedUrl,
             "getFragmentStatus": getFragmentStatus,
         };
 
@@ -116,6 +117,14 @@
         function getFragmentUrl(data)
         {
             return $http.get('/api/fragments/' + data.id + '/url').then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function getFragmentEmbedUrl(data)
+        {
+            return $http.get('/api/fragments/' + data.id + '/embed_url').then(function (response)
             {
                 return response.data;
             });

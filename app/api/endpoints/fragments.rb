@@ -1,20 +1,6 @@
 module Endpoints
   class Fragments < Grape::API
     namespace :fragments do
-      # get fragments
-      get '', jbuilder: 'fragments' do
-        @fragments = Fragment.all
-      end
-
-      # get fragment
-      params do
-        requires :id, type: Integer, desc: 'ID'
-      end
-
-      get ':id', jbuilder: 'fragment' do
-        @fragment = Fragment.find(params[:id])
-      end
-
       # get fragment status
       params do
         requires :id, type: Integer, desc: 'ID'
@@ -35,6 +21,19 @@ module Endpoints
         fragment = Fragment.find(params[:id])
 
         {url: fragment.url}
+      end
+
+      # get fragment embed url
+      params do
+        requires :id, type: Integer, desc: 'ID'
+      end
+
+      get ':id/embed_url' do
+        fragment = Fragment.find(params[:id])
+
+        v = get_v(fragment.url);
+
+        {embed_url: "https://www.youtube.com/embed/#{v}?autoplay=0"}
       end
 
       # upload fragment on YouTube
@@ -63,17 +62,17 @@ module Endpoints
         optional :description, type: String, desc: 'Description'
       end
 
-      post '' do
+      post '', jbuilder: 'fragment' do
         user  = User.find(params[:user_id])
         video = Video.find(params[:video_id])
 
-        Fragment.create user_id: user.id,
-                        video_id: video.id,
-                        title: params[:title],
-                        start_from: params[:start_from],
-                        end_from: params[:end_from],
-                        description: params[:description],
-                        status: 'new'
+        @fragment = Fragment.create user_id: user.id,
+                                    video_id: video.id,
+                                    title: params[:title],
+                                    start_from: params[:start_from],
+                                    end_from: params[:end_from],
+                                    description: params[:description],
+                                    status: 'new'
       end
 
       # delete fragment
