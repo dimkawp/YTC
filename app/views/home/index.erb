@@ -1,56 +1,138 @@
-<div class="ui segment" data-ng-show="index.user.id">
+<div class="ui raised segment" data-ng-hide="index.user.id">
+  <a class="ui red ribbon label">
+    <i class="user icon"></i>
+  </a>
+
+  <button class="ui youtube button" data-ng-click="index.login()">
+    <i class="sign in icon"></i> Login with YouTube
+  </button>
+</div>
+
+<div class="ui raised segment" data-ng-show="index.user.id">
   <a class="ui red ribbon label">
     <i class="video play icon"></i>
   </a>
 
-  <div class="ui segments" data-ng-show="index.video.preview">
-    <div class="ui segment" data-ng-if="index.video.preview" data-ng-class="{loading: index.fragment.isCreating}">
-      <iframe frameborder="0" width="100%" height="600" data-ng-src="{{ index.fragment.embed_url }}"></iframe>
-    </div>
-    <div class="ui segment" data-ng-show="index.fragment.isCreated">
-      <div class="ui form">
-        <div class="field">
-          <label>New Youtube URL</label>
+  <div class="ui pointing secondary menu">
+    <a class="item active" data-tab="new-fragment">New Fragment</a>
+    <a class="item" data-tab="profile" data-ng-click="index.getUserFragments()">Profile</a>
+  </div>
 
-          <div class="ui fluid action input">
-            <input id="new-url" value="{{ index.new_url }}">
+  <div class="ui tab active" data-tab="new-fragment">
+    <div class="ui segments" data-ng-show="index.video.isPreviewing">
+      <div class="ui segment" data-ng-if="index.video.isPreviewing" data-ng-class="{loading: index.fragment.isCreating}">
+        <iframe frameborder="0" width="100%" height="600" data-ng-src="{{ index.video.embed_url }}"></iframe>
+      </div>
+      <div class="ui segment" data-ng-show="index.fragment.isCreated">
+        <div class="ui form">
+          <div class="field">
+            <label>New Youtube URL</label>
 
-            <button id="copy-button" class="ui red icon labeled button" data-clipboard-target="#new-url">
-              <i class="copy icon"></i> Copy
-            </button>
+            <div class="ui fluid action input">
+              <input id="url" value="{{ index.fragment.url }}">
+
+              <button id="copy-button" class="ui red icon labeled button" data-clipboard-target="#url">
+                <i class="copy icon"></i> Copy
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      <div class="ui segment center aligned" data-ng-show="index.fragment.isCreated">
+        <div class="ui buttons">
+          <a class="ui facebook button" href="#" socialshare socialshare-provider="facebook" socialshare-title="{{ index.fragment.title }}" socialshare-description="{{ index.fragment.description }}" socialshare-url="{{ index.fragment.url }}">
+            <i class="facebook icon"></i> Share on Facebook
+          </a>
+          <div class="or"></div>
+          <a class="ui twitter button" href="#" socialshare socialshare-provider="twitter" socialshare-text="{{ index.fragment.title }}" socialshare-url="{{ index.fragment.url }}">
+            <i class="twitter icon"></i> Share on Twitter
+          </a>
+        </div>
+      </div>
     </div>
-    <div class="ui segment" data-ng-show="index.fragment.isCreated">
-      <div class="sharethis-inline-share-buttons"></div>
+    <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreating || index.fragment.isCreated">
+      <div class="required field">
+        <label>Youtube URL</label>
+
+        <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.createVideo();" data-ng-model="index.video.url" data-ng-disabled="index.video.id">
+      </div>
+      <div data-ng-show="index.video.embed_url">
+        <div class="required field">
+          <label>Duration</label>
+
+          <div min="0" max="index.video.duration" model-min="index.fragment.start_from" model-max="index.fragment.end_from" show-values="true" attach-handle-values="true" on-handle-up="index.getVideoEmbedUrl()" on-handle-down="index.getVideoEmbedUrl()" data-range-slider></div>
+        </div>
+        <div class="required field">
+          <label>Title</label>
+
+          <input type="text" name="title" data-ng-model="index.fragment.title">
+        </div>
+        <div class="field">
+          <label>Description</label>
+
+          <textarea name="description" rows="5" data-ng-model="index.fragment.description"></textarea>
+        </div>
+
+        <div class="ui basic segment center aligned">
+          <button class="ui massive red button" data-ng-click="index.createFragment()">Create fragment</button>
+        </div>
+      </div>
     </div>
   </div>
+  <div class="ui tab" data-tab="profile">
+    <div class="ui grid">
+      <div class="ui four wide column">
+        <div class="ui card">
+          <div class="image">
+            <img data-ng-src="{{ index.user.image }}">
+          </div>
+          <div class="content">
+            <a class="header">{{ index.user.name }}</a>
 
-  <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreating || index.fragment.isCreated">
-    <div class="required field">
-      <label>Youtube URL</label>
-
-      <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.getVideoInfo(); index.getVideoEmbedUrl();" data-ng-model="index.fragment.url">
-    </div>
-    <div data-ng-show="index.fragment.embed_url">
-      <div class="required field">
-        <label>Duration</label>
-
-        <div min="1" max="index.video.end" model-min="index.fragment.start" model-max="index.fragment.end" show-values="true" attach-handle-values="true" on-handle-up="index.getVideoEmbedUrl()" on-handle-down="index.getVideoEmbedUrl()" data-range-slider></div>
+            <div class="meta">
+              <span class="info_email">{{ index.user.email }}</span>
+            </div>
+          </div>
+          <div class="extra content">
+            <span>
+              <i class="video icon"></i> {{ index.user.fragments.length }} fragments
+            </span>
+          </div>
+          <div class="ui bottom attached button" data-ng-click="index.logout()" data-ng-show="index.user.id">
+            <i class="sign out icon"></i> Logout
+          </div>
+        </div>
       </div>
-      <div class="required field">
-        <label>Title</label>
+      <div class="ui twelve wide column">
+        <div class="ui search">
+          <div class="ui icon fluid input">
+            <input class="prompt" type="text" placeholder="Search" data-ng-model="searchBox">
+            <i class="search icon"></i>
+          </div>
+        </div>
 
-        <input type="text" name="title" data-ng-model="index.fragment.title">
-      </div>
-      <div class="field">
-        <label>Description</label>
+        <div class="ui divided items">
+          <div class="item" data-ng-repeat="fragment in index.user.fragments | filter:searchBox">
+            <div class="image">
+              <img data-ng-src="http://img.youtube.com/vi/{{ fragment.video.v }}/0.jpg">
+            </div>
+            <div class="content">
+              <a class="header">{{ fragment.title }}</a>
 
-        <textarea name="description" rows="5" data-ng-model="index.fragment.description"></textarea>
-      </div>
-      <div align="center">
-        <button class="ui massive red button" data-ng-click="index.createFragment()">Create fragment</button>
+              <div class="description">
+                <p>{{ fragment.description }}</p>
+              </div>
+              <div class="extra">
+                <button class="ui mini icon button">
+                  <i class="youtube play icon"></i> Preview
+                </button>
+                <button class="ui mini red icon button" data-ng-click="index.deleteFragment(fragment);">
+                  <i class="trash icon"></i> Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

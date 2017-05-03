@@ -11,58 +11,49 @@
 
     <link href="/favicon.ico" rel="shortcut icon">
 
-    <link href="/packages/semantic/css/semantic.min.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css" rel="stylesheet">
     <link href="/packages/angular-rangeslider/css/rangeslider.css" rel="stylesheet">
     <link href="/assets/css/app.min.css" rel="stylesheet">
   </head>
   <body data-ng-controller="IndexController as index">
     <div class="ui container">
+      <header class="header">
+        <a class="logo" href="#" data-ng-click="index.reloadPage()">
+          <img src="/assets/images/logo.png" alt="Logo"> YTC
+        </a>
+      </header>
       <section class="content">
-        <div class="ui segment">
-          <a class="ui red ribbon label">
-            <i class="user icon"></i>
-          </a>
-
-          {{ index.user.name }}
-
-          <button class="ui youtube button" data-ng-click="index.login()" data-ng-hide="index.user.id">
-            <i class="sign in icon"></i> Login with YouTube
-          </button>
-
-          <button class="ui button" data-ng-click="index.logout()" data-ng-show="index.user.id">
-            <i class="sign out icon"></i> Logout
-          </button>
-        </div>
-
         <%= yield %>
       </section>
     </div>
 
-    <script src="/packages/jquery/js/jquery.min.js"></script>
-    <script src="/packages/angular/js/angular.min.js"></script>
-    <script src="/packages/angular-cookie/js/cookie.min.js"></script>
-    <script src="/packages/angular-token-auth/js/token-auth.min.js"></script>
-    <script src="/packages/angular-rangeslider/js/rangeslider.js"></script>
-    <script src="/packages/semantic/js/semantic.min.js"></script>
-    <script src="/assets/js/app.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-cookie/4.1.0/angular-cookie.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js"></script>
-    <script src="//platform-api.sharethis.com/js/sharethis.js#property=5901d83fbfca890011a62a27&product=inline-share-buttons"></script>
+    <script src="/packages/angular-token-auth/js/token-auth.min.js"></script>
+    <script src="/packages/angular-socialshare/js/socialshare.min.js"></script>
+    <script src="/packages/angular-rangeslider/js/rangeslider.js"></script>
+    <script src="/assets/js/app.min.js"></script>
     <script>
         $(function ()
         {
             new Clipboard('#copy-button');
+
+            $('.menu .item').tab();
 
             $('#create-fragment').form
             ({
                 on: 'change',
                 fields: {
                     url: ['empty','url'],
-                    start: ['empty', 'integer'],
-                    end: ['empty', 'integer'],
+                    start_from: ['empty', 'integer'],
+                    end_from: ['empty', 'integer'],
                     title: ['empty']
                 }
             });
-        })
+        });
     </script>
   </body>
 </html>

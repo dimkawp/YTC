@@ -11,21 +11,24 @@
     {
         var vm = this;
 
-        vm.video = [];
-        vm.user = $auth.user;
+        vm.user     = $auth.user;
+        vm.video    = [];
         vm.fragment = [];
 
-        vm.login = login;
-        vm.logout = logout;
-        vm.getVideoInfo = getVideoInfo;
-        vm.getVideoEmbedUrl = getVideoEmbedUrl;
-        vm.downloadVideo = downloadVideo;
-        vm.uploadVideo = uploadVideo;
-        vm.deleteVideoFile = deleteVideoFile;
-        vm.uploadVideoOnYouTube = uploadVideoOnYouTube;
-        vm.getNewUrl = getNewUrl;
-        vm.createFragment = createFragment;
+        vm.login             = login;
+        vm.logout            = logout;
+        vm.getUserFragments  = getUserFragments;
+        vm.createVideo       = createVideo;
+        vm.downloadVideo     = downloadVideo;
+        vm.uploadVideo       = uploadVideo;
+        vm.getVideoEmbedUrl  = getVideoEmbedUrl;
+        vm.getVideoStatus    = getVideoStatus;
+        vm.createFragment    = createFragment;
+        vm.deleteFragment    = deleteFragment;
+        vm.uploadFragment    = uploadFragment;
         vm.getFragmentStatus = getFragmentStatus;
+        vm.getFragmentUrl    = getFragmentUrl;
+        vm.reloadPage        = reloadPage;
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -45,122 +48,139 @@
 
         /*
          |--------------------------------------------------------------------------------------------------------------
-         | Video
+         | Users
          |--------------------------------------------------------------------------------------------------------------
          */
 
-        function getVideoInfo()
+        function getUserFragments()
         {
             var data = {
-                url: vm.fragment.url
+                id: vm.user.id
             };
 
-            vm.video.preview = true;
-
-            api.getVideoInfo(data).then(function (data)
+            api.getUserFragments(data).then(function (data)
             {
-                vm.video.end = data.end;
-
-                vm.fragment.video_id = data.video_id;
-                vm.fragment.start = 1;
-                vm.fragment.end = data.end;
-                vm.fragment.title = data.title;
-                vm.fragment.description = data.description;
+                vm.user.fragments = data;
             });
         }
 
-        function getVideoEmbedUrl()
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Videos
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function createVideo()
         {
             var data = {
-                url: vm.fragment.url,
-                start: vm.fragment.start,
-                end: vm.fragment.end
+                url: vm.video.url
             };
 
-            vm.video.preview = true;
-
-            api.getVideoEmbedUrl(data).then(function (data)
+            api.createVideo(data).then(function (data)
             {
-                vm.fragment.embed_url = $sce.trustAsResourceUrl(data.embed_url);
+                vm.video = data;
+                vm.video.isPreviewing = true;
+
+                vm.fragment.start_from  = 0;
+                vm.fragment.end_from    = vm.video.duration;
+                vm.fragment.title       = vm.video.title;
+                vm.fragment.description = vm.video.description;
+
+                getVideoEmbedUrl();
             });
         }
 
         function downloadVideo()
         {
-            api.downloadVideo(vm.fragment.id).then(function (data)
+            var data = {
+                id: vm.video.id
+            };
+
+            api.downloadVideo(data).then(function (data)
             {
-                vm.fragment.status = data.status;
+                vm.video.status = data.status;
             });
 
             var status = $interval(function ()
             {
-                if (vm.fragment.status == 'downloaded')
+                if (vm.video.status == 'downloaded' || vm.video.status == 'uploaded')
                 {
-                    uploadVideo();
-                }
+                    if (vm.video.status == 'downloaded')
+                    {
+                        uploadVideo();
+                    }
 
-                if (vm.fragment.status == 'video_on_cloud')
-                {
-                    uploadVideoOnYouTube();
-                }
+                    if (vm.video.status == 'uploaded')
+                    {
+                        uploadFragment();
+                    }
 
-                if (vm.fragment.status == 'downloaded' || vm.fragment.status == 'video_on_cloud')
-                {
                     $interval.cancel(status);
                 }
 
-                getFragmentStatus();
+                getVideoStatus();
             }, 5000);
         }
 
         function uploadVideo()
         {
-            api.uploadVideo(vm.fragment.id).then(function (data)
+            var data = {
+                id: vm.video.id
+            };
+
+            api.uploadVideo(data).then(function (data)
             {
-                vm.fragment.status = data.status;
+                vm.video.status = data.status;
             });
 
             var status = $interval(function ()
             {
-                if (vm.fragment.status == 'upload_on_cloud' || vm.fragment.status == 'video_on_cloud')
+                if (vm.video.status == 'uploaded')
                 {
-                    uploadVideoOnYouTube();
+                    uploadFragment();
 
                     $interval.cancel(status);
                 }
 
-                getFragmentStatus();
+                getVideoStatus();
             }, 5000);
         }
 
-        function uploadVideoOnYouTube()
+        function getVideoEmbedUrl()
         {
-            api.uploadVideoOnYouTube(vm.fragment.id).then(function ()
+            var data = {
+                id: vm.video.id,
+                start_from: vm.fragment.start_from,
+                end_from: vm.fragment.end_from
+            };
+
+            api.getVideoEmbedUrl(data).then(function (data)
             {
-                deleteVideoFile();
+                vm.video.embed_url = $sce.trustAsResourceUrl(data.embed_url);
             });
-
-            var status = $interval(function ()
-            {
-                if (vm.fragment.status == 'uploaded_on_yt')
-                {
-                    getNewUrl();
-
-                    vm.fragment.isCreating = false;
-                    vm.fragment.isCreated = true;
-
-                    $interval.cancel(status);
-                }
-
-                getFragmentStatus();
-            }, 5000);
         }
 
-        function deleteVideoFile()
+        function getVideoStatus()
         {
-            api.deleteVideoFile(vm.fragment.id).then(function ()
+            var data = {
+                id: vm.video.id
+            };
+
+            api.getVideoStatus(data).then(function (data)
             {
-                //
+                vm.video.status = data.status;
+            });
+        }
+
+        function deleteFragment(fragment)
+        {
+            var data = {
+                id: fragment.id
+            };
+
+            api.deleteFragment(data).then(function ()
+            {
+                getUserFragments();
             });
         }
 
@@ -174,12 +194,11 @@
         {
             var data = {
                 user_id: vm.user.id,
-                url: vm.fragment.url,
-                start: vm.fragment.start,
-                end: vm.fragment.end,
+                video_id: vm.video.id,
+                start_from: vm.fragment.start_from,
+                end_from: vm.fragment.end_from,
                 title: vm.fragment.title,
-                description: vm.fragment.description,
-                video_id: vm.fragment.video_id
+                description: vm.fragment.description
             };
 
             api.createFragment(data).then(function (data)
@@ -191,24 +210,65 @@
             });
         }
 
-        function getFragmentStatus()
-        {
-            api.getFragmentStatus(vm.fragment.id).then(function (data)
-            {
-                vm.fragment.status = data.status;
-            });
-        }
-
-        function getNewUrl()
+        function uploadFragment()
         {
             var data = {
                 id: vm.fragment.id
             };
 
-            api.getNewUrl(data).then(function (data)
+            api.uploadFragment(data).then(function ()
             {
-                vm.new_url = data.url;
+
             });
+
+            var status = $interval(function ()
+            {
+                if (vm.fragment.status == 'uploaded')
+                {
+                    getFragmentUrl();
+
+                    vm.fragment.isCreating = false;
+                    vm.fragment.isCreated = true;
+
+                    $interval.cancel(status);
+                }
+
+                getFragmentStatus();
+            }, 5000);
+        }
+
+        function getFragmentStatus()
+        {
+            var data = {
+                id: vm.fragment.id
+            };
+
+            api.getFragmentStatus(data).then(function (data)
+            {
+                vm.fragment.status = data.status;
+            });
+        }
+
+        function getFragmentUrl()
+        {
+            var data = {
+                id: vm.fragment.id
+            };
+
+            api.getFragmentUrl(data).then(function (data)
+            {
+                vm.fragment.url = data.url;
+            });
+        }
+
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Other
+         |--------------------------------------------------------------------------------------------------------------
+         */
+        function reloadPage()
+        {
+            location.reload();
         }
     }
 })();
