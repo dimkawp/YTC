@@ -13,8 +13,10 @@
     <i class="video play icon"></i>
   </a>
 
+  <button class="ui red right floated button" data-ng-click="index.newFragment()" data-ng-class="{disabled: index.fragment.isCreating}">New Fragment</button>
+
   <div class="ui pointing secondary menu">
-    <a class="item active" data-tab="new-fragment" data-ng-click="index.newFragment()" data-app-tab>New Fragment</a>
+    <a class="item active" data-tab="new-fragment" data-app-tab>New Fragment</a>
     <a class="item" data-tab="my-profile" data-ng-click="index.getUserFragments()" data-app-tab>My Profile</a>
   </div>
 
@@ -54,10 +56,16 @@
       </div>
     </div>
     <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreating || index.fragment.isCreated">
+      <div class="ui icon negative message" data-ng-show="index.error">
+        <i class="warning icon"></i>
+        <i class="close icon" data-ng-click="index.error = ''"></i>
+        <div class="header">{{ index.error }}</div>
+      </div>
+
       <div class="required field">
         <label>Youtube URL</label>
 
-        <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.createVideo();" data-ng-model="index.video.url" data-ng-disabled="index.video.id">
+        <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.createVideo()" data-ng-model="index.video.url" data-ng-disabled="index.video.id">
       </div>
       <div data-ng-show="index.video.embed_url">
         <div class="required field">
@@ -127,7 +135,7 @@
                 <p>{{ fragment.description }}</p>
               </div>
               <div class="extra">
-                <button class="ui red mini icon labeled button" data-ng-click="index.deleteFragment(fragment);">
+                <button class="ui red mini icon labeled button" data-ng-click="index.deleteFragment(fragment)">
                   <i class="trash icon"></i> Delete
                 </button>
               </div>

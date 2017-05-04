@@ -4,12 +4,32 @@ module Endpoints
       # get fragment status
       params do
         requires :id, type: Integer, desc: 'ID'
+        requires :job_id, type: String, desc: 'Job ID'
       end
 
-      get ':id/status' do
+      post ':id/status' do
         fragment = Fragment.find(params[:id])
 
+        status = Sidekiq::Status::status(params[:job_id])
+
+        if status.to_s == 'failed' || status.to_s == 'interrupted'
+          video.status = 'error'
+          video.error  = 'An error has occurred. Please try again or choose another video.'
+          video.save
+        end
+
         {status: fragment.status}
+      end
+
+      # get fragment error
+      params do
+        requires :id, type: Integer, desc: 'ID'
+      end
+
+      get ':id/error' do
+        fragment = Fragment.find(params[:id])
+
+        {error: fragment.error}
       end
 
       # get fragment url
@@ -31,7 +51,7 @@ module Endpoints
       get ':id/embed_url' do
         fragment = Fragment.find(params[:id])
 
-        v = get_v(fragment.url);
+        v = get_v(fragment.url)
 
         {embed_url: "https://www.youtube.com/embed/#{v}?autoplay=0"}
       end
@@ -44,12 +64,12 @@ module Endpoints
       get ':id/upload' do
         fragment = Fragment.find(params[:id])
 
-        YoutubeUploaderWorker.perform_async(fragment.id)
-
-        fragment.status = 'uploading';
+        fragment.status = 'uploading'
         fragment.save
 
-        {status: fragment.status}
+        job_id = YoutubeUploaderWorker.perform_async(fragment.id)
+
+        {job_id: job_id}
       end
 
       # create fragment
