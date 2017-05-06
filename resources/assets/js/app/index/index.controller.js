@@ -5,17 +5,18 @@
     angular.module('app.index')
            .controller('IndexController', IndexController);
 
-    IndexController.$inject = ['$auth', '$sce', '$interval', 'api'];
+    IndexController.$inject = ['$auth', '$sce', '$interval', '$timeout', 'api'];
 
-    function IndexController($auth, $sce, $interval, api)
+    function IndexController($auth, $sce, $interval, $timeout, api)
     {
         var vm = this;
 
-        vm.error    = '';
-        vm.user     = $auth.user;
-        vm.video    = [];
-        vm.fragment = [];
-        vm.results  = [];
+        vm.error           = '';
+        vm.user            = $auth.user;
+        vm.video           = [];
+        vm.fragment        = [];
+        vm.active_fragment = [];
+        vm.results         = [];
 
         vm.login               = login;
         vm.logout              = logout;
@@ -27,7 +28,9 @@
         vm.getVideoError       = getVideoError;
         vm.getVideoEmbedUrl    = getVideoEmbedUrl;
         vm.newFragment         = newFragment;
+        vm.setActiveFragment   = setActiveFragment;
         vm.createFragment      = createFragment;
+        // vm.previewFragment     = previewFragment;
         vm.deleteFragment      = deleteFragment;
         vm.uploadFragment      = uploadFragment;
         vm.getFragmentStatus   = getFragmentStatus;
@@ -92,6 +95,32 @@
                 vm.fragment.description = vm.video.description;
 
                 getVideoEmbedUrl();
+            });
+        }
+
+        function setActiveFragment(fragment)
+        {
+            vm.active_fragment = fragment;
+
+            var data = {
+                id: vm.active_fragment.id
+            };
+
+            api.getFragmentEmbedUrl(data).then(function (data)
+            {
+                vm.active_fragment.embed_url = $sce.trustAsResourceUrl(data.embed_url);
+            });
+        }
+
+        function deleteFragment()
+        {
+            var data = {
+                id: vm.active_fragment.id
+            };
+
+            api.deleteFragment(data).then(function ()
+            {
+                getUserFragments();
             });
         }
 
@@ -205,18 +234,6 @@
             });
         }
 
-        function deleteFragment(fragment)
-        {
-            var data = {
-                id: fragment.id
-            };
-
-            api.deleteFragment(data).then(function ()
-            {
-                getUserFragments();
-            });
-        }
-
         /*
          |--------------------------------------------------------------------------------------------------------------
          | Fragments
@@ -274,9 +291,12 @@
                     {
                         getFragmentUrl();
 
-                        vm.video.isCreated = false;
-                        vm.fragment.isCreating = false;
-                        vm.fragment.isCreated = true;
+                        $timeout(function ()
+                        {
+                            vm.video.isCreated = false;
+                            vm.fragment.isCreating = false;
+                            vm.fragment.isCreated = true;
+                        }, 5000);
 
                         $interval.cancel(status);
                     }
