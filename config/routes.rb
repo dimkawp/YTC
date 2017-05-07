@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   root 'home#index'
 
   get '/' => 'home#index'
+  get '/test' => 'home#test'
 
   mount Api::API => '/api'
   mount Sidekiq::Web => '/sidekiq'

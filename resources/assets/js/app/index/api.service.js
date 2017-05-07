@@ -16,12 +16,14 @@
             "uploadVideo": uploadVideo,
             "getVideoEmbedUrl": getVideoEmbedUrl,
             "getVideoStatus": getVideoStatus,
+            "getVideoError": getVideoError,
             "createFragment": createFragment,
             "deleteFragment": deleteFragment,
             "uploadFragment": uploadFragment,
             "getFragmentUrl": getFragmentUrl,
             "getFragmentEmbedUrl": getFragmentEmbedUrl,
             "getFragmentStatus": getFragmentStatus,
+            "getFragmentError": getFragmentError,
         };
 
         /*
@@ -78,7 +80,15 @@
 
         function getVideoStatus(data)
         {
-            return $http.get('/api/videos/' + data.id + '/status').then(function (response)
+            return $http.post('/api/videos/' + data.id + '/status', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function getVideoError(data)
+        {
+            return $http.get('/api/videos/' + data.id + '/error').then(function (response)
             {
                 return response.data;
             });
@@ -132,7 +142,15 @@
 
         function getFragmentStatus(data)
         {
-            return $http.get('/api/fragments/' + data.id + '/status').then(function (response)
+            return $http.post('/api/fragments/' + data.id + '/status', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
+
+        function getFragmentError(data)
+        {
+            return $http.get('/api/fragments/' + data.id + '/error').then(function (response)
             {
                 return response.data;
             });
