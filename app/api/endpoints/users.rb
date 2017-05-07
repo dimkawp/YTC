@@ -9,7 +9,8 @@ module Endpoints
       get ':id/fragments', jbuilder: 'fragments' do
         user = User.find(params[:id])
 
-        @fragments = user.fragments
+        @fragments = user.fragments.where(status: 'uploaded')
+                                   .order(id: :desc)
       end
     end
   end

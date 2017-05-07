@@ -16,6 +16,9 @@ class YoutubeDownloaderWorker
 
       if File.exists?(file)
         video.status = 'downloaded'
+      else
+        video.status = 'error'
+        video.error  = 'An error has occurred. Please try again or choose another video.'
       end
     end
 

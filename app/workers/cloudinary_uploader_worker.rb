@@ -18,6 +18,9 @@ class CloudinaryUploaderWorker
         video.status     = 'uploaded'
 
         File.delete(file)
+      else
+        video.status = 'error'
+        video.error  = 'An error has occurred. Please try again or choose another video.'
       end
     end
 

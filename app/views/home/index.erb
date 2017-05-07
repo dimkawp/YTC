@@ -13,18 +13,20 @@
     <i class="video play icon"></i>
   </a>
 
+  <button class="ui red right floated button" data-ng-click="index.newFragment()" data-ng-class="{disabled: index.fragment.isCreating}" data-title="Reloader" data-content="After created fragment, reload tab 'new fragment.'" data-position="top left">New Fragment</button>
+
   <div class="ui pointing secondary menu">
-    <a class="item active" data-tab="new-fragment" data-ng-click="index.newFragment()" data-app-tab>New Fragment</a>
+    <a class="item active" data-tab="new-fragment" data-app-tab>New Fragment</a>
     <a class="item" data-tab="my-profile" data-ng-click="index.getUserFragments()" data-app-tab>My Profile</a>
   </div>
 
   <div class="ui tab active" data-tab="new-fragment">
     <div class="ui segments" data-ng-show="index.video.isCreated || index.fragment.isCreated">
       <div class="ui segment" data-ng-if="index.video.isCreated" data-ng-class="{loading: index.fragment.isCreating}">
-        <iframe frameborder="0" width="100%" height="600" data-ng-src="{{ index.video.embed_url }}"></iframe>
+        <iframe frameborder="0" width="100%" height="600" data-ng-src="{{ index.video.embed_url }}" allowfullscreen></iframe>
       </div>
       <div class="ui segment" data-ng-if="index.fragment.isCreated">
-        <iframe frameborder="0" width="100%" height="600" data-ng-src="{{ index.fragment.embed_url }}"></iframe>
+        <iframe frameborder="0" width="100%" height="600" data-ng-src="{{ index.fragment.embed_url }}" allowfullscreen></iframe>
       </div>
       <div class="ui segment" data-ng-if="index.fragment.isCreated">
         <div class="ui form">
@@ -54,10 +56,16 @@
       </div>
     </div>
     <div id="create-fragment" class="ui form" data-ng-hide="index.fragment.isCreating || index.fragment.isCreated">
+      <div class="ui icon negative message" data-ng-show="index.error">
+        <i class="warning icon"></i>
+        <i class="close icon" data-ng-click="index.error = ''"></i>
+        <div class="header">{{ index.error }}</div>
+      </div>
+
       <div class="required field">
         <label>Youtube URL</label>
 
-        <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.createVideo();" data-ng-model="index.video.url" data-ng-disabled="index.video.id">
+        <input type="url" name="url" placeholder="Youtube URL" data-ng-change="index.createVideo()" data-ng-model="index.video.url" data-ng-disabled="index.video.id" data-content="Use the link from youtube">
       </div>
       <div data-ng-show="index.video.embed_url">
         <div class="required field">
@@ -101,7 +109,7 @@
               <i class="video icon"></i> {{ index.user.fragments.length }} fragments
             </span>
           </div>
-          <div class="ui bottom attached button" data-ng-click="index.logout()" data-ng-show="index.user.id">
+          <div class="ui bottom attached button" data-ng-click="index.logout()" data-ng-class="{disabled: index.fragment.isCreating}" data-ng-show="index.user.id">
             <i class="sign out icon"></i> Logout
           </div>
         </div>
@@ -127,7 +135,10 @@
                 <p>{{ fragment.description }}</p>
               </div>
               <div class="extra">
-                <button class="ui red mini icon labeled button" data-ng-click="index.deleteFragment(fragment);">
+                <button class="ui blue mini icon labeled button" data-ng-click="index.setActiveFragment(fragment);" data-modal-id="#preview-fragment" data-app-modal>
+                  <i class="video icon"></i> Preview
+                </button>
+                <button class="ui red mini icon labeled button" data-ng-click="index.setActiveFragment(fragment);" data-modal-id="#delete-fragment" data-app-modal>
                   <i class="trash icon"></i> Delete
                 </button>
               </div>
@@ -135,6 +146,28 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="ui small modal" id="preview-fragment">
+  <i class="close icon"></i>
+
+  <div class="content">
+    <!--<div class="ui embed" data-source="youtube" data-url="{{ index.active_fragment.embed_url }}"></div>-->
+
+    <iframe frameborder="0" width="100%" height="400" data-ng-src="{{ index.active_fragment.embed_url }}" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div class="ui small modal" id="delete-fragment">
+  <i class="close icon"></i>
+
+  <div class="header">Are you sure want to delete fragment?</div>
+  <div class="actions">
+    <div class="ui black deny button">No</div>
+    <div class="ui positive right labeled icon button" data-ng-click="index.deleteFragment();">Yes
+      <i class="checkmark icon"></i>
     </div>
   </div>
 </div>
