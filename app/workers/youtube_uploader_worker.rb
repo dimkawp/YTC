@@ -14,6 +14,9 @@ class YoutubeUploaderWorker
 
       fragment.url    = "https://www.youtube.com/watch?v=#{@youtube.id}"
       fragment.status = 'uploaded'
+
+      NewFragmentMailer.create_new_fragment_email(fragment).deliver
+
     else
       fragment.status = 'error'
       fragment.error  = 'Your session has expired. Please re-login.'

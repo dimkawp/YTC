@@ -54,3 +54,6 @@ gem 'omniauth-google-oauth2'
 gem 'cloudinary'
 gem 'youtube-dl.rb'
 gem 'yt'
+
+# mailer
+gem 'mail'
