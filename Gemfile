@@ -58,3 +58,6 @@ gem 'yt'
 
 # mailer
 gem 'mail'
+
+#redis
+gem 'redis'
