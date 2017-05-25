@@ -30,6 +30,7 @@ end
 
 group :production do
   gem 'rails_12factor'
+  gem 'uglifier'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -54,3 +55,9 @@ gem 'omniauth-google-oauth2'
 gem 'cloudinary'
 gem 'youtube-dl.rb'
 gem 'yt'
+
+# mailer
+gem 'mail'
+
+#redis
+gem 'redis'

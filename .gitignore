@@ -9,7 +9,6 @@
 
 # Ignore config
 config/secrets.yml
-config/database.yml
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
