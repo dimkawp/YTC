@@ -18,6 +18,7 @@
   <div class="ui pointing secondary menu">
     <a class="item active" data-tab="new-fragment" data-app-tab>New Fragment</a>
     <a class="item" data-tab="my-profile" data-ng-click="index.getUserFragments()" data-app-tab>My Profile</a>
+    <a data-ng-if="index.user.email == 'dimkawp@gmail.com'" class="item" data-tab="admin" data-app-tab>Admin</a>
   </div>
 
   <div class="ui tab active" data-tab="new-fragment">
@@ -147,6 +148,9 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="ui tab" data-tab="admin">
+    <p>admin panel: </p>
   </div>
 </div>
 

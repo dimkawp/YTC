@@ -1,1 +1,27 @@
-body{padding-top:20px}header{font:700 30px Verdana;text-align:center}header .logo{color:#E0E1E2}header .logo:hover{color:#DB2828}header .logo img{width:100px;vertical-align:middle}.ngrs-range-slider{border:none;box-shadow:none}.ngrs-range-slider .ngrs-join{background-image:linear-gradient(#db2828,#db2828)}
+body {
+  padding-top: 20px;
+}
+header {
+  font: bold 30px 'Verdana';
+  text-align: center;
+}
+header .logo {
+  color: #E0E1E2;
+}
+header .logo:hover {
+  color: #DB2828;
+}
+header .logo img {
+  width: 100px;
+  vertical-align: middle;
+}
+.ngrs-range-slider {
+  border: none;
+  box-shadow: none;
+}
+.ngrs-range-slider .ngrs-join {
+  background-image: -webkit-linear-gradient(#db2828, #db2828);
+  background-image: linear-gradient(#db2828, #db2828);
+}
+
+/*# sourceMappingURL=app.min.css.map */
