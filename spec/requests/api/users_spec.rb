@@ -1,16 +1,27 @@
 require 'spec_helper'
 require 'rails_helper'
 
-describe 'User Fragments', type: :request do
-  it 'return user fragments with status uploaded' do
+RSpec.describe 'Users', type: :request do
+  describe 'GET /fragments' do
 
-    get ':id/fragments', params: {id: 1}
-    user = User.find(params[:id])
+    it 'all fragments with status uploads' do
 
-    @fragments = user.fragments.where(status: 'uploaded')
+      get '1/fragments'
 
-    expect(User.ordered_by_last_status).to eq([uploaded])
 
     end
+
+
+  end
+  # it 'return user fragments with status uploaded' do
+  #
+  #   get ':id/fragments', params: {id: 1}
+  #   user = User.find(params[:id])
+  #
+  #   @fragments = user.fragments.where(status: 'uploaded')
+  #
+  #   expect(User.ordered_by_last_status).to eq([uploaded])
+  #
+  #   end
 end
 
