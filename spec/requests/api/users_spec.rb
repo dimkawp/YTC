@@ -8,7 +8,6 @@ RSpec.describe 'Users', type: :request do
 
       get '1/fragments'
 
-
     end
 
 
