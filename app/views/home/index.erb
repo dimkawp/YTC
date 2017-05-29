@@ -18,7 +18,7 @@
   <div class="ui pointing secondary menu">
     <a class="item active" data-tab="new-fragment" data-app-tab>New Fragment</a>
     <a class="item" data-tab="my-profile" data-ng-click="index.getUserFragments()" data-app-tab>My Profile</a>
-    <a data-ng-if="index.user.email == 'dimkawp@gmail.com'" class="item" data-tab="admin" data-app-tab>Admin</a>
+    <a data-ng-if="index.user.role == 'admin'" class="item" data-tab="admin" data-ng-click="index.getAdminController()" data-app-tab>Admin</a>
   </div>
 
   <div class="ui tab active" data-tab="new-fragment">
@@ -150,7 +150,119 @@
     </div>
   </div>
   <div class="ui tab" data-tab="admin">
-    <p>admin panel: </p>
+    <div class="ui styled fluid accordion">
+      <div class="active title">
+        <i class="dropdown icon"></i>
+        Users
+      </div>
+      <div class="content">
+
+        <table class="ui compact celled definition table">
+          <thead>
+          <tr>
+            <th></th>
+            <th>Avatar</th>
+            <th>Name</th>
+            <th>E-mail address</th>
+            <th>Role</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr data-ng-repeat="user in index.secret_admin.users">
+            <td class="collapsing">
+              <!--<div class="ui fitted slider checkbox">-->
+              <!--<input type="checkbox" data-ng-if="user.role == 'admin'" data-gn-true> <label></label>-->
+              <!--</div>-->
+            </td>
+            <td>  </td>
+            <td>{{ user.name }}  </td>
+            <td>{{ user.email }} </td>
+            <td>{{ user.role }} </td>
+          </tr>
+
+          </tbody>
+          <tfoot class="full-width">
+          <tr>
+            <th></th>
+            <th colspan="4">
+              <div class="ui right floated small primary labeled icon button">
+                <i class="user icon"></i> Add User
+              </div>
+              <div class="ui small button">
+                Approve
+              </div>
+              <div class="ui small  disabled button">
+                Approve All
+              </div>
+            </th>
+          </tr>
+          </tfoot>
+        </table>
+
+      </div>
+      <div class="title">
+        <i class="dropdown icon"></i>
+        Fragments
+      </div>
+      <div class="content">
+
+        <table class="ui compact celled definition table">
+          <thead>
+          <tr>
+            <th></th>
+            <th>User ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Error</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr data-ng-repeat="fragment in index.secret_admin.fragments">
+            <td class="collapsing">
+              <!--<div class="ui fitted slider checkbox">-->
+              <!--<input type="checkbox" data-ng-if="user.role == 'admin'" data-gn-true> <label></label>-->
+              <!--</div>-->
+            </td>
+
+            <td>{{ fragment.user_id }}  </td>
+            <td>{{ fragment.title }} </td>
+            <td>{{ fragment.description }} </td>
+            <td>{{ fragment.error }} </td>
+          </tr>
+
+          </tbody>
+          <tfoot class="full-width">
+          <tr>
+            <th></th>
+            <th colspan="4">
+              <div class="ui right floated small primary labeled icon button">
+                <i class="user icon"></i> Add Fragment
+              </div>
+              <div class="ui small button">
+                Approve
+              </div>
+              <div class="ui small  disabled button">
+                Approve All
+              </div>
+            </th>
+          </tr>
+          </tfoot>
+        </table>
+
+      </div>
+      <div class="title">
+        <i class="dropdown icon"></i>
+        Cloudinary
+      </div>
+      <div class="content">
+        <div>
+          <%= cl_video_tag("KqTD30qbqyU",:width => 100, :height => 100) %>
+          <%= cl_video_tag("KqTD30qbqyU",:width => 100, :height => 100) %>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>
 

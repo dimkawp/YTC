@@ -17,6 +17,7 @@
         vm.fragment        = [];
         vm.active_fragment = [];
         vm.results         = [];
+        vm.secret_admin    = [];
 
         vm.login               = login;
         vm.logout              = logout;
@@ -37,6 +38,7 @@
         vm.getFragmentError    = getFragmentError;
         vm.getFragmentUrl      = getFragmentUrl;
         vm.getFragmentEmbedUrl = getFragmentEmbedUrl;
+        vm.getAdminController  = getAdminController;
 
         /*
          |--------------------------------------------------------------------------------------------------------------
@@ -52,6 +54,24 @@
         function logout()
         {
             $auth.signOut();
+        }
+
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Admin
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function getAdminController()
+        {
+            var data = {
+                token: vm.user.access_token
+            };
+
+            api.getAdminController(data).then(function (data)
+            {
+                vm.secret_admin = data;
+            });
         }
 
         /*

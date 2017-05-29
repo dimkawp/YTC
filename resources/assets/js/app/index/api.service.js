@@ -10,6 +10,7 @@
     function api($http)
     {
         return {
+            "getAdminController": getAdminController,
             "getUserFragments": getUserFragments,
             "createVideo": createVideo,
             "downloadVideo": downloadVideo,
@@ -23,8 +24,22 @@
             "getFragmentUrl": getFragmentUrl,
             "getFragmentEmbedUrl": getFragmentEmbedUrl,
             "getFragmentStatus": getFragmentStatus,
-            "getFragmentError": getFragmentError,
+            "getFragmentError": getFragmentError
         };
+
+        /*
+         |--------------------------------------------------------------------------------------------------------------
+         | Admin
+         |--------------------------------------------------------------------------------------------------------------
+         */
+
+        function getAdminController(data)
+        {
+            return $http.post('/api/admin/secret', data).then(function (response)
+            {
+                return response.data;
+            });
+        }
 
         /*
          |--------------------------------------------------------------------------------------------------------------

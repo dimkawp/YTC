@@ -6,9 +6,12 @@ module Endpoints
         requires :token, type: String, desc: 'Token'
       end
 
-      get '/admin' do
+      post '/secret' do
         if check_admin(params[:token]) === true
-          @users = User.all.order(id: :asc)
+          {
+           users: User.all.order(id: :asc),
+           fragments: Fragment.all
+          }
         else
           {error: 'error'}
         end
